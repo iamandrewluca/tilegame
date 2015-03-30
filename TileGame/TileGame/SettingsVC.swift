@@ -9,9 +9,4 @@
 import UIKit
 
 class SettingsVC: UIViewController {
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
-
 }

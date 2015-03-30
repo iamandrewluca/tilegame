@@ -12,7 +12,6 @@
 		15324F6D1AC88D29003E1864 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15324F6C1AC88D29003E1864 /* SettingsVC.swift */; };
 		15324F6F1AC88D39003E1864 /* GameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15324F6E1AC88D39003E1864 /* GameVC.swift */; };
 		15E31CF21AC52B660087AF7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E31CF11AC52B660087AF7F /* AppDelegate.swift */; };
-		15E31CF61AC52B660087AF7F /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E31CF51AC52B660087AF7F /* GameScene.swift */; };
 		15E31CFB1AC52B660087AF7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15E31CF91AC52B660087AF7F /* Main.storyboard */; };
 		15E31CFD1AC52B660087AF7F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15E31CFC1AC52B660087AF7F /* Images.xcassets */; };
 		15E31D001AC52B660087AF7F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15E31CFE1AC52B660087AF7F /* LaunchScreen.xib */; };
@@ -37,7 +36,6 @@
 		15E31CEC1AC52B660087AF7F /* TileGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TileGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15E31CF01AC52B660087AF7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15E31CF11AC52B660087AF7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		15E31CF51AC52B660087AF7F /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		15E31CFA1AC52B660087AF7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		15E31CFC1AC52B660087AF7F /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		15E31CFF1AC52B660087AF7F /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -90,7 +88,6 @@
 				15324F6A1AC88CD4003E1864 /* LobbyVC.swift */,
 				15324F6C1AC88D29003E1864 /* SettingsVC.swift */,
 				15324F6E1AC88D39003E1864 /* GameVC.swift */,
-				15E31CF51AC52B660087AF7F /* GameScene.swift */,
 				15E31CF91AC52B660087AF7F /* Main.storyboard */,
 				15E31CFC1AC52B660087AF7F /* Images.xcassets */,
 				15E31CFE1AC52B660087AF7F /* LaunchScreen.xib */,
@@ -224,7 +221,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				15E31CF61AC52B660087AF7F /* GameScene.swift in Sources */,
 				15324F6B1AC88CD4003E1864 /* LobbyVC.swift in Sources */,
 				15324F691AC88B9C003E1864 /* MenuVC.swift in Sources */,
 				15324F6F1AC88D39003E1864 /* GameVC.swift in Sources */,

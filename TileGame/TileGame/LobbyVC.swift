@@ -9,9 +9,4 @@
 import UIKit
 
 class LobbyVC: UIViewController {
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
-
 }

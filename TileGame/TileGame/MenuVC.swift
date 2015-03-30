@@ -9,9 +9,4 @@
 import UIKit
 
 class MenuVC: UIViewController {
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
-
 }
