@@ -10,6 +10,10 @@ import UIKit
 
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    @IBAction func goBack(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return 10
     }

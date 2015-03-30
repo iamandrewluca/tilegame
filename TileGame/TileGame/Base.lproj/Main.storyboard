@@ -17,7 +17,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
-                                <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
+                                <rect key="frame" x="0.0" y="28" width="600" height="572"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ose-y0-HcP">
                                     <size key="itemSize" width="145" height="145"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
@@ -44,7 +44,7 @@
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="levelNumber" destination="TVg-Y9-nCB" id="mrj-xb-ME4"/>
-                                            <segue destination="BV1-FR-VrT" kind="show" id="ozx-9X-m1N"/>
+                                            <segue destination="BV1-FR-VrT" kind="presentation" modalTransitionStyle="crossDissolve" id="ozx-9X-m1N"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -53,12 +53,21 @@
                                     <outlet property="delegate" destination="hVi-5l-GF7" id="3Nz-W5-ACH"/>
                                 </connections>
                             </collectionView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="J3P-M0-8LC">
+                                <rect key="frame" x="16" y="0.0" width="46" height="30"/>
+                                <state key="normal" title="Back">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="goBack:" destination="hVi-5l-GF7" eventType="touchUpInside" id="s2h-WB-b7f"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="FmE-Qk-mbX" firstAttribute="top" secondItem="U4j-Tx-gDr" secondAttribute="bottom" id="44Z-XY-0gY"/>
                             <constraint firstItem="U4j-Tx-gDr" firstAttribute="leading" secondItem="OTM-Iq-Pbw" secondAttribute="leading" id="F3k-oJ-uHQ"/>
-                            <constraint firstItem="U4j-Tx-gDr" firstAttribute="top" secondItem="OTM-Iq-Pbw" secondAttribute="top" id="ic6-S2-WFU"/>
+                            <constraint firstItem="U4j-Tx-gDr" firstAttribute="top" secondItem="OTM-Iq-Pbw" secondAttribute="top" constant="28" id="ic6-S2-WFU"/>
                             <constraint firstAttribute="trailing" secondItem="U4j-Tx-gDr" secondAttribute="trailing" id="osh-mj-oOu"/>
                         </constraints>
                     </view>
@@ -122,7 +131,7 @@
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <segue destination="hVi-5l-GF7" kind="presentation" modalPresentationStyle="fullScreen" modalTransitionStyle="flipHorizontal" id="4bZ-Yv-yRi"/>
+                                    <segue destination="hVi-5l-GF7" kind="presentation" modalTransitionStyle="flipHorizontal" id="4bZ-Yv-yRi"/>
                                 </connections>
                             </button>
                         </subviews>
