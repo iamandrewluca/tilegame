@@ -11,6 +11,7 @@
 		15324F6B1AC88CD4003E1864 /* LobbyVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15324F6A1AC88CD4003E1864 /* LobbyVC.swift */; };
 		15324F6D1AC88D29003E1864 /* SettingsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15324F6C1AC88D29003E1864 /* SettingsVC.swift */; };
 		15324F6F1AC88D39003E1864 /* GameVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15324F6E1AC88D39003E1864 /* GameVC.swift */; };
+		156D82BB1AC9ACB0009E3C4E /* LobbyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 156D82BA1AC9ACB0009E3C4E /* LobbyCollectionViewCell.swift */; };
 		15E31CF21AC52B660087AF7F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15E31CF11AC52B660087AF7F /* AppDelegate.swift */; };
 		15E31CFB1AC52B660087AF7F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 15E31CF91AC52B660087AF7F /* Main.storyboard */; };
 		15E31CFD1AC52B660087AF7F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 15E31CFC1AC52B660087AF7F /* Images.xcassets */; };
@@ -33,6 +34,7 @@
 		15324F6A1AC88CD4003E1864 /* LobbyVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyVC.swift; sourceTree = "<group>"; };
 		15324F6C1AC88D29003E1864 /* SettingsVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsVC.swift; sourceTree = "<group>"; };
 		15324F6E1AC88D39003E1864 /* GameVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameVC.swift; sourceTree = "<group>"; };
+		156D82BA1AC9ACB0009E3C4E /* LobbyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyCollectionViewCell.swift; sourceTree = "<group>"; };
 		15E31CEC1AC52B660087AF7F /* TileGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TileGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		15E31CF01AC52B660087AF7F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		15E31CF11AC52B660087AF7F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 				15E31CFC1AC52B660087AF7F /* Images.xcassets */,
 				15E31CFE1AC52B660087AF7F /* LaunchScreen.xib */,
 				15E31CEF1AC52B660087AF7F /* Supporting Files */,
+				156D82BA1AC9ACB0009E3C4E /* LobbyCollectionViewCell.swift */,
 			);
 			path = TileGame;
 			sourceTree = "<group>";
@@ -224,6 +227,7 @@
 				15324F6B1AC88CD4003E1864 /* LobbyVC.swift in Sources */,
 				15324F691AC88B9C003E1864 /* MenuVC.swift in Sources */,
 				15324F6F1AC88D39003E1864 /* GameVC.swift in Sources */,
+				156D82BB1AC9ACB0009E3C4E /* LobbyCollectionViewCell.swift in Sources */,
 				15E31CF21AC52B660087AF7F /* AppDelegate.swift in Sources */,
 				15324F6D1AC88D29003E1864 /* SettingsVC.swift in Sources */,
 			);
@@ -350,7 +354,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = TileGame/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -360,7 +366,9 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				INFOPLIST_FILE = TileGame/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};

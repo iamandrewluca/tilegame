@@ -9,4 +9,8 @@
 import UIKit
 
 class GameVC: UIViewController {
+    
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
 }
