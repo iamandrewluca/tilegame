@@ -7,36 +7,59 @@
 //
 
 import SpriteKit
+import Foundation
 
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        let myLabel = SKLabelNode(fontNamed:"Chalkduster")
-        myLabel.text = "Hello, World!";
-        myLabel.fontSize = 65;
-        myLabel.position = CGPoint(x:CGRectGetMidX(self.frame), y:CGRectGetMidY(self.frame));
         
-        self.addChild(myLabel)
+        //self.anchorPoint = CGPointMake(0.5, 0.5)
+        
+        let deviceWidth = UIScreen.mainScreen().bounds.width
+        let deviceHeight = UIScreen.mainScreen().bounds.height
+        
+        let tileWidth = deviceWidth * 6 / 43
+        let tileMargin = tileWidth / 6
+        
+        let shape = SKShapeNode(rect: CGRectMake(0, 0, tileWidth, tileWidth), cornerRadius: 10)
+        shape.fillColor = UIColor.whiteColor()
+        
+        let texture = self.view?.textureFromNode(shape)
+        
+        let yStart = (deviceHeight - deviceWidth) / 2 + tileMargin + tileWidth / 2
+        
+        for i in 0...5 {
+            for j in 0...5 {
+                let sprite = SKSpriteNode(texture: texture)
+                
+                let x = tileMargin + tileWidth / 2 + CGFloat(j) * (tileMargin + tileWidth)
+                let y = yStart + CGFloat(i) * (tileMargin + tileWidth)
+                
+                sprite.position = CGPointMake(x, y)
+                
+                addChild(sprite)
+            }
+        }
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
         /* Called when a touch begins */
         
         for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            
-            let sprite = SKSpriteNode(imageNamed:"Spaceship")
-            
-            sprite.xScale = 0.5
-            sprite.yScale = 0.5
-            sprite.position = location
-            
-            let action = SKAction.rotateByAngle(CGFloat(M_PI), duration:1)
-            
-            sprite.runAction(SKAction.repeatActionForever(action))
-            
-            self.addChild(sprite)
+            //
         }
+    }
+    
+    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
+        // ended
+    }
+    
+    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
+        // canceled
+    }
+    
+    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
+        // moved
     }
    
     override func update(currentTime: CFTimeInterval) {
