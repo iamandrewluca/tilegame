@@ -18,24 +18,27 @@ class GameScene: SKScene {
         let deviceWidth = UIScreen.mainScreen().bounds.width
         let deviceHeight = UIScreen.mainScreen().bounds.height
         
-        let tileWidth = deviceWidth * 8 / 55
-        let tileMargin = tileWidth / 8
+        // 6*x+5*(x/8)+2*(x/4)=deviceWidth
+        // 6 tiles + 5 spaces + 2 margins = deviceWidth
+        let tileWidth = deviceWidth * 8 / 57
+        let tileSpacing = tileWidth / 8
+        let boardMargin = tileWidth / 4
+        
+        let yStart = (deviceHeight - deviceWidth) / 2 + boardMargin + tileWidth / 2
         
         let ratio = UIScreen.mainScreen().scale
         
-        let shape = SKShapeNode(rect: CGRectMake(0, 0, tileWidth*ratio , tileWidth*ratio), cornerRadius: 10*ratio)
+        let shape = SKShapeNode(rect: CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio), cornerRadius: 10 * ratio)
         shape.fillColor = UIColor.whiteColor()
         
         let texture = self.view?.textureFromNode(shape)
-        
-        let yStart = (deviceHeight - deviceWidth) / 2 + tileMargin + tileWidth / 2
         
         for i in 0...5 {
             for j in 0...5 {
                 let sprite = SKSpriteNode(texture: texture, color: UIColor.whiteColor(), size: CGSizeMake(tileWidth, tileWidth))
                 
-                let x = tileMargin + tileWidth / 2 + CGFloat(j) * (tileMargin + tileWidth)
-                let y = yStart + CGFloat(i) * (tileMargin + tileWidth)
+                let x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
+                let y = yStart + CGFloat(i) * (tileSpacing + tileWidth)
                 
                 sprite.position = CGPointMake(x, y)
                 
