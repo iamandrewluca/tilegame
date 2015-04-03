@@ -18,10 +18,12 @@ class GameScene: SKScene {
         let deviceWidth = UIScreen.mainScreen().bounds.width
         let deviceHeight = UIScreen.mainScreen().bounds.height
         
-        let tileWidth = deviceWidth * 6 / 43
-        let tileMargin = tileWidth / 6
+        let tileWidth = deviceWidth * 8 / 55
+        let tileMargin = tileWidth / 8
         
-        let shape = SKShapeNode(rect: CGRectMake(0, 0, tileWidth, tileWidth), cornerRadius: 10)
+        let ratio = UIScreen.mainScreen().scale
+        
+        let shape = SKShapeNode(rect: CGRectMake(0, 0, tileWidth*ratio , tileWidth*ratio), cornerRadius: 10*ratio)
         shape.fillColor = UIColor.whiteColor()
         
         let texture = self.view?.textureFromNode(shape)
@@ -30,7 +32,7 @@ class GameScene: SKScene {
         
         for i in 0...5 {
             for j in 0...5 {
-                let sprite = SKSpriteNode(texture: texture)
+                let sprite = SKSpriteNode(texture: texture, color: UIColor.whiteColor(), size: CGSizeMake(tileWidth, tileWidth))
                 
                 let x = tileMargin + tileWidth / 2 + CGFloat(j) * (tileMargin + tileWidth)
                 let y = yStart + CGFloat(i) * (tileMargin + tileWidth)
