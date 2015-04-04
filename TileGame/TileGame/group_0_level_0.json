@@ -7,10 +7,14 @@
         [70, 51, 30, 16, 50, 36 ],
         [70, 26, 50, 40, 10, 30 ]
     ],
+    
     "redTarget" : 3,
     "blueTarget" : 3,
     "yellowTarget" : 3,
     "greenTarget" : 3,
     "purpleTarget" : 3,
-    "levelType": "free"
+    
+    /* free | time | move */
+    "levelType": "time"
+    "typeValue": 50 /* seconds */
 }

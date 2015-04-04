@@ -11,6 +11,26 @@ import Foundation
 
 class GameScene: SKScene {
     
+    func calculateBoardPositions() {
+        
+    }
+    
+    func loadLevel() {
+        
+    }
+    
+    func generateBoardBackground() {
+        
+    }
+    
+    func generateBoardTiles() {
+        
+    }
+    
+    func prepareUI() {
+        
+    }
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
@@ -36,6 +56,7 @@ class GameScene: SKScene {
         var boardPositions = Array(count: 6, repeatedValue: row)
         
         var boardBackground = SKNode()
+        
         
         for i in 0...5 {
             
