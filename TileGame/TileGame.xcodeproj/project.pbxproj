@@ -18,6 +18,8 @@
 		15A905921AC9C10700B37BEB /* LobbyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A905911AC9C10700B37BEB /* LobbyViewController.swift */; };
 		15A905981AC9C22E00B37BEB /* LobbyCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A905971AC9C22E00B37BEB /* LobbyCollectionViewCell.swift */; };
 		15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A905991AC9D05400B37BEB /* Tile.swift */; };
+		15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C836791ACFC1F900784FEC /* Constants.swift */; };
+		15C8367C1ACFC20000784FEC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C8367B1ACFC20000784FEC /* Settings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,8 @@
 		15A905911AC9C10700B37BEB /* LobbyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyViewController.swift; sourceTree = "<group>"; };
 		15A905971AC9C22E00B37BEB /* LobbyCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyCollectionViewCell.swift; sourceTree = "<group>"; };
 		15A905991AC9D05400B37BEB /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
+		15C836791ACFC1F900784FEC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		15C8367B1ACFC20000784FEC /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -94,6 +98,8 @@
 				15A905971AC9C22E00B37BEB /* LobbyCollectionViewCell.swift */,
 				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
 				15A905991AC9D05400B37BEB /* Tile.swift */,
+				15C8367B1ACFC20000784FEC /* Settings.swift */,
+				15C836791ACFC1F900784FEC /* Constants.swift */,
 				151B5A8B1AC9BA92002BD68C /* Main.storyboard */,
 				151B5A8E1AC9BA92002BD68C /* Images.xcassets */,
 				151B5A901AC9BA92002BD68C /* LaunchScreen.xib */,
@@ -233,7 +239,9 @@
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
 				15A905981AC9C22E00B37BEB /* LobbyCollectionViewCell.swift in Sources */,
 				151B5A841AC9BA92002BD68C /* AppDelegate.swift in Sources */,
+				15C8367C1ACFC20000784FEC /* Settings.swift in Sources */,
 				15A905901AC9C06C00B37BEB /* MenuViewController.swift in Sources */,
+				15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,19 +12,17 @@ import Foundation
 class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        
-        //self.anchorPoint = CGPointMake(0.5, 0.5)
-        
-        let deviceWidth = UIScreen.mainScreen().bounds.width
-        let deviceHeight = UIScreen.mainScreen().bounds.height
-        
+
+        let sceneWidth = self.size.width
+        let sceneHeight = self.size.height
+
         // 6*x+5*(x/8)+2*(x/4)=deviceWidth
         // 6 tiles + 5 spaces + 2 margins = deviceWidth
-        let tileWidth = deviceWidth * 8 / 57
+        let tileWidth = sceneWidth * 8 / 57
         let tileSpacing = tileWidth / 8
         let boardMargin = tileWidth / 4
         
-        let yStart = (deviceHeight - deviceWidth) / 2 + boardMargin + tileWidth / 2
+        let yStart = (sceneHeight - sceneWidth) / 2 + boardMargin + tileWidth / 2
         
         let ratio = UIScreen.mainScreen().scale
         
@@ -33,17 +31,26 @@ class GameScene: SKScene {
         
         let texture = self.view?.textureFromNode(shape)
         
+        var boardPositions = Array<Array<CGPoint>>()
+        
         for i in 0...5 {
+            
+            var row = Array<CGPoint>()
+            
             for j in 0...5 {
                 let sprite = SKSpriteNode(texture: texture, color: UIColor.whiteColor(), size: CGSizeMake(tileWidth, tileWidth))
                 
                 let x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
                 let y = yStart + CGFloat(i) * (tileSpacing + tileWidth)
                 
+                row.append(CGPointMake(x, y))
+                
                 sprite.position = CGPointMake(x, y)
                 
                 addChild(sprite)
             }
+            
+            boardPositions.append(row)
         }
     }
     
