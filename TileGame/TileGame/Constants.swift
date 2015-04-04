@@ -7,3 +7,11 @@
 //
 
 import Foundation
+
+struct Constants {
+    
+    static let someInt:Int = {
+        return 0
+        
+    }()
+}

@@ -10,6 +10,7 @@ import SpriteKit
 import Foundation
 
 class GameScene: SKScene {
+    
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
@@ -31,11 +32,12 @@ class GameScene: SKScene {
         
         let texture = self.view?.textureFromNode(shape)
         
-        var boardPositions = Array<Array<CGPoint>>()
+        var row = Array(count: 6, repeatedValue: CGPointZero)
+        var boardPositions = Array(count: 6, repeatedValue: row)
+        
+        var boardBackground = SKNode()
         
         for i in 0...5 {
-            
-            var row = Array<CGPoint>()
             
             for j in 0...5 {
                 let sprite = SKSpriteNode(texture: texture, color: UIColor.whiteColor(), size: CGSizeMake(tileWidth, tileWidth))
@@ -43,15 +45,19 @@ class GameScene: SKScene {
                 let x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
                 let y = yStart + CGFloat(i) * (tileSpacing + tileWidth)
                 
-                row.append(CGPointMake(x, y))
-                
                 sprite.position = CGPointMake(x, y)
                 
-                addChild(sprite)
+                boardPositions[i][j] = sprite.position
+                
+                boardBackground.addChild(sprite)
             }
-            
-            boardPositions.append(row)
         }
+        
+        let boardTexture = self.view?.textureFromNode(boardBackground)
+        let boardSprite = SKSpriteNode(texture: boardTexture)
+        boardSprite.position = CGPointMake(self.size.width / 2, self.size.height / 2)
+        
+        addChild(boardSprite)
     }
     
     override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {

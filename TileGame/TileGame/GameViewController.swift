@@ -14,15 +14,13 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let scene = GameScene(size: self.view.frame.size)
         let skView = self.view as SKView
+        let scene = GameScene(size: skView.frame.size)
+        scene.scaleMode = .AspectFill
         
         skView.showsFPS = true
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
-        
-        scene.scaleMode = .AspectFill
-        
         skView.presentScene(scene)
     }
 
