@@ -19,7 +19,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier("LobbyCell", forIndexPath: indexPath) as LobbyCollectionViewCell)
+        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier("LobbyCell", forIndexPath: indexPath) as! LobbyCollectionViewCell)
         cell.levelNumber.text = String(indexPath.row)
         
         return cell

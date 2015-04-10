@@ -16,7 +16,7 @@ class GameScene: SKScene {
     let sceneWidth: CGFloat
     let sceneHeight: CGFloat
     let tileWidth: CGFloat
-    var tileSpacing: CGFloat
+    let tileSpacing: CGFloat
     let boardMargin: CGFloat
     let yStart: CGFloat
     
@@ -44,11 +44,18 @@ class GameScene: SKScene {
         calculateBoardPositions()
         
         loadLevel()
+    }
+    
+    override func didMoveToView(view: SKView) {
+        /* Setup your scene here */
         
         generateBoardBackground()
+        
         generateBoardTiles()
         
         prepareUI()
+        
+        showGame()
     }
     
     func calculateBoardPositions() {
@@ -59,7 +66,7 @@ class GameScene: SKScene {
             }
         }
     }
-    
+
     func loadLevel() {
         
     }
@@ -87,7 +94,7 @@ class GameScene: SKScene {
         
         let boardTexture = self.view?.textureFromNode(boardBackground)
         boardSprite = SKSpriteNode(texture: boardTexture)
-        boardSprite?.position = CGPointMake(self.size.width / 2, self.size.height / 2)
+        boardSprite?.position = CGPointMake(sceneWidth / 2, sceneHeight / 2)
     }
     
     func generateBoardTiles() {
@@ -98,33 +105,7 @@ class GameScene: SKScene {
         
     }
     
-    override func didMoveToView(view: SKView) {
-        /* Setup your scene here */
-        
+    func showGame() {
         addChild(boardSprite!)
-    }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        /* Called when a touch begins */
-        
-        for touch: AnyObject in touches {
-            //
-        }
-    }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        // ended
-    }
-    
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        // canceled
-    }
-    
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        // moved
-    }
-   
-    override func update(currentTime: CFTimeInterval) {
-        /* Called before each frame is rendered */
     }
 }

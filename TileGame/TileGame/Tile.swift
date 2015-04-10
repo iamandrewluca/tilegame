@@ -24,22 +24,6 @@ class Tile: SKSpriteNode {
         
         userInteractionEnabled = true
     }
-    
-    override func touchesBegan(touches: NSSet, withEvent event: UIEvent) {
-        println("\(position.x), \(position.y)")
-    }
-    
-    override func touchesCancelled(touches: NSSet!, withEvent event: UIEvent!) {
-        println("\(position.x), \(position.y)")
-    }
-    
-    override func touchesEnded(touches: NSSet, withEvent event: UIEvent) {
-        println("\(position.x), \(position.y)")
-    }
-    
-    override func touchesMoved(touches: NSSet, withEvent event: UIEvent) {
-        println("\(position.x), \(position.y)")
-    }
 }
 
 enum TileType {
