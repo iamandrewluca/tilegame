@@ -9,23 +9,39 @@
 import SpriteKit
 
 class Tile: SKSpriteNode {
+    
+    var row = 0
+    var column = 0
+    var tileType = 0
+    var childTile: Tile?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    var row = 0
-    var column = 0
-    var type = 0
-    var childTile: Tile?
-    
-    init(column: Int, row: Int, tileType: TileType) {
-        super.init()
-        
-        userInteractionEnabled = true
+    init(type: TileType, delegate: GameScene) {
+        let gc = GameConstants.sharedInstance!
+        super.init(texture: gc.tileTexture, color: type.tileColor, size: gc.tileSize)
     }
 }
 
-enum TileType {
-    case Unknown, Blue, Green, Red, Yellow, Purple, Star, Empty
+enum TileType: Int {
+    case Unknown = 0, Color1, Color2, Color3, Color4, Color5, Star, Empty
+    
+    var tileColor: SKColor {
+        switch self {
+        case .Color1:
+            return Constants.Color1
+        case .Color2:
+            return Constants.Color2
+        case .Color3:
+            return Constants.Color3
+        case .Color4:
+            return Constants.Color4
+        case .Color5:
+            return Constants.Color5
+        default:
+            return SKColor.redColor()
+        }
+    }
 }

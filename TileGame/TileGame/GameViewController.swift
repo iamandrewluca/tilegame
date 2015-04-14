@@ -15,6 +15,9 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         let skView = self.view as! SKView
+        
+        GameConstants.createInstance(skView)
+        
         let scene = GameScene(size: skView.frame.size)
         scene.scaleMode = .AspectFill
         
