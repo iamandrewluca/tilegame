@@ -10,18 +10,45 @@ import SpriteKit
 
 class Tile: SKSpriteNode {
     
-    var row = 0
-    var column = 0
-    var tileType = 0
-    var childTile: Tile?
+    var row: Int
+    var column: Int
+    var type: TileType
+    var childTile: Tile? {
+        didSet {
+            
+        }
+    }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(type: TileType, delegate: GameScene) {
+    init(tileRow: Int, tileColumn: Int, tileType: TileType, delegate: GameScene) {
+        
+        row = tileRow
+        column = tileColumn
+        type = tileType
+        
         let gc = GameConstants.sharedInstance!
-        super.init(texture: gc.tileTexture, color: type.tileColor, size: gc.tileSize)
+        
+        super.init(texture: gc.tileTexture, color: tileType.tileColor, size: gc.tileSize)
+        
+        position = gc.boardPositions[row][column]
+        
+        colorBlendFactor = 1.0
+        userInteractionEnabled = true
+    }
+    
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+    }
+    
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+    }
+    
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
     }
 }
 
@@ -43,5 +70,9 @@ enum TileType: Int {
         default:
             return SKColor.redColor()
         }
+    }
+    
+    static func random() -> TileType {
+        return TileType(rawValue: Int(arc4random_uniform(6) + 1))!
     }
 }

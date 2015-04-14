@@ -46,16 +46,19 @@ class GameScene: SKScene {
         
         for row in gc.boardPositions {
             for position in row {
-                let sprite = SKSpriteNode(texture: gc.tileTexture, color: UIColor.whiteColor(), size: CGSizeMake(gc.tileWidth, gc.tileWidth))
+                let sprite = SKSpriteNode(texture: gc.tileTexture, color: UIColor.whiteColor(), size: gc.tileSize)
                 sprite.position = position
                 boardBackground.addChild(sprite)
+                
+                var tile = Tile(tileRow: 0, tileColumn: 0, tileType: TileType.random(), delegate: self)
+                addChild(tile)
             }
         }
         
         let boardTexture = self.view?.textureFromNode(boardBackground)
         
         boardSprite = SKSpriteNode(texture: boardTexture)
-        boardSprite.position = CGPointMake(gc.sceneWidth / 2, gc.sceneHeight / 2)
+        boardSprite.position = CGPointMake(gc.sceneSize.width / 2, gc.sceneSize.height / 2)
     }
     
     func generateBoardTiles() {
@@ -67,6 +70,6 @@ class GameScene: SKScene {
     }
     
     func showGame() {
-        addChild(boardSprite!)
+        //addChild(boardSprite!)
     }
 }
