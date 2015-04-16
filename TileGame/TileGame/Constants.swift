@@ -59,7 +59,7 @@ class Constants {
         for var i = 0; i < boardPositions.count; ++i {
             for var j = 0; j < boardPositions[i].count; ++j {
                 boardPositions[i][j].x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
-                boardPositions[i][j].y = yStart + CGFloat(i) * (tileSpacing + tileWidth)
+                boardPositions[i][j].y = yStart + CGFloat(boardPositions.count - 1 - i) * (tileSpacing + tileWidth)
             }
         }
     }
