@@ -11,6 +11,64 @@ import SpriteKit
 
 class Constants {
     
+    static var sceneView: SKView? {
+        didSet {
+            if let view = sceneView {
+                
+                sceneSize = view.frame.size
+                
+                // 6*x+5*(x/8)+2*(x/4)=deviceWidth
+                // 6 tiles + 5 spaces + 2 margins = deviceWidth
+                tileWidth = sceneSize.width * 8 / 57
+                
+                tileSize = CGSizeMake(tileWidth, tileWidth)
+                tileSpacing = tileWidth / 8
+                boardMargin = tileWidth / 4
+                yStart = (sceneSize.height - sceneSize.width) / 2 + boardMargin + tileWidth / 2
+                
+                let ratio = UIScreen.mainScreen().scale
+                let shape = SKShapeNode()
+                
+                shape.path = CGPathCreateWithRoundedRect(
+                    CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
+                    tileCornerRadius * ratio,
+                    tileCornerRadius * ratio, nil)
+                
+                shape.fillColor = UIColor.whiteColor()
+                
+                tileTexture = view.textureFromNode(shape)
+                
+                calculateBoardPositions()
+            }
+            
+        }
+    }
+    
+    static var boardPositions = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: CGPointZero))
+    static var tileTexture: SKTexture! = SKTexture()
+    static var tileSize: CGSize = CGSizeZero
+    static var sceneSize: CGSize = CGSizeZero
+    
+    private static var tileWidth: CGFloat = 0.0
+    private static var tileSpacing: CGFloat = 0.0
+    private static var boardMargin: CGFloat = 0.0
+    private static var yStart: CGFloat = 0.0
+    private static var tileCornerRadius: CGFloat = 10
+    
+    private static func calculateBoardPositions() {
+        for var i = 0; i < boardPositions.count; ++i {
+            for var j = 0; j < boardPositions[i].count; ++j {
+                boardPositions[i][j].x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
+                boardPositions[i][j].y = yStart + CGFloat(i) * (tileSpacing + tileWidth)
+            }
+        }
+    }
+    
+    
+    /////////////////////
+    // Color constants //
+    /////////////////////
+    
     // this will be set from user preferences
     static var colorTheme = 0
     

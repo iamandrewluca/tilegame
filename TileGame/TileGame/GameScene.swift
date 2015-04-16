@@ -12,15 +12,6 @@ import Foundation
 class GameScene: SKScene {
     
     var boardSprite: SKSpriteNode!
-
-    // because of NSCoding protocol
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    override init(size: CGSize) {
-        super.init(size: size)
-    }
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
@@ -38,19 +29,17 @@ class GameScene: SKScene {
     
     func generateBoardBackground() {
         
-        let gc = GameConstants.sharedInstance!
-        
         // here we have info about level
         
         let boardBackground = SKNode()
         
-        for row in gc.boardPositions {
+        for row in Constants.boardPositions {
             for position in row {
-                let sprite = SKSpriteNode(texture: gc.tileTexture, color: UIColor.whiteColor(), size: gc.tileSize)
+                let sprite = SKSpriteNode(texture: Constants.tileTexture, color: UIColor.whiteColor(), size: Constants.tileSize)
                 sprite.position = position
                 boardBackground.addChild(sprite)
                 
-                var tile = Tile(tileRow: 0, tileColumn: 0, tileType: TileType.random(), delegate: self)
+                var tile = Tile(tileRow: 3, tileColumn: 0, tileType: TileType.Color1, delegate: self)
                 addChild(tile)
             }
         }
@@ -58,7 +47,7 @@ class GameScene: SKScene {
         let boardTexture = self.view?.textureFromNode(boardBackground)
         
         boardSprite = SKSpriteNode(texture: boardTexture)
-        boardSprite.position = CGPointMake(gc.sceneSize.width / 2, gc.sceneSize.height / 2)
+        boardSprite.position = CGPointMake(Constants.sceneSize.width / 2, Constants.sceneSize.height / 2)
     }
     
     func generateBoardTiles() {

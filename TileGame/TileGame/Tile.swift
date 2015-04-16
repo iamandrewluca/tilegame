@@ -29,11 +29,9 @@ class Tile: SKSpriteNode {
         column = tileColumn
         type = tileType
         
-        let gc = GameConstants.sharedInstance!
+        super.init(texture: Constants.tileTexture, color: tileType.tileColor, size: Constants.tileSize)
         
-        super.init(texture: gc.tileTexture, color: tileType.tileColor, size: gc.tileSize)
-        
-        position = gc.boardPositions[row][column]
+        position = Constants.boardPositions[row][column]
         
         colorBlendFactor = 1.0
         userInteractionEnabled = true
@@ -75,4 +73,8 @@ enum TileType: Int {
     static func random() -> TileType {
         return TileType(rawValue: Int(arc4random_uniform(6) + 1))!
     }
+}
+
+enum Direction {
+    case Right, Up, Left, Down
 }
