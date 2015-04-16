@@ -119,6 +119,10 @@ class GameScene: SKScene {
     }
     
     func tileDragBegan(tile: Tile, touch: UITouch) {
+        
+        orientation = Orientation.None
+        direction = Direction.None
+        
         startedPosition = tile.position
         lastPosition = tile.position
         calculateDirectionsConstrains(tile)
@@ -127,7 +131,7 @@ class GameScene: SKScene {
     func tileDragMoved(tile: Tile, touch: UITouch) {
         
         var currentPosition = touch.locationInNode(self)
-        var delta = CGPointMake(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y)
+        var delta = currentPosition - lastPosition
         
         if orientation == Orientation.None {
             if fabs(delta.x) > fabs(delta.y) {
@@ -138,7 +142,6 @@ class GameScene: SKScene {
                 } else {
                     direction = Direction.Left
                 }
-                tile.position.x = currentPosition.x
             } else {
                 orientation = Orientation.Vertical
                 
@@ -147,9 +150,13 @@ class GameScene: SKScene {
                 } else {
                     direction = Direction.Up
                 }
-                tile.position.y = currentPosition.y
             }
+        } else if orientation == Orientation.Horizontal {
+            tile.position.x = currentPosition.x
+        } else {
+            tile.position.y = currentPosition.y
         }
+        
         
         lastPosition = currentPosition
     }
@@ -160,7 +167,7 @@ class GameScene: SKScene {
     
     func tileDragEnded(tile: Tile, touch: UITouch) {
         var currentPosition = touch.locationInNode(self)
-        var delta = CGPointMake(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y)
+        var delta = currentPosition - lastPosition
         println(delta)
     }
 }
