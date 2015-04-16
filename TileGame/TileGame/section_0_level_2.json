@@ -7,13 +7,7 @@
         [53, 51, 32, 16, 51, 36 ],
         [34, 25, 56, 45, 16, 31 ]
     ],
-    
-    "redTarget" : 3,
-    "blueTarget" : 3,
-    "yellowTarget" : 3,
-    "greenTarget" : 3,
-    "purpleTarget" : 3,
-    
-    /* free | time | move */
-    "levelType": "free"
+    "colorTargets" : [3, 3, 3, 3, 3],
+    "levelType": 0
+    "levelTypeCounter": 0
 }

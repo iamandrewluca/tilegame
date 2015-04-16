@@ -10,6 +10,9 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
+    
+    var section: Int = 0
+    var level: Int = 0
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,8 @@ class GameViewController: UIViewController {
         Constants.sceneView = skView
         
         let scene = GameScene(size: skView.frame.size)
+        scene.currentLevel = Level(levelNumber: level, sectionNumber: section)
+        
         scene.scaleMode = .AspectFill
         
         skView.showsFPS = true

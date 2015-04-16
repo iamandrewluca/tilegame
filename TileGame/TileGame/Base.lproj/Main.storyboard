@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6751" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KhK-Lu-EzO">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="7531" systemVersion="14D131" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KhK-Lu-EzO">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6736"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7520"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
@@ -85,7 +85,7 @@
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
                                             <outlet property="levelNumber" destination="TVg-Y9-nCB" id="mrj-xb-ME4"/>
-                                            <segue destination="BV1-FR-VrT" kind="presentation" modalTransitionStyle="crossDissolve" id="ozx-9X-m1N"/>
+                                            <segue destination="BV1-FR-VrT" kind="presentation" identifier="toGameScene" modalTransitionStyle="crossDissolve" id="ozx-9X-m1N"/>
                                         </connections>
                                     </collectionViewCell>
                                 </cells>
@@ -106,6 +106,9 @@
                             <constraint firstItem="U4j-Tx-gDr" firstAttribute="top" secondItem="eCy-nn-f09" secondAttribute="bottom" id="hJg-3y-afV"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="colletionView" destination="U4j-Tx-gDr" id="oTb-Dp-GWm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YuP-Lq-O8e" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

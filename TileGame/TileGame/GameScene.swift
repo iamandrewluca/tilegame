@@ -12,19 +12,19 @@ import Foundation
 class GameScene: SKScene {
     
     var boardSprite: SKSpriteNode!
+    var tilesBoard: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
+    
+    var currentLevel: Level?
+    // will be used when switching from one level to another
+    var newLevel: Level?
     
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
-        loadLevel()
         generateBoardBackground()
         generateBoardTiles()
         prepareUI()
         showGame()
-    }
-
-    func loadLevel() {
-        
     }
     
     func generateBoardBackground() {
@@ -38,9 +38,6 @@ class GameScene: SKScene {
                 let sprite = SKSpriteNode(texture: Constants.tileTexture, color: UIColor.whiteColor(), size: Constants.tileSize)
                 sprite.position = position
                 boardBackground.addChild(sprite)
-                
-                var tile = Tile(tileRow: 3, tileColumn: 0, tileType: TileType.Color1, delegate: self)
-                addChild(tile)
             }
         }
         
@@ -59,6 +56,6 @@ class GameScene: SKScene {
     }
     
     func showGame() {
-        //addChild(boardSprite!)
+        addChild(boardSprite!)
     }
 }
