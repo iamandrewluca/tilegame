@@ -15,8 +15,12 @@ class Tile: SKSpriteNode {
     var type: TileType
     var childTile: Tile? {
         didSet {
-            childTile?.position = CGPointZero
-            childTile?.userInteractionEnabled = false
+            if let tile = childTile {
+                childTile?.position = CGPointZero
+                childTile?.userInteractionEnabled = false
+                childTile?.runAction(SKAction.scaleBy(0.4, duration: 0))
+                self.addChild(tile)
+            }
         }
     }
 
@@ -32,7 +36,7 @@ class Tile: SKSpriteNode {
         
         
         if tileType == TileType.Star {
-            super.init(texture: SKTexture(imageNamed: "Star"), color: SKColor.clearColor(), size: Constants.tileSize)
+            super.init(texture: SKTexture(imageNamed: "Star"), color: SKColor.whiteColor(), size: Constants.tileSize)
         } else {
             super.init(texture: Constants.tileTexture, color: tileType.tileColor, size: Constants.tileSize)
         }
@@ -44,16 +48,19 @@ class Tile: SKSpriteNode {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        print("began")
+        println("began")
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        println("moved")
     }
     
     override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        println("canceled")
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        println("ended")
     }
 }
 

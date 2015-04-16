@@ -53,9 +53,8 @@ class GameScene: SKScene {
                         let childTileType: TileType! = currentLevel.childTiles[i][j]
                         
                         // checking if has a valid child
-                        if childTileType != TileType.Unknown || childTileType != TileType.Empty {
+                        if childTileType != TileType.Unknown && childTileType != TileType.Empty {
                             let currentChildTile = Tile(tileRow: i, tileColumn: j, tileType: childTileType, delegate: self)
-                            currentChildTile.zPosition = 2
                             currentTile.childTile = currentChildTile
                         }
                         
@@ -68,11 +67,8 @@ class GameScene: SKScene {
         }
         
         let boardTexture = self.view?.textureFromNode(backgroundNodes)
-        
         boardBackground = SKSpriteNode(texture: boardTexture)
         boardBackground.position = CGPointMake(Constants.sceneSize.width / 2, Constants.sceneSize.height / 2)
-        boardBackground.zPosition = 0
-        tileNodes.zPosition = 1
     }
     
     func prepareUI() {
@@ -80,7 +76,7 @@ class GameScene: SKScene {
     }
     
     func showGame() {
-        addChild(boardBackground!)
+        addChild(boardBackground)
         addChild(tileNodes)
     }
 }
