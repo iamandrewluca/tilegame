@@ -18,22 +18,25 @@ class Tile: SKSpriteNode {
             if let tile = childTile {
                 childTile?.position = CGPointZero
                 childTile?.userInteractionEnabled = false
-                childTile?.runAction(SKAction.scaleBy(0.4, duration: 0))
+                childTile?.runAction(SKAction.scaleBy(0.5, duration: 0))
                 self.addChild(tile)
             }
         }
     }
+    
+    // tipa "delegate"
+    var delegate: GameScene?
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    init(tileRow: Int, tileColumn: Int, tileType: TileType, delegate: GameScene) {
+    init(tileRow: Int, tileColumn: Int, tileType: TileType, tileDelegate: GameScene) {
         
         row = tileRow
         column = tileColumn
         type = tileType
-        
+        delegate = tileDelegate
         
         if tileType == TileType.Star {
             super.init(texture: SKTexture(imageNamed: "Star"), color: SKColor.whiteColor(), size: Constants.tileSize)
@@ -48,19 +51,19 @@ class Tile: SKSpriteNode {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        println("began")
+        self.delegate?.tileDragBegan(self, touch: touches.first as! UITouch)
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        println("moved")
+        self.delegate?.tileDragMoved(self, touch: touches.first as! UITouch)
     }
     
     override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        println("canceled")
+        self.delegate?.tileDragCancelled(self, touch: touches.first as! UITouch)
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        println("ended")
+        self.delegate?.tileDragEnded(self, touch: touches.first as! UITouch)
     }
 }
 
@@ -89,6 +92,10 @@ enum TileType: Int {
     }
 }
 
-enum Direction {
-    case Right, Up, Left, Down
+enum Direction: Int {
+    case Right = 0, Up, Left, Down, None
+}
+
+enum Orientation: Int {
+    case Horizontal = 0, Vertical, None
 }

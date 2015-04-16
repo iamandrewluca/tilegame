@@ -16,6 +16,7 @@ class GameScene: SKScene {
     var tilesBoard: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
     
     var currentLevel: Level!
+    
     // will be used when switching from one level to another
     var newLevel: Level!
     
@@ -48,13 +49,13 @@ class GameScene: SKScene {
                     // we know that a star can't be a main tile
                     if currentTileType != TileType.Empty {
                         
-                        let currentTile = Tile(tileRow: i, tileColumn: j, tileType: currentTileType, delegate: self)
+                        let currentTile = Tile(tileRow: i, tileColumn: j, tileType: currentTileType, tileDelegate: self)
                         
                         let childTileType: TileType! = currentLevel.childTiles[i][j]
                         
                         // checking if has a valid child
                         if childTileType != TileType.Unknown && childTileType != TileType.Empty {
-                            let currentChildTile = Tile(tileRow: i, tileColumn: j, tileType: childTileType, delegate: self)
+                            let currentChildTile = Tile(tileRow: i, tileColumn: j, tileType: childTileType, tileDelegate: self)
                             currentTile.childTile = currentChildTile
                         }
                         
@@ -78,5 +79,88 @@ class GameScene: SKScene {
     func showGame() {
         addChild(boardBackground)
         addChild(tileNodes)
+    }
+    
+    var startedPosition = CGPointZero
+    var directionsConstrains = Array(count: 4, repeatedValue: CGPointZero)
+    var lastPosition = CGPointZero
+    var orientation = Orientation.None
+    var direction = Direction.None
+    
+    func calculateDirectionsConstrains(tile: Tile) {
+        
+        for var i = 0; i < directionsConstrains.count; ++i {
+            directionsConstrains[i] = tile.position
+        }
+        
+        // right check
+        for var i = tile.column + 1; i < Constants.boardPositions[tile.row].count; ++i {
+            if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
+            directionsConstrains[Direction.Right.rawValue] = Constants.boardPositions[tile.row][i]
+        }
+        
+        // up check
+        for var i = tile.row - 1; i >= 0; --i {
+            if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
+            directionsConstrains[Direction.Up.rawValue] = Constants.boardPositions[i][tile.column]
+        }
+        
+        // left check
+        for var i = tile.column - 1; i >= 0; --i {
+            if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
+            directionsConstrains[Direction.Left.rawValue] = Constants.boardPositions[tile.row][i]
+        }
+        
+        // down check
+        for var i = tile.row + 1; i < Constants.boardPositions.count; ++i {
+            if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
+            directionsConstrains[Direction.Down.rawValue] = Constants.boardPositions[i][tile.column]
+        }
+    }
+    
+    func tileDragBegan(tile: Tile, touch: UITouch) {
+        startedPosition = tile.position
+        lastPosition = tile.position
+        calculateDirectionsConstrains(tile)
+    }
+    
+    func tileDragMoved(tile: Tile, touch: UITouch) {
+        
+        var currentPosition = touch.locationInNode(self)
+        var delta = CGPointMake(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y)
+        
+        if orientation == Orientation.None {
+            if fabs(delta.x) > fabs(delta.y) {
+                orientation = Orientation.Horizontal
+                
+                if delta.x > 0.0 {
+                    direction = Direction.Right
+                } else {
+                    direction = Direction.Left
+                }
+                tile.position.x = currentPosition.x
+            } else {
+                orientation = Orientation.Vertical
+                
+                if delta.y > 0.0 {
+                    direction = Direction.Down
+                } else {
+                    direction = Direction.Up
+                }
+                tile.position.y = currentPosition.y
+            }
+        }
+        
+        lastPosition = currentPosition
+    }
+    
+    func tileDragCancelled(tile: Tile, touch: UITouch) {
+        
+    }
+    
+    func tileDragEnded(tile: Tile, touch: UITouch) {
+        var currentPosition = touch.locationInNode(self)
+        var delta = CGPointMake(currentPosition.x - lastPosition.x, currentPosition.y - lastPosition.y)
+        println(delta)
     }
 }
