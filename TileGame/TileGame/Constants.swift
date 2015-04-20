@@ -13,9 +13,9 @@ class Constants {
     
     static var sceneView: SKView? {
         didSet {
-            if let view = sceneView {
+            if let view = sceneView, scene = view.scene {
                 
-                sceneSize = view.frame.size
+                sceneSize = scene.frame.size
                 
                 // 6*x+5*(x/8)+2*(x/4)=deviceWidth
                 // 6 tiles + 5 spaces + 2 margins = deviceWidth
@@ -30,9 +30,7 @@ class Constants {
                 boardMargin = (sceneSize.width - 6*tileWidth - 5*tileSpacing) / 2
                 
                 yStart = (sceneSize.height - sceneSize.width) / 2 + boardMargin + tileWidth / 2
-                println(yStart)
                 yStart.roundDecimals(numberOfDecimals: 1)
-                println(yStart)
                 
                 let ratio = UIScreen.mainScreen().scale
                 let shape = SKShapeNode()

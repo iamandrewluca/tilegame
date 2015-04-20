@@ -25,6 +25,8 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
         
+        Constants.sceneView = view
+        
         prepareBoard()
         prepareUI()
         showGame()
@@ -33,6 +35,10 @@ class GameScene: SKScene {
     func prepareBoard() {
         
         let backgroundNodes = SKNode()
+        
+        let background = SKSpriteNode(color: SKColor.clearColor(), size: Constants.sceneSize)
+        background.anchorPoint = CGPointZero
+        backgroundNodes.addChild(background)
         
         for var i = 0; i < Constants.boardSize; ++i {
             for var j = 0; j < Constants.boardSize; ++j {

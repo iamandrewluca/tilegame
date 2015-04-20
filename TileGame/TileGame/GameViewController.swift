@@ -19,9 +19,6 @@ class GameViewController: UIViewController {
         
         let skView = self.view as! SKView
         
-        // here constants are calculated
-        Constants.sceneView = skView
-        
         let scene = GameScene(size: skView.frame.size)
         scene.currentLevel = Level(levelNumber: level, sectionNumber: section)
         
