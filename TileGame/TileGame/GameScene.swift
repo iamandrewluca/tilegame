@@ -327,7 +327,18 @@ class GameScene: SKScene {
                 moveAction = nil
             }
             
-            tile.runAction(moveAction)
+            tile.runAction(moveAction) {
+                var tilesToDestroy = self.getNeighbours(tile)
+                
+                if tilesToDestroy.count >= 3 {
+                    for tile in tilesToDestroy {
+                        
+                        self.currentLevel.mainTiles[tile.row][tile.column] = TileType.Empty
+                        self.currentLevel.childTiles[tile.row][tile.column] = TileType.Empty
+                        tile.removeFromParent()
+                    }
+                }
+            }
         }
     }
 }
