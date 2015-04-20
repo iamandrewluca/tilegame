@@ -81,93 +81,134 @@ class GameScene: SKScene {
         addChild(tileNodes)
     }
     
-    var startedPosition = CGPointZero
-    var directionsConstrains = Array(count: 4, repeatedValue: CGPointZero)
+    var startPosition = CGPointZero
+    var currentPosition = CGPointZero
     var lastPosition = CGPointZero
-    var orientation = Orientation.None
-    var direction = Direction.None
+    var endPosition = CGPointZero
     
-    func calculateDirectionsConstrains(tile: Tile) {
+    var limits = Array(count: 4, repeatedValue: CGPointZero)
+    var currentOrientation = Orientation.None
+    var currentDirection = Direction.None
+    
+    func calculateLimits(tile: Tile) {
         
-        for var i = 0; i < directionsConstrains.count; ++i {
-            directionsConstrains[i] = tile.position
+        for var i = 0; i < limits.count; ++i {
+            limits[i] = tile.position
         }
         
         // right check
         for var i = tile.column + 1; i < Constants.boardPositions[tile.row].count; ++i {
             if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
-            directionsConstrains[Direction.Right.rawValue] = Constants.boardPositions[tile.row][i]
+            limits[Direction.Right.rawValue] = Constants.boardPositions[tile.row][i]
         }
         
         // up check
         for var i = tile.row - 1; i >= 0; --i {
             if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
-            directionsConstrains[Direction.Up.rawValue] = Constants.boardPositions[i][tile.column]
+            limits[Direction.Up.rawValue] = Constants.boardPositions[i][tile.column]
         }
         
         // left check
         for var i = tile.column - 1; i >= 0; --i {
             if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
-            directionsConstrains[Direction.Left.rawValue] = Constants.boardPositions[tile.row][i]
+            limits[Direction.Left.rawValue] = Constants.boardPositions[tile.row][i]
         }
         
         // down check
         for var i = tile.row + 1; i < Constants.boardPositions.count; ++i {
             if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
-            directionsConstrains[Direction.Down.rawValue] = Constants.boardPositions[i][tile.column]
+            limits[Direction.Down.rawValue] = Constants.boardPositions[i][tile.column]
         }
     }
     
     func tileDragBegan(tile: Tile, touch: UITouch) {
         
-        orientation = Orientation.None
-        direction = Direction.None
+        println("began")
         
-        startedPosition = tile.position
+        calculateLimits(tile)
+        
+        startPosition = tile.position
+        currentPosition = tile.position
         lastPosition = tile.position
-        calculateDirectionsConstrains(tile)
+        endPosition = tile.position
+        
+        currentOrientation = Orientation.None
+        currentDirection = Direction.None
     }
     
     func tileDragMoved(tile: Tile, touch: UITouch) {
         
-        var currentPosition = touch.locationInNode(self)
+        currentPosition = touch.locationInNode(self)
         var delta = currentPosition - lastPosition
+        lastPosition = currentPosition
         
-        if orientation == Orientation.None {
-            if fabs(delta.x) > fabs(delta.y) {
-                orientation = Orientation.Horizontal
-                
-                if delta.x > 0.0 {
-                    direction = Direction.Right
+        if currentOrientation == Orientation.None {
+            var deltaFromStart = currentPosition - startPosition
+            
+            if max(fabs(deltaFromStart.x), fabs(deltaFromStart.y)) > 10 {
+                if fabs(deltaFromStart.x) > fabs(deltaFromStart.y) {
+                    currentOrientation = Orientation.Horizontal
+                    
+                    if deltaFromStart.x > 0.0 {
+                        currentDirection = Direction.Right
+                    } else {
+                        currentDirection = Direction.Left
+                    }
                 } else {
-                    direction = Direction.Left
-                }
-            } else {
-                orientation = Orientation.Vertical
-                
-                if delta.y > 0.0 {
-                    direction = Direction.Down
-                } else {
-                    direction = Direction.Up
+                    currentOrientation = Orientation.Vertical
+                    
+                    if deltaFromStart.y > 0.0 {
+                        currentDirection = Direction.Down
+                    } else {
+                        currentDirection = Direction.Up
+                    }
                 }
             }
-        } else if orientation == Orientation.Horizontal {
-            tile.position.x = currentPosition.x
-        } else {
-            tile.position.y = currentPosition.y
+        } else if currentOrientation == Orientation.Horizontal {
+            tile.position.x = clamp(limits[Direction.Left.rawValue].x,
+                limits[Direction.Right.rawValue].x, currentPosition.x)
+        } else if currentOrientation == Orientation.Vertical {
+            tile.position.y = clamp(limits[Direction.Up.rawValue].y,
+                limits[Direction.Down.rawValue].y, currentPosition.y)
         }
-        
-        
-        lastPosition = currentPosition
     }
     
     func tileDragCancelled(tile: Tile, touch: UITouch) {
         
+        println("cancel")
+        
+        tileDragEnded(tile, touch: touch)
     }
     
     func tileDragEnded(tile: Tile, touch: UITouch) {
-        var currentPosition = touch.locationInNode(self)
-        var delta = currentPosition - lastPosition
-        println(delta)
+        
+        println("end")
+        
+        endPosition = touch.locationInNode(self)
+        var delta = endPosition - startPosition
+        lastPosition = endPosition
+        
+        var middle = (limits[currentDirection.rawValue] + startPosition) / 2
+        
+        var moveAction: SKAction!
+        
+        switch currentOrientation {
+        case Orientation.Horizontal:
+            if endPosition.x > middle.x {
+                moveAction = SKAction.moveToX(limits[Direction.Right.rawValue].x, duration: 0.2)
+            } else {
+                moveAction = SKAction.moveToX(limits[Direction.Left.rawValue].x, duration: 0.2)
+            }
+        case Orientation.Vertical:
+            if endPosition.y > middle.y {
+                moveAction = SKAction.moveToY(limits[Direction.Down.rawValue].y, duration: 0.2)
+            } else {
+                moveAction = SKAction.moveToY(limits[Direction.Up.rawValue].y, duration: 0.2)
+            }
+        default:
+            moveAction = nil
+        }
+        
+        tile.runAction(moveAction)
     }
 }

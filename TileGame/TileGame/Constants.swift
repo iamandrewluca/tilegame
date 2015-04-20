@@ -28,13 +28,12 @@ class Constants {
                 
                 let ratio = UIScreen.mainScreen().scale
                 let shape = SKShapeNode()
-                
+
+                shape.fillColor = UIColor.whiteColor()
                 shape.path = CGPathCreateWithRoundedRect(
                     CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
                     tileCornerRadius * ratio,
                     tileCornerRadius * ratio, nil)
-                
-                shape.fillColor = UIColor.whiteColor()
                 
                 tileTexture = view.textureFromNode(shape)
                 
