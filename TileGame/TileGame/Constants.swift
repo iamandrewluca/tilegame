@@ -43,10 +43,14 @@ class Constants {
         }
     }
     
-    static var boardPositions = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: CGPointZero))
+    static var boardPositions = Array(count: Constants.boardSize,
+        repeatedValue: Array(count: Constants.boardSize,
+            repeatedValue: CGPointZero))
+    
     static var tileTexture: SKTexture! = SKTexture()
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
+    static var boardSize = 6
     
     private static var tileWidth: CGFloat = 0.0
     private static var tileSpacing: CGFloat = 0.0
@@ -55,10 +59,10 @@ class Constants {
     private static var tileCornerRadius: CGFloat = 10
     
     private static func calculateBoardPositions() {
-        for var i = 0; i < boardPositions.count; ++i {
-            for var j = 0; j < boardPositions[i].count; ++j {
+        for var i = 0; i < boardSize; ++i {
+            for var j = 0; j < boardSize; ++j {
                 boardPositions[i][j].x = boardMargin + tileWidth / 2 + CGFloat(j) * (tileSpacing + tileWidth)
-                boardPositions[i][j].y = yStart + CGFloat(boardPositions.count - 1 - i) * (tileSpacing + tileWidth)
+                boardPositions[i][j].y = yStart + CGFloat(Constants.boardSize - 1 - i) * (tileSpacing + tileWidth)
             }
         }
     }

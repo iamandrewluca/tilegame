@@ -16,8 +16,8 @@ class Level {
     var levelType: LevelType? = LevelType.FreeTime
     var levelTypeCounter: Int = 0
     
-    var mainTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType?.None))
-    var childTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType?.None))
+    var mainTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType.Unknown))
+    var childTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType.Unknown))
     var colorTargets = Array(count: 5, repeatedValue: 0)
     
     init(levelNumber: Int, sectionNumber: Int) {
@@ -49,8 +49,8 @@ class Level {
             if let tiles = level["tiles"] as? Array<Array<Int>> {
                 for var i = 0; i < tiles.count; ++i {
                     for var j = 0; j < tiles[i].count; ++j {
-                        mainTiles[i][j] = TileType(rawValue: tiles[i][j] / 10)
-                        childTiles[i][j] = TileType(rawValue: tiles[i][j] % 10)
+                        mainTiles[i][j] = TileType(rawValue: tiles[i][j] / 10)!
+                        childTiles[i][j] = TileType(rawValue: tiles[i][j] % 10)!
                     }
                 }
             }
