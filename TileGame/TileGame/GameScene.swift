@@ -105,9 +105,68 @@ class GameScene: SKScene {
         currentLevel.childTiles[tile.row][tile.column] = currentLevel.childTiles[to.row][to.column]
         currentLevel.childTiles[to.row][to.column] = aux
         
+        tilesBoard[to.row][to.column] = tile
+        tilesBoard[tile.row][tile.column] = nil
+        
         tile.row = to.row
         tile.column = to.column
     }
+    
+    func getNeighbours(startTile: Tile) -> Array<Tile> {
+        
+        var neighbours = Array<Tile>()
+        var lastTiles = Array<Tile>()
+        
+        lastTiles.append(startTile)
+        
+        while lastTiles.count > 0 {
+            
+            var nextTiles = Array<Tile>()
+            
+            for tile in lastTiles {
+                if !tile.visited && tile.type == startTile.type {
+                    tile.visited = true
+                    neighbours.append(tile)
+                    
+                    if tile.row - 1 >= 0 {
+                        if let neighbour = tilesBoard[tile.row - 1][tile.column] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+                    
+                    if tile.row + 1 < Constants.boardSize {
+                        if let neighbour = tilesBoard[tile.row + 1][tile.column] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+                    
+                    if tile.column - 1 >= 0 {
+                        if let neighbour = tilesBoard[tile.row][tile.column - 1] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+                    
+                    if tile.column + 1 < Constants.boardSize {
+                        if let neighbour = tilesBoard[tile.row][tile.column + 1] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+                }
+            }
+            
+            lastTiles.removeAll(keepCapacity: true)
+            lastTiles += nextTiles
+            nextTiles.removeAll(keepCapacity: true)
+        }
+        
+        for tile in neighbours {
+            tile.visited = false
+        }
+        
+        return neighbours
+    }
+    
+    
     
     func calculateLimits(tile: Tile) {
         
@@ -145,6 +204,8 @@ class GameScene: SKScene {
         println("began")
         
         calculateLimits(tile)
+        
+        print(getNeighbours(tile).count)
         
         startPosition = touch.locationInNode(self)
         currentPosition = startPosition

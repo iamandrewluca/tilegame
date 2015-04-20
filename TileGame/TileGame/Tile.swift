@@ -13,6 +13,7 @@ class Tile: SKSpriteNode {
     var row: Int
     var column: Int
     var type: TileType
+    var visited: Bool = false
     var childTile: Tile? {
         didSet {
             if let tile = childTile {
