@@ -20,11 +20,19 @@ class Constants {
                 // 6*x+5*(x/8)+2*(x/4)=deviceWidth
                 // 6 tiles + 5 spaces + 2 margins = deviceWidth
                 tileWidth = sceneSize.width * 8 / 57
-                
+                tileWidth.roundDecimals(numberOfDecimals: 1)
+
                 tileSize = CGSizeMake(tileWidth, tileWidth)
+                
                 tileSpacing = tileWidth / 8
-                boardMargin = tileWidth / 4
+                tileSpacing.roundDecimals(numberOfDecimals: 1)
+                
+                boardMargin = (sceneSize.width - 6*tileWidth - 5*tileSpacing) / 2
+                
                 yStart = (sceneSize.height - sceneSize.width) / 2 + boardMargin + tileWidth / 2
+                println(yStart)
+                yStart.roundDecimals(numberOfDecimals: 1)
+                println(yStart)
                 
                 let ratio = UIScreen.mainScreen().scale
                 let shape = SKShapeNode()

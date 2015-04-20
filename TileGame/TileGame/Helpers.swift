@@ -32,3 +32,10 @@ func !=(lhs: CGPoint, rhs: CGPoint) -> Bool {
 func clamp(minLimit: CGFloat, maxLimit: CGFloat, value: CGFloat) -> CGFloat {
     return max(minLimit, min(value, maxLimit))
 }
+
+extension CGFloat {
+    mutating func roundDecimals(#numberOfDecimals: Int) {
+        let multiplier = pow(10.0, CGFloat(numberOfDecimals))
+        self = round(self * multiplier) / multiplier
+    }
+}
