@@ -8,6 +8,7 @@
 
 import SpriteKit
 import Foundation
+import UIKit
 
 class GameScene: SKScene {
     
@@ -96,6 +97,7 @@ class GameScene: SKScene {
     
     var limits = Array(count: 4, repeatedValue: (row: Int(), column: Int()))
     var currentOrientation = Orientation.None
+    var startDirection = Direction.None
     var currentDirection = Direction.None
     
     func getRowColumnPosition(position: (row: Int, column: Int)) -> CGPoint {
@@ -176,6 +178,8 @@ class GameScene: SKScene {
     
     func calculateLimits(tile: Tile) {
         
+        
+        // set all limits to current position
         for var i = 0; i < limits.count; ++i {
             limits[i] = (tile.row, tile.column)
         }
@@ -220,41 +224,53 @@ class GameScene: SKScene {
         
         currentOrientation = Orientation.None
         currentDirection = Direction.None
+        startDirection = Direction.None
+    }
+    
+    func getOrientationFrom(#delta: CGPoint) -> Orientation {
+        
+        var orientation = Orientation.None
+        
+        if max(fabs(delta.x), fabs(delta.y)) > 10 {
+            if fabs(delta.x) > fabs(delta.y) {
+                orientation = Orientation.Horizontal
+                
+                if delta.x > 0.0 {
+                    startDirection = Direction.Right
+                    currentDirection = startDirection
+                } else {
+                    startDirection = Direction.Left
+                    currentDirection = startDirection
+                }
+            } else {
+                orientation = Orientation.Vertical
+                
+                if delta.y > 0.0 {
+                    startDirection = Direction.Up
+                    currentDirection = startDirection
+                } else {
+                    startDirection = Direction.Down
+                    currentDirection = startDirection
+                }
+            }
+        }
+        
+        return orientation
     }
     
     func tileDragMoved(tile: Tile, touch: UITouch) {
         
         currentPosition = touch.locationInNode(self)
         var delta = currentPosition - lastPosition
+        var deltaFromStart = currentPosition - startPosition
         
         if currentOrientation == Orientation.None {
-            
-            var deltaFromStart = currentPosition - startPosition
-            
-            if max(fabs(deltaFromStart.x), fabs(deltaFromStart.y)) > 10 {
-                if fabs(deltaFromStart.x) > fabs(deltaFromStart.y) {
-                    currentOrientation = Orientation.Horizontal
-                    
-                    if deltaFromStart.x > 0.0 {
-                        currentDirection = Direction.Right
-                    } else {
-                        currentDirection = Direction.Left
-                    }
-                } else {
-                    currentOrientation = Orientation.Vertical
-                    
-                    if deltaFromStart.y > 0.0 {
-                        currentDirection = Direction.Up
-                    } else {
-                        currentDirection = Direction.Down
-                    }
-                }
-            }
+            currentOrientation = getOrientationFrom(delta: deltaFromStart)
         } else {
             
             if currentOrientation == Orientation.Horizontal {
                 
-                if currentPosition.x > lastPosition.x {
+                if delta.x > 0 {
                     currentDirection = Direction.Right
                 } else {
                     currentDirection = Direction.Left
@@ -269,7 +285,7 @@ class GameScene: SKScene {
                 
             } else if currentOrientation == Orientation.Vertical {
                 
-                if currentPosition.y > lastPosition.y {
+                if delta.y > 0 {
                     currentDirection = Direction.Down
                 } else {
                     currentDirection = Direction.Up
@@ -281,6 +297,12 @@ class GameScene: SKScene {
                 var maxY = Constants.boardPositions[maxRow][tile.column].y
                 
                 tile.position.y = clamp(minY, maxY, currentPosition.y)
+            }
+            
+            var startTilePosition = Constants.boardPositions[tile.row][tile.column]
+            
+            if startTilePosition == tile.position {
+                currentOrientation = Orientation.None
             }
         }
         
