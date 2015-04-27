@@ -31,6 +31,10 @@ class Header: SKNode {
             colorLabels[i]!.position = headerPositions[i]
             addChild(colorLabels[i]!)
         }
+        var spr = SKSpriteNode(texture: Constants.tile2RoundCorners, size: CGSizeMake(85, 85))
+        spr.position.x = 100
+        spr.position.y = 50
+        addChild(spr)
     }
 
     required init?(coder aDecoder: NSCoder) {

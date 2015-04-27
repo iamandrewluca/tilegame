@@ -11,7 +11,7 @@ import Foundation
 
 class GameScene: SKScene {
     
-    var header = Header()
+    var header: Header!
     var canSwipe = true
     var boardBackground: SKSpriteNode!
     var tileNodes = SKNode()
@@ -83,6 +83,7 @@ class GameScene: SKScene {
     }
     
     func prepareUI() {
+        header = Header()
         header.position = CGPointMake(0, Constants.sceneSize.height - 85)
         self.addChild(header)
     }

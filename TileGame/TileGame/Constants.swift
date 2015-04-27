@@ -22,7 +22,7 @@ class Constants {
                 // 6 tiles + 5 spaces + 2 margins = deviceWidth
                 tileWidth = sceneSize.width * 8 / 57
                 tileWidth.roundDecimals(numberOfDecimals: 1)
-                tileCornerRadius = 10
+                tileCornerRadius = tileWidth / 4
 
                 tileSize = CGSizeMake(tileWidth, tileWidth)
                 
@@ -37,11 +37,20 @@ class Constants {
                 
                 let ratio = UIScreen.mainScreen().scale
                 
-                let starPath = getStarPath(0, y: 0, radius: tileWidth / 4, sides: 5, pointyness: 2)
+                let starPath = getStarPath(0, y: 0, radius: tileWidth / 4 * ratio, sides: 5, pointyness: 2)
                 let roundRectPath = CGPathCreateWithRoundedRect(
                     CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
                     tileCornerRadius * ratio,
                     tileCornerRadius * ratio, nil)
+                
+                let btnSize: CGFloat = 85 * ratio
+                let tile2Bezier = UIBezierPath(roundedRect: CGRectMake(0, 0, btnSize, btnSize), byRoundingCorners: UIRectCorner.TopRight | UIRectCorner.BottomLeft, cornerRadii: CGSizeMake(btnSize / 2, btnSize / 2))
+                
+                let tile2Shape = SKShapeNode()
+                tile2Shape.path = tile2Bezier.CGPath
+                tile2Shape.fillColor = SKColor.whiteColor()
+                
+                tile2RoundCorners = view.textureFromNode(tile2Shape)
                 
                 let tileShape = SKShapeNode()
                 tileShape.fillColor = UIColor.whiteColor()
@@ -54,6 +63,8 @@ class Constants {
                 starTexture = view.textureFromNode(starShape)
                 
                 starShape.fillColor = SKColor.blackColor()
+                starShape.setScale(0.75)
+                starShape.zRotation = 30
                 starShape.position = CGPointMake(tileShape.frame.width / 2, tileShape.frame.height / 2)
                 tileShape.addChild(starShape)
                 
@@ -72,6 +83,7 @@ class Constants {
     static var tileTexture: SKTexture! = SKTexture()
     static var starTexture: SKTexture! = SKTexture()
     static var tileStarTexture: SKTexture! = SKTexture()
+    static var tile2RoundCorners: SKTexture = SKTexture()
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
     static var boardSize = 6
@@ -125,7 +137,8 @@ class Constants {
         }
         CGPathCloseSubpath(path)
         
-        return path
+        var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
+        return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)
     }
     
     /////////////////////
