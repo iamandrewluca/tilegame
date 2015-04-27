@@ -11,6 +11,8 @@ import Foundation
 
 class GameScene: SKScene {
     
+    var header = Header()
+    var canSwipe = true
     var boardBackground: SKSpriteNode!
     var tileNodes = SKNode()
     var tilesBoard: [[Tile?]] = Array(count: Constants.boardSize,
@@ -35,11 +37,10 @@ class GameScene: SKScene {
     func prepareBoard() {
         
         let backgroundNodes = SKNode()
-        
         let background = SKSpriteNode(color: SKColor.clearColor(), size: Constants.sceneSize)
         background.anchorPoint = CGPointZero
         backgroundNodes.addChild(background)
-        
+
         for var i = 0; i < Constants.boardSize; ++i {
             for var j = 0; j < Constants.boardSize; ++j {
                 
@@ -77,15 +78,17 @@ class GameScene: SKScene {
         
         let boardTexture = self.view?.textureFromNode(backgroundNodes)
         boardBackground = SKSpriteNode(texture: boardTexture)
-        boardBackground.position = CGPointMake(Constants.sceneSize.width / 2, Constants.sceneSize.height / 2)
+        boardBackground.anchorPoint = CGPointZero
+        addChild(backgroundNodes)
     }
     
     func prepareUI() {
-        
+        header.position = CGPointMake(24, Constants.sceneSize.height - 24)
+        self.addChild(header)
     }
     
     func showGame() {
-        addChild(boardBackground)
+        //addChild(boardBackground)
         addChild(tileNodes)
     }
     
@@ -177,7 +180,6 @@ class GameScene: SKScene {
     
     func calculateLimits(tile: Tile) {
         
-        
         // set all limits to current position
         for var i = 0; i < limits.count; ++i {
             limits[i] = (tile.row, tile.column)
@@ -210,11 +212,7 @@ class GameScene: SKScene {
     
     func tileDragBegan(tile: Tile, touch: UITouch) {
         
-        println("began")
-        
         calculateLimits(tile)
-        
-        print(getNeighbours(tile).count)
         
         startPosition = touch.locationInNode(self)
         currentPosition = startPosition
@@ -308,16 +306,11 @@ class GameScene: SKScene {
         lastPosition = currentPosition
     }
     
-    func tileDragCancelled(tile: Tile, touch: UITouch) {
-        
-        println("cancel")
-        
+    func tileDragCancelled(tile: Tile, touch: UITouch) {        
         tileDragEnded(tile, touch: touch)
     }
     
     func tileDragEnded(tile: Tile, touch: UITouch) {
-        
-        println("end")
         
         if currentOrientation != Orientation.None {
             
@@ -356,15 +349,37 @@ class GameScene: SKScene {
             
             tile.runAction(moveAction) {
                 var tilesToDestroy = self.getNeighbours(tile)
-                
                 if tilesToDestroy.count >= 3 {
                     for tile in tilesToDestroy {
-                        
-                        self.currentLevel.mainTiles[tile.row][tile.column] = TileType.Empty
-                        self.currentLevel.childTiles[tile.row][tile.column] = TileType.Empty
-                        tile.removeFromParent()
+                        self.destroyTile(tile)
                     }
                 }
+            }
+        }
+    }
+    
+    func destroyTile(tile: Tile) {
+        
+        self.currentLevel.mainTiles[tile.row][tile.column] = TileType.Empty
+        self.currentLevel.childTiles[tile.row][tile.column] = TileType.Empty
+        tile.removeFromParent()
+        
+        if let childTile = tile.childTile {
+            
+            if childTile.type != TileType.Star {
+                
+                childTile.position = tile.position
+                childTile.userInteractionEnabled = true
+                childTile.row = tile.row
+                childTile.column = tile.column
+                childTile.runAction(SKAction.scaleTo(1, duration: 0))
+                self.currentLevel.mainTiles[tile.row][tile.column] = childTile.type
+                self.tilesBoard[tile.row][tile.column] = childTile
+                childTile.removeFromParent()
+                self.addChild(childTile)
+                
+            } else {
+                
             }
         }
     }

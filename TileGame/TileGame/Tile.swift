@@ -19,7 +19,7 @@ class Tile: SKSpriteNode {
             if let tile = childTile {
                 childTile?.position = CGPointZero
                 childTile?.userInteractionEnabled = false
-                childTile?.runAction(SKAction.scaleBy(0.5, duration: 0))
+                childTile?.runAction(SKAction.scaleTo(0.5, duration: 0))
                 self.addChild(tile)
             }
         }
