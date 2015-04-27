@@ -83,12 +83,12 @@ class GameScene: SKScene {
     }
     
     func prepareUI() {
-        header.position = CGPointMake(24, Constants.sceneSize.height - 24)
+        header.position = CGPointMake(0, Constants.sceneSize.height - 85)
         self.addChild(header)
     }
     
     func showGame() {
-        //addChild(boardBackground)
+//        addChild(boardBackground)
         addChild(tileNodes)
     }
     

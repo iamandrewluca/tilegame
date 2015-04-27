@@ -40,7 +40,7 @@ class Tile: SKSpriteNode {
         delegate = tileDelegate
         
         if tileType == TileType.Star {
-            super.init(texture: SKTexture(imageNamed: "Star"), color: SKColor.whiteColor(), size: Constants.tileSize)
+            super.init(texture: Constants.starTexture, color: SKColor.whiteColor(), size: Constants.tileSize)
         } else {
             super.init(texture: Constants.tileTexture, color: tileType.tileColor, size: Constants.tileSize)
         }

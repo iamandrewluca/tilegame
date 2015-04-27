@@ -36,15 +36,28 @@ class Constants {
                 yStart.roundDecimals(numberOfDecimals: 1)
                 
                 let ratio = UIScreen.mainScreen().scale
-                let shape = SKShapeNode()
-
-                shape.fillColor = UIColor.whiteColor()
-                shape.path = CGPathCreateWithRoundedRect(
+                
+                let starPath = getStarPath(0, y: 0, radius: tileWidth / 4, sides: 5, pointyness: 2)
+                let roundRectPath = CGPathCreateWithRoundedRect(
                     CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
                     tileCornerRadius * ratio,
                     tileCornerRadius * ratio, nil)
                 
-                tileTexture = view.textureFromNode(shape)
+                let tileShape = SKShapeNode()
+                tileShape.fillColor = UIColor.whiteColor()
+                tileShape.path = roundRectPath
+                tileTexture = view.textureFromNode(tileShape)
+                
+                let starShape = SKShapeNode()
+                starShape.fillColor = SKColor.whiteColor()
+                starShape.path = starPath
+                starTexture = view.textureFromNode(starShape)
+                
+                starShape.fillColor = SKColor.blackColor()
+                starShape.position = CGPointMake(tileShape.frame.width / 2, tileShape.frame.height / 2)
+                tileShape.addChild(starShape)
+                
+                tileStarTexture = view.textureFromNode(tileShape)
                 
                 calculateBoardPositions()
             }
@@ -57,6 +70,8 @@ class Constants {
             repeatedValue: CGPointZero))
     
     static var tileTexture: SKTexture! = SKTexture()
+    static var starTexture: SKTexture! = SKTexture()
+    static var tileStarTexture: SKTexture! = SKTexture()
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
     static var boardSize = 6
@@ -95,7 +110,7 @@ class Constants {
         }
         return points
     }
-    private static func starPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPathRef {
+    private static func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPathRef {
         let adjustment = 360/sides/2
         let path = CGPathCreateMutable()
         let points = polygonPointArray(sides, x: x, y: y, radius: radius)
