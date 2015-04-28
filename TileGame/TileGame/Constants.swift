@@ -35,6 +35,7 @@ class Constants {
                 
                 let ratio = UIScreen.mainScreen().scale
                 
+                let pausePath = getPausePath(tileWidth / 2 * ratio, height: tileWidth / 2 * ratio)
                 let starPath = getStarPath(0, y: 0, radius: tileWidth / 4 * ratio, sides: 5, pointyness: 2)
                 let roundRectPath = CGPathCreateWithRoundedRect(
                     CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
@@ -45,6 +46,11 @@ class Constants {
                     roundedRect: CGRectMake(0, 0, tileWidth * ratio, tileWidth * ratio),
                     byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.BottomRight,
                     cornerRadii: CGSizeMake(tileWidth * ratio / 2, tileWidth * ratio / 2))
+                
+                let pauseShape = SKShapeNode()
+                pauseShape.path = pausePath
+                pauseShape.fillColor = SKColor.blackColor()
+                pauseTexture = view.textureFromNode(pauseShape)
                 
                 let tile2RoundCornersShape = SKShapeNode()
                 tile2RoundCornersShape.path = tile2RoundCornersPath.CGPath
@@ -96,6 +102,7 @@ class Constants {
     static var tileStarTexture: SKTexture! = SKTexture()
     static var tile2RoundCornersTexture: SKTexture = SKTexture()
     static var headerTexture: SKTexture = SKTexture()
+    static var pauseTexture: SKTexture = SKTexture()
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
     static var boardSize = 6
@@ -114,15 +121,16 @@ class Constants {
             }
         }
     }
-    
     private static func calculateHeaderPositions() {
+        let smallTileWidth = tileWidth / 2
         let widthWithoutLR = sceneSize.width - tileWidth * 2
-        let onePart = widthWithoutLR / 6
-        let startX = tileWidth + onePart
         let yMiddle = tileWidth / 2
+        let space = (widthWithoutLR - 5 * smallTileWidth) / 6
+        let startX = tileWidth + space + smallTileWidth / 2
         
         for var i = 0; i < headerPositions.count; ++i {
-            headerPositions[i] = CGPointMake(startX + CGFloat(i) * onePart, yMiddle)
+            let x = startX + CGFloat(i) * (space + smallTileWidth)
+            headerPositions[i] = CGPointMake(x, yMiddle)
         }
     }
     
@@ -163,7 +171,24 @@ class Constants {
         var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
         return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)
     }
-    
+    private static func getPausePath(width: CGFloat, height: CGFloat) -> CGPathRef {
+        let leftPath = CGPathCreateMutable()
+        CGPathMoveToPoint(leftPath, nil, 0, 0)
+        
+        CGPathAddLineToPoint(leftPath, nil, width / 3, 0)
+        CGPathAddLineToPoint(leftPath, nil, width / 3, height)
+        CGPathAddLineToPoint(leftPath, nil, 0, height)
+        CGPathAddLineToPoint(leftPath, nil, 0, 0)
+        
+        CGPathCloseSubpath(leftPath)
+        
+        let rightPath = CGPathCreateMutableCopy(leftPath)
+        
+        var translateTransform = CGAffineTransformMakeTranslation(width / 3 * 2, 0)
+        CGPathAddPath(leftPath, &translateTransform, rightPath)
+        
+        return leftPath
+    }
     /////////////////////
     // Color constants //
     /////////////////////
