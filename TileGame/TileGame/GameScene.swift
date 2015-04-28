@@ -84,7 +84,6 @@ class GameScene: SKScene {
     
     func prepareUI() {
         header = Header()
-        header.position = CGPointMake(0, Constants.sceneSize.height - 85)
         self.addChild(header)
     }
     

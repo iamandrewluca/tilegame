@@ -32,8 +32,6 @@ class Constants {
                 boardMargin = (sceneSize.width - 6*tileWidth - 5*tileSpacing) / 2
                 
                 yStart = (sceneSize.height - sceneSize.width) / 2 + boardMargin + tileWidth / 2
-//                yStart *= 0.75
-                yStart.roundDecimals(numberOfDecimals: 1)
                 
                 let ratio = UIScreen.mainScreen().scale
                 
@@ -43,14 +41,25 @@ class Constants {
                     tileCornerRadius * ratio,
                     tileCornerRadius * ratio, nil)
                 
-                let btnSize: CGFloat = 85 * ratio
-                let tile2Bezier = UIBezierPath(roundedRect: CGRectMake(0, 0, btnSize, btnSize), byRoundingCorners: UIRectCorner.TopRight | UIRectCorner.BottomLeft, cornerRadii: CGSizeMake(btnSize / 2, btnSize / 2))
+                let tile2RoundCornersPath = UIBezierPath(
+                    roundedRect: CGRectMake(0, 0, tileWidth * ratio, tileWidth * ratio),
+                    byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.BottomRight,
+                    cornerRadii: CGSizeMake(tileWidth * ratio / 2, tileWidth * ratio / 2))
                 
-                let tile2Shape = SKShapeNode()
-                tile2Shape.path = tile2Bezier.CGPath
-                tile2Shape.fillColor = SKColor.whiteColor()
+                let tile2RoundCornersShape = SKShapeNode()
+                tile2RoundCornersShape.path = tile2RoundCornersPath.CGPath
+                tile2RoundCornersShape.fillColor = SKColor.whiteColor()
+                tile2RoundCornersTexture = view.textureFromNode(tile2RoundCornersShape)
                 
-                tile2RoundCorners = view.textureFromNode(tile2Shape)
+                let headerBackgroundPath = UIBezierPath(
+                    roundedRect: CGRectMake(0, 0, sceneSize.width * ratio, tileWidth * ratio),
+                    byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.TopRight,
+                    cornerRadii: CGSizeMake(tileWidth * ratio / 2, tileWidth * ratio / 2))
+                
+                let headerBackgroundShape = SKShapeNode()
+                headerBackgroundShape.path = headerBackgroundPath.CGPath
+                headerBackgroundShape.fillColor = SKColor.whiteColor()
+                headerTexture = view.textureFromNode(headerBackgroundShape)
                 
                 let tileShape = SKShapeNode()
                 tileShape.fillColor = UIColor.whiteColor()
@@ -71,8 +80,8 @@ class Constants {
                 tileStarTexture = view.textureFromNode(tileShape)
                 
                 calculateBoardPositions()
+                calculateHeaderPositions()
             }
-            
         }
     }
     
@@ -80,10 +89,13 @@ class Constants {
         repeatedValue: Array(count: Constants.boardSize,
             repeatedValue: CGPointZero))
     
+    static var headerPositions = Array(count: 5, repeatedValue: CGPointZero)
+    
     static var tileTexture: SKTexture! = SKTexture()
     static var starTexture: SKTexture! = SKTexture()
     static var tileStarTexture: SKTexture! = SKTexture()
-    static var tile2RoundCorners: SKTexture = SKTexture()
+    static var tile2RoundCornersTexture: SKTexture = SKTexture()
+    static var headerTexture: SKTexture = SKTexture()
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
     static var boardSize = 6
@@ -103,7 +115,18 @@ class Constants {
         }
     }
     
-    private static func degree2radian(a:CGFloat) -> CGFloat {
+    private static func calculateHeaderPositions() {
+        let widthWithoutLR = sceneSize.width - tileWidth * 2
+        let onePart = widthWithoutLR / 6
+        let startX = tileWidth + onePart
+        let yMiddle = tileWidth / 2
+        
+        for var i = 0; i < headerPositions.count; ++i {
+            headerPositions[i] = CGPointMake(startX + CGFloat(i) * onePart, yMiddle)
+        }
+    }
+    
+    static func degree2radian(a:CGFloat) -> CGFloat {
         let b = CGFloat(M_PI) * a/180
         return b
     }
