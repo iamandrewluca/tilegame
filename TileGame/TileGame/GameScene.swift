@@ -84,6 +84,10 @@ class GameScene: SKScene {
     
     func prepareUI() {
         header = Header()
+        for var i = 0; i < currentLevel.colorTargets.count; ++i {
+            header.colorLabels[i]!.text = "0/\(currentLevel.colorTargets[i])"
+        }
+        header.levelTopLabel.text = "\(currentLevel.level + 1)"
         self.addChild(header)
     }
     
@@ -228,7 +232,7 @@ class GameScene: SKScene {
         
         var orientation = Orientation.None
         
-        if max(fabs(delta.x), fabs(delta.y)) > 10 {
+        if max(fabs(delta.x), fabs(delta.y)) > 5 {
             if fabs(delta.x) > fabs(delta.y) {
                 orientation = Orientation.Horizontal
                 

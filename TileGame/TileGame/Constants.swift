@@ -37,10 +37,9 @@ class Constants {
                 
                 let pausePath = getPausePath(tileWidth / 2 * ratio, height: tileWidth / 2 * ratio)
                 let starPath = getStarPath(0, y: 0, radius: tileWidth / 4 * ratio, sides: 5, pointyness: 2)
-                let roundRectPath = CGPathCreateWithRoundedRect(
-                    CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
-                    tileCornerRadius * ratio,
-                    tileCornerRadius * ratio, nil)
+                let roundRectPath = UIBezierPath(
+                    roundedRect: CGRectMake(0, 0, tileWidth * ratio , tileWidth * ratio),
+                    cornerRadius: tileCornerRadius * ratio).CGPath
                 
                 let tile2RoundCornersPath = UIBezierPath(
                     roundedRect: CGRectMake(0, 0, tileWidth * ratio, tileWidth * ratio),
@@ -189,6 +188,11 @@ class Constants {
         
         return leftPath
     }
+    
+    static var primaryFont = "HelveticaNeue-UltraLight"
+    static var secondaryFont = "HelveticaNeue-UltraLight"
+    
+    
     /////////////////////
     // Color constants //
     /////////////////////

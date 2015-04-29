@@ -19,6 +19,7 @@ class Level {
     var mainTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType.Unknown))
     var childTiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: TileType.Unknown))
     var colorTargets = Array(count: 5, repeatedValue: 0)
+    var currentTargets = Array(count: 5, repeatedValue: 0)
     var colorStars = Array(count: 5, repeatedValue: false)
     
     init(levelNumber: Int, sectionNumber: Int) {

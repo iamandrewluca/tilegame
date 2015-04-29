@@ -80,6 +80,7 @@ class Header: SKNode {
             color: SKColor.blackColor(),
             size: CGSizeMake(Constants.tileSize.width / 2, Constants.tileSize.width / 2))
         
+        pause.name = "pause"
         pause.zRotation = Constants.degree2radian(90)
         pause.position = CGPointMake(-Constants.tileSize.width / 2, Constants.tileSize.width / 2)
         rightIcon.addChild(pause)
@@ -110,13 +111,7 @@ class Header: SKNode {
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        let point = touch.locationInNode(self)
-        let node = self.nodeAtPoint(point)
-        
-        if node.name == "pause" {
-            println("pause")
-        }
+        //
     }
     
     override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
@@ -124,7 +119,13 @@ class Header: SKNode {
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        //
+        let touch = touches.first as! UITouch
+        let point = touch.locationInNode(self)
+        let node = self.nodeAtPoint(point)
+        
+        if node.name == "pause" {
+            println("pause")
+        }
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
