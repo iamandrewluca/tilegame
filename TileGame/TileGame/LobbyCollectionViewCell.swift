@@ -10,5 +10,13 @@ import UIKit
 
 class LobbyCollectionViewCell: UICollectionViewCell {
     
-    @IBOutlet weak var levelNumber: UILabel!
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        
+        backgroundColor = UIColor.grayColor()
+    }
+
+    required init(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

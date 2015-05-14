@@ -47,25 +47,16 @@
                                 <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                                 <collectionViewLayout key="collectionViewLayout" id="0x1-fL-glW" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
                                             <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                             <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="TVg-Y9-nCB">
-                                                    <rect key="frame" x="51" y="62" width="42" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                         <connections>
-                                            <outlet property="levelNumber" destination="TVg-Y9-nCB" id="mrj-xb-ME4"/>
                                             <segue destination="BV1-FR-VrT" kind="presentation" identifier="toGameScene" id="ozx-9X-m1N"/>
                                         </connections>
                                     </collectionViewCell>
@@ -88,6 +79,7 @@
                         </constraints>
                     </view>
                     <connections>
+                        <outlet property="collectionViewLayout" destination="0x1-fL-glW" id="bng-pc-3FF"/>
                         <outlet property="colletionView" destination="U4j-Tx-gDr" id="oTb-Dp-GWm"/>
                     </connections>
                 </viewController>

@@ -10,7 +10,8 @@ import UIKit
 
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    @IBOutlet weak var colletionView: UICollectionView!
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
     
     @IBAction func goBack(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -25,8 +26,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier("LobbyCell", forIndexPath: indexPath) as! LobbyCollectionViewCell)
-        cell.levelNumber.text = String(indexPath.row)
+        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! LobbyCollectionViewCell)
         
         return cell
     }
@@ -39,6 +39,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        
+        self.collectionView.registerClass(LobbyCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "Cell")
     }
 
     override func didReceiveMemoryWarning() {
@@ -58,7 +60,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         if let identifier = segue.identifier {
             if identifier == "toGameScene" {
                 let cell = sender as! LobbyCollectionViewCell
-                let indexPath = self.colletionView.indexPathForCell(cell)!
+                let indexPath = self.collectionView.indexPathForCell(cell)!
                 let gameCtrl: GameViewController = segue.destinationViewController as! GameViewController
                 gameCtrl.section = indexPath.section
                 gameCtrl.level = indexPath.item
