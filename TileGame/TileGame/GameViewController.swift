@@ -20,6 +20,7 @@ class GameViewController: UIViewController {
         let skView = self.view as! SKView
         
         let scene = GameScene(size: skView.frame.size)
+
         scene.currentLevel = Level(levelNumber: level, sectionNumber: section)
         
         scene.scaleMode = .AspectFill

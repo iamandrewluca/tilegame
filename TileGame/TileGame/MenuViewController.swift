@@ -25,6 +25,29 @@ class MenuViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        setupButtons()
+    }
+    
+    @IBAction func soundButtonPressed(sender: AnyObject) {
+        println("sound")
+    }
+    @IBAction func resetButtonPressed(sender: AnyObject) {
+        println("reset")
+    }
+    @IBAction func musicButtonPressed(sender: AnyObject) {
+        println("music")
+    }
+    @IBAction func adsButtonPressed(sender: AnyObject) {
+        println("ads")
+    }
+    @IBAction func shareButtonPressed(sender: AnyObject) {
+        println("share")
+    }
+    @IBAction func rateButtonPressed(sender: AnyObject) {
+        println("rate")
+    }
+    
+    func setupButtons() {
         self.soundButton.backgroundColor = Constants.Color1
         self.resetButton.backgroundColor = Constants.Color2
         self.musicButton.backgroundColor = Constants.Color3
@@ -60,21 +83,21 @@ class MenuViewController: UIViewController {
         shareLayer.path = UIBezierPath(
             roundedRect: self.shareButton.bounds,
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.BottomLeft,
-            cornerRadii: CGSizeMake(10, 10)).CGPath
+            cornerRadii: CGSizeMake(20, 20)).CGPath
         self.shareButton.layer.mask = shareLayer
         
         let adsLayer = CAShapeLayer()
         adsLayer.path = UIBezierPath(
             roundedRect: self.adsButton.bounds,
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopLeft,
-            cornerRadii: CGSizeMake(10, 10)).CGPath
+            cornerRadii: CGSizeMake(20, 20)).CGPath
         self.adsButton.layer.mask = adsLayer
         
         let rateLayer = CAShapeLayer()
         rateLayer.path = UIBezierPath(
             roundedRect: self.rateButton.bounds,
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.TopLeft,
-            cornerRadii: CGSizeMake(10, 10)).CGPath
+            cornerRadii: CGSizeMake(20, 20)).CGPath
         self.rateButton.layer.mask = rateLayer
     }
 
