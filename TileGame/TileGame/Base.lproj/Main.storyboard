@@ -44,18 +44,19 @@
                             </view>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
-                                <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
-                                <collectionViewLayout key="collectionViewLayout" id="0x1-fL-glW" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
+                                <color key="backgroundColor" red="0.93725490196078431" green="0.93725490196078431" blue="0.95686274509803926" alpha="1" colorSpace="calibratedRGB"/>
+                                <collectionViewLayout key="collectionViewLayout" id="sqo-ge-wMz" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="Cell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         </view>
                                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                        <size key="customSize" width="145" height="145"/>
                                         <connections>
                                             <segue destination="BV1-FR-VrT" kind="presentation" identifier="toGameScene" id="ozx-9X-m1N"/>
                                         </connections>
@@ -79,8 +80,8 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="collectionViewLayout" destination="0x1-fL-glW" id="bng-pc-3FF"/>
-                        <outlet property="colletionView" destination="U4j-Tx-gDr" id="oTb-Dp-GWm"/>
+                        <outlet property="collectionView" destination="U4j-Tx-gDr" id="jxx-N7-ZK9"/>
+                        <outlet property="collectionViewLayout" destination="sqo-ge-wMz" id="6cl-LT-pgL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YuP-Lq-O8e" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -98,7 +99,7 @@
                     <view key="view" contentMode="scaleToFill" id="3se-qz-xqx" customClass="SKView">
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                        <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                     </view>
                     <navigationItem key="navigationItem" id="dX2-92-R1C"/>
                 </viewController>
@@ -246,7 +247,7 @@
                                 </connections>
                             </button>
                         </subviews>
-                        <color key="backgroundColor" cocoaTouchSystemColor="viewFlipsideBackgroundColor"/>
+                        <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="7" id="CKc-M6-KVb"/>
                             <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="Gy2-oS-67t" secondAttribute="trailing" constant="8" id="HWC-jF-z4N"/>

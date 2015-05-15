@@ -13,7 +13,7 @@ class LobbyCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        backgroundColor = UIColor.grayColor()
+        backgroundColor = UIColor.redColor()
     }
 
     required init(coder aDecoder: NSCoder) {

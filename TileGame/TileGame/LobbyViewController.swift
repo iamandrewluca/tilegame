@@ -10,6 +10,7 @@ import UIKit
 
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
+    let cellIdentifier = "LobbyCell"
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
     
@@ -26,7 +27,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! LobbyCollectionViewCell)
+        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! LobbyCollectionViewCell)
         
         return cell
     }
@@ -40,7 +41,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         // Do any additional setup after loading the view.
         
-        self.collectionView.registerClass(LobbyCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: "Cell")
+        self.collectionView.registerClass(LobbyCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: cellIdentifier)
     }
 
     override func didReceiveMemoryWarning() {

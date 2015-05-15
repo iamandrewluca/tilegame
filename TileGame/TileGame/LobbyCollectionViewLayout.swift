@@ -18,23 +18,18 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
     let cellIdentifier = "Cell"
     
     var layoutInfo = Dictionary<String, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>()
-    
-    override init() {
-        
-        itemInsets = UIEdgeInsetsMake(10, 10, 10, 10)
-        itemSize = CGSizeMake(145, 145)
-        numberOfColumns = 2
-        interItemSpacingY = 10
-        
-        super.init()
-    }
 
     required init(coder aDecoder: NSCoder) {
         
         itemInsets = UIEdgeInsetsMake(10, 10, 10, 10)
         itemSize = CGSizeMake(145, 145)
-        numberOfColumns = 2
         interItemSpacingY = 10
+        
+        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
+            numberOfColumns = 3
+        } else {
+            numberOfColumns = 2
+        }
 
         super.init(coder: aDecoder)
     }
@@ -51,7 +46,7 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
             
             for var item = 0; item < itemCount; ++item {
                 indexPath = NSIndexPath(forItem: item, inSection: section)
-                
+
                 var itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
                 itemAttributes.frame = frameForItemAtIndexPath(indexPath)
                 
@@ -65,19 +60,23 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
     
     func frameForItemAtIndexPath(indexPath: NSIndexPath) -> CGRect {
         
-        var row = indexPath.section / numberOfColumns
-        var column = indexPath.section % numberOfColumns;
+        var rowPerSection = collectionView!.numberOfItemsInSection(indexPath.section) / numberOfColumns
         
-        var spacingX: CGFloat = collectionView!.bounds.size.width -
-            itemInsets.left - itemInsets.right - (CGFloat(numberOfColumns) * itemSize.width)
+        var row = indexPath.item / numberOfColumns + indexPath.section * rowPerSection
+        
+        var column = indexPath.item % numberOfColumns
+        
+        var spacingX: CGFloat = collectionView!.bounds.size.width + itemInsets.left -
+            CGFloat(numberOfColumns) * (itemSize.width + itemInsets.right + itemInsets.left)
         
         if numberOfColumns > 1 {
             spacingX = spacingX / CGFloat(numberOfColumns - 1)
         }
-
-        var originX: CGFloat = floor(itemInsets.left + CGFloat(column) * (itemSize.width + spacingX))
-        var originY: CGFloat = floor(itemInsets.top + CGFloat(row) * (itemSize.height + interItemSpacingY))
         
+        var spacingXpart: CGFloat = spacingX / CGFloat(numberOfColumns + 1)
+        
+        var originX: CGFloat = floor(spacingXpart + itemInsets.left + CGFloat(column) * (itemSize.width + spacingXpart + itemInsets.right))
+        var originY: CGFloat = floor(itemInsets.top + CGFloat(row) * (itemSize.height + interItemSpacingY))
         return CGRectMake(originX, originY, itemSize.width, itemSize.height)
     }
     
@@ -101,6 +100,10 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
     
     
     override func collectionViewContentSize() -> CGSize {
-        return CGSizeZero
+        var rowPerSection = collectionView!.numberOfItemsInSection(0) / numberOfColumns
+        var rowCount = rowPerSection * collectionView!.numberOfSections()
+        var height = itemInsets.top + CGFloat(rowCount) * itemSize.height + CGFloat(rowCount - 1) * interItemSpacingY + itemInsets.bottom
+        
+        return CGSizeMake(collectionView!.bounds.size.width, height)
     }
 }
