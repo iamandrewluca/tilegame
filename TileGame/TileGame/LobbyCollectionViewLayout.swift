@@ -69,14 +69,11 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
         var spacingX: CGFloat = collectionView!.bounds.size.width + itemInsets.left -
             CGFloat(numberOfColumns) * (itemSize.width + itemInsets.right + itemInsets.left)
         
-        if numberOfColumns > 1 {
-            spacingX = spacingX / CGFloat(numberOfColumns - 1)
-        }
-        
         var spacingXpart: CGFloat = spacingX / CGFloat(numberOfColumns + 1)
         
         var originX: CGFloat = floor(spacingXpart + itemInsets.left + CGFloat(column) * (itemSize.width + spacingXpart + itemInsets.right))
         var originY: CGFloat = floor(itemInsets.top + CGFloat(row) * (itemSize.height + interItemSpacingY))
+        
         return CGRectMake(originX, originY, itemSize.width, itemSize.height)
     }
     
