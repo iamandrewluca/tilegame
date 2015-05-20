@@ -39,3 +39,10 @@ extension CGFloat {
         self = round(self * multiplier) / multiplier
     }
 }
+
+func *(lhs: CGSize, rhs: CGFloat) -> CGSize {
+    var multipliedSize = lhs
+    multipliedSize.width *= rhs
+    multipliedSize.height *= rhs
+    return multipliedSize
+}

@@ -9,7 +9,7 @@
         <!--Lobby View Controller-->
         <scene sceneID="4UA-Yu-eTw">
             <objects>
-                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LpQ-tW-sWV"/>
                         <viewControllerLayoutGuide type="bottom" id="FmE-Qk-mbX"/>
@@ -45,9 +45,9 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
+                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="Tile_Game" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="Tile_Game" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -106,7 +106,7 @@
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="maK-i9-Uhn"/>
                         <viewControllerLayoutGuide type="bottom" id="khH-OB-KpY"/>
@@ -147,7 +147,7 @@
         <!--Menu View Controller-->
         <scene sceneID="YeG-pP-hkt">
             <objects>
-                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="g3A-T0-zAz"/>
                         <viewControllerLayoutGuide type="bottom" id="tR4-x1-aXD"/>
@@ -161,12 +161,17 @@
                                 <color key="backgroundColor" red="0.60000002384185791" green="0.40000000596046448" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="WSZ-e5-uhR" secondAttribute="height" multiplier="1:1" id="InC-qS-Ivh"/>
-                                    <constraint firstAttribute="height" constant="100" id="zTw-Tv-oGr"/>
+                                    <constraint firstAttribute="height" constant="100" id="zTw-Tv-oGr">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="200"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Play">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <segue destination="hVi-5l-GF7" kind="presentation" id="4bZ-Yv-yRi"/>
                                 </connections>
@@ -176,12 +181,17 @@
                                 <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Gy2-oS-67t" secondAttribute="height" multiplier="1:1" id="fhd-09-FYr"/>
-                                    <constraint firstAttribute="width" constant="70" id="nT1-M2-rlB"/>
+                                    <constraint firstAttribute="width" constant="70" id="nT1-M2-rlB">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="140"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Music">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="musicButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="HZO-zm-5py"/>
                                 </connections>
@@ -190,13 +200,18 @@
                                 <rect key="frame" x="177" y="284" width="65" height="65"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="HsB-TP-rfu"/>
+                                    <constraint firstAttribute="width" constant="65" id="HsB-TP-rfu">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="130"/>
+                                    </constraint>
                                     <constraint firstAttribute="width" secondItem="4fm-Xg-xqV" secondAttribute="height" multiplier="1:1" id="rlE-aT-Ta9"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Sound">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="soundButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="zQw-Ox-Xhw"/>
                                 </connections>
@@ -206,78 +221,122 @@
                                 <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="O9u-Fb-0JF" secondAttribute="height" multiplier="1:1" id="X6R-Df-lP7"/>
-                                    <constraint firstAttribute="width" constant="55" id="XbI-3p-nbm"/>
+                                    <constraint firstAttribute="width" constant="55" id="XbI-3p-nbm">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="110"/>
+                                    </constraint>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Reset">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="resetButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="gjt-cz-8Nb"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ash-oP-8tH">
-                                <rect key="frame" x="358" y="287" width="60" height="60"/>
+                                <rect key="frame" x="358" y="290" width="60" height="60"/>
                                 <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="Ktp-Va-aVW"/>
+                                    <constraint firstAttribute="width" constant="60" id="Ktp-Va-aVW">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="120"/>
+                                    </constraint>
                                     <constraint firstAttribute="width" secondItem="Ash-oP-8tH" secondAttribute="height" multiplier="1:1" id="eWJ-SE-EIP"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Share">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="shareButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="MyA-BB-Nsq"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OQI-CE-dAA">
-                                <rect key="frame" x="358" y="229" width="50" height="50"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="OQI-CE-dAA" secondAttribute="height" multiplier="1:1" id="2J5-7T-1eG"/>
-                                    <constraint firstAttribute="width" constant="50" id="Yfx-2i-rzw"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Rate">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="rateButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="Fsl-OL-o4P"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-rw-0a4">
-                                <rect key="frame" x="358" y="355" width="45" height="45"/>
+                                <rect key="frame" x="358" y="358" width="45" height="45"/>
                                 <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" constant="45" id="pUT-nz-fQO"/>
+                                    <constraint firstAttribute="width" constant="45" id="pUT-nz-fQO">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="90"/>
+                                    </constraint>
                                     <constraint firstAttribute="width" secondItem="2ou-rw-0a4" secondAttribute="height" multiplier="1:1" id="w35-TC-BJO"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Ads">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
                                 <connections>
                                     <action selector="adsButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="TPy-tx-RwM"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OQI-CE-dAA">
+                                <rect key="frame" x="358" y="232" width="50" height="50"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="OQI-CE-dAA" secondAttribute="height" multiplier="1:1" id="2J5-7T-1eG"/>
+                                    <constraint firstAttribute="width" constant="50" id="Yfx-2i-rzw">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="100"/>
+                                    </constraint>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="15"/>
+                                <state key="normal" title="Rate">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="HelveticaNeue-CondensedBold" family="Helvetica Neue" pointSize="30"/>
+                                </variation>
+                                <connections>
+                                    <action selector="rateButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="Fsl-OL-o4P"/>
                                 </connections>
                             </button>
                         </subviews>
                         <color key="backgroundColor" red="0.12156862745098039" green="0.12941176470588237" blue="0.14117647058823529" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="7" id="CKc-M6-KVb"/>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="Gy2-oS-67t" secondAttribute="trailing" constant="8" id="HWC-jF-z4N"/>
-                            <constraint firstItem="Ash-oP-8tH" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="IBK-Dd-wff"/>
-                            <constraint firstItem="OQI-CE-dAA" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="NxC-XL-QZX"/>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="SvR-Du-3d3"/>
-                            <constraint firstItem="Ash-oP-8tH" firstAttribute="top" secondItem="OQI-CE-dAA" secondAttribute="bottom" constant="8" id="TLz-aD-Zyq"/>
-                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="4fm-Xg-xqV" secondAttribute="bottom" constant="8" id="Urf-ve-vfq"/>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="5" id="cB2-07-WuX"/>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="Ash-oP-8tH" secondAttribute="bottom" constant="8" id="cIr-0d-GBd"/>
+                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="7" id="CKc-M6-KVb">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="Gy2-oS-67t" secondAttribute="trailing" constant="8" id="HWC-jF-z4N">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="Ash-oP-8tH" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="IBK-Dd-wff">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="OQI-CE-dAA" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="NxC-XL-QZX">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="SvR-Du-3d3">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="Ash-oP-8tH" firstAttribute="top" secondItem="OQI-CE-dAA" secondAttribute="bottom" constant="8" id="TLz-aD-Zyq">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="4fm-Xg-xqV" secondAttribute="bottom" constant="8" id="Urf-ve-vfq">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="8" id="cB2-07-WuX">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="Ash-oP-8tH" secondAttribute="bottom" constant="8" id="cIr-0d-GBd">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
                             <constraint firstAttribute="centerX" secondItem="WSZ-e5-uhR" secondAttribute="centerX" id="f3L-EF-cCY"/>
-                            <constraint firstItem="Gy2-oS-67t" firstAttribute="leading" secondItem="O9u-Fb-0JF" secondAttribute="trailing" constant="8" id="gly-Qb-cqr"/>
+                            <constraint firstItem="Gy2-oS-67t" firstAttribute="leading" secondItem="O9u-Fb-0JF" secondAttribute="trailing" constant="8" id="gly-Qb-cqr">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
                             <constraint firstAttribute="centerY" secondItem="WSZ-e5-uhR" secondAttribute="centerY" id="kWB-1J-g7H"/>
-                            <constraint firstItem="Gy2-oS-67t" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="8" id="vBY-yy-si8"/>
-                            <constraint firstItem="WSZ-e5-uhR" firstAttribute="leading" secondItem="4fm-Xg-xqV" secondAttribute="trailing" constant="8" id="wUF-lp-5tx"/>
+                            <constraint firstItem="Gy2-oS-67t" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="8" id="vBY-yy-si8">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
+                            <constraint firstItem="WSZ-e5-uhR" firstAttribute="leading" secondItem="4fm-Xg-xqV" secondAttribute="trailing" constant="8" id="wUF-lp-5tx">
+                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
+                            </constraint>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Xxq-kg-H16"/>
