@@ -54,10 +54,10 @@
                                             <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="Bd7-bt-FbB">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="Bd7-bt-FbB">
                                                     <rect key="frame" x="8" y="97" width="40" height="40"/>
                                                 </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="fh7-7u-ikp">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="fh7-7u-ikp">
                                                     <rect key="frame" x="52" y="97" width="40" height="40"/>
                                                 </imageView>
                                                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="soA-Ok-G1M">
@@ -299,6 +299,5 @@
     <resources>
         <image name="Back" width="48" height="48"/>
         <image name="NoStar" width="40" height="38"/>
-        <image name="Star" width="40" height="38"/>
     </resources>
 </document>

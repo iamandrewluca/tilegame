@@ -261,9 +261,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		151B5A7D1AC9BA92002BD68C /* TileGame */ = {
+		151B5A7D1AC9BA92002BD68C /* Tile Game */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "TileGame" */;
+			buildConfigurationList = 151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "Tile Game" */;
 			buildPhases = (
 				151B5A7A1AC9BA92002BD68C /* Sources */,
 				151B5A7B1AC9BA92002BD68C /* Frameworks */,
@@ -273,7 +273,7 @@
 			);
 			dependencies = (
 			);
-			name = TileGame;
+			name = "Tile Game";
 			productName = TileGame;
 			productReference = 151B5A7E1AC9BA92002BD68C /* TileGame.app */;
 			productType = "com.apple.product-type.application";
@@ -327,7 +327,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				151B5A7D1AC9BA92002BD68C /* TileGame */,
+				151B5A7D1AC9BA92002BD68C /* Tile Game */,
 				151B5A961AC9BA92002BD68C /* TileGameTests */,
 			);
 		};
@@ -406,7 +406,7 @@
 /* Begin PBXTargetDependency section */
 		151B5A991AC9BA92002BD68C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 151B5A7D1AC9BA92002BD68C /* TileGame */;
+			target = 151B5A7D1AC9BA92002BD68C /* Tile Game */;
 			targetProxy = 151B5A981AC9BA92002BD68C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -580,7 +580,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "TileGame" */ = {
+		151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "Tile Game" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				151B5AA21AC9BA92002BD68C /* Debug */,
