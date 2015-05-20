@@ -10,7 +10,6 @@ import UIKit
 
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
-    let cellIdentifier = "LobbyCell"
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
     
@@ -23,25 +22,29 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 3
+        return 6
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = (collectionView.dequeueReusableCellWithReuseIdentifier(cellIdentifier, forIndexPath: indexPath) as! LobbyCollectionViewCell)
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCollectionViewCell
         
         return cell
     }
     
+    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+        var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: Identifiers.lobbyHeader, forIndexPath: indexPath) as! LobbyCollectionViewHeader
+
+        return header
+    }
+        
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
-        self.collectionView.registerClass(LobbyCollectionViewCell.classForCoder(), forCellWithReuseIdentifier: cellIdentifier)
+        collectionView!.registerNib(UINib(nibName: "LobbyCollectionViewHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
     }
 
     override func didReceiveMemoryWarning() {

@@ -12,11 +12,21 @@ class LobbyCollectionViewCell: UICollectionViewCell {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
-        backgroundColor = UIColor.redColor()
     }
 
     required init(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        super.init(coder: aDecoder)
+    }
+    
+    override func awakeFromNib() {
+        
+        layer.cornerRadius = 10
+        
+        backgroundColor = UIColor.whiteColor()
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.25
+        layer.shadowColor = UIColor.grayColor().CGColor
+        layer.shadowRadius = 2.0
+        layer.shadowOffset = CGSizeZero
     }
 }
