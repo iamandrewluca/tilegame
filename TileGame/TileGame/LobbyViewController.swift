@@ -12,6 +12,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
+    @IBOutlet weak var backButton: UIButton!
     
     @IBAction func goBack(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
@@ -45,6 +46,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewDidLoad()
         
         collectionView!.registerNib(UINib(nibName: "LobbyCollectionViewHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
+        
+        let backImage = UIImage(named: "Back")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        backButton.setImage(backImage, forState: UIControlState.Normal)
+        backButton.tintColor = UIColor.grayColor();
     }
 
     override func didReceiveMemoryWarning() {
@@ -62,7 +67,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         // Pass the selected object to the new view controller.
         
         if let identifier = segue.identifier {
-            if identifier == "toGameScene" {
+            if identifier == Identifiers.gameSceneSegue {
                 let cell = sender as! LobbyCollectionViewCell
                 let indexPath = self.collectionView.indexPathForCell(cell)!
                 let gameCtrl: GameViewController = segue.destinationViewController as! GameViewController

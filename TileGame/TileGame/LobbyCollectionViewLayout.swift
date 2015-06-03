@@ -15,7 +15,7 @@ class LobbyCollectionViewLayout : UICollectionViewLayout {
     var headerInsets = UIEdgeInsetsZero
     
     var cellSize = CGSizeMake(145, 145)
-    var headerSize = CGSizeMake(0, 55)
+    var headerSize = CGSizeMake(0, 48)
     
     var numberOfColumns: Int
     var spacingX: CGFloat = 0
