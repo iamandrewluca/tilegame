@@ -9,11 +9,12 @@
 import Foundation
 
 class Levels {
-    
-    var levelsInfo: Array<Array<Int>>
+
     var levelsInfoPath: String
+    var levelsInfo: Array<Array<Int>>
     var unlockedSections: Int
     var totalSections: Int
+    var levelsPerSection = 6
     
     init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
@@ -26,7 +27,6 @@ class Levels {
 
         unlockedSections = levelsInfo.count
         totalSections = Levels.getTotalSections()
-        println(totalSections)
     }
 
     private class func getTotalSections() -> Int {

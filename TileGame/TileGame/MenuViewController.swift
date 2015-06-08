@@ -9,6 +9,7 @@
 import UIKit
 
 class MenuViewController: UIViewController {
+
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var soundButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
@@ -16,6 +17,8 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var adsButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
+
+    var levels = Levels()
     
     override func prefersStatusBarHidden() -> Bool {
         return true
@@ -128,7 +131,8 @@ class MenuViewController: UIViewController {
         
         if let identifier = segue.identifier {
             if identifier == Identifiers.lobbySegue {
-                println("toLobby")
+                let lobby = segue.destinationViewController as! LobbyViewController
+                lobby.levels = levels
             }
         }
     }

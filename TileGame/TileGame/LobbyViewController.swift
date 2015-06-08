@@ -13,21 +13,24 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
     @IBOutlet weak var backButton: UIButton!
+
+    var levels: Levels!
     
     @IBAction func goBack(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 6
+        return levels.levelsPerSection
     }
     
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
-        return 6
+        return levels.totalSections
     }
     
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCollectionViewCell
+        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(
+            Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCollectionViewCell
         
         return cell
     }

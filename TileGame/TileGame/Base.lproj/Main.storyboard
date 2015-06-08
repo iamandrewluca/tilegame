@@ -164,7 +164,7 @@
                                     <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="35"/>
                                 </variation>
                                 <connections>
-                                    <segue destination="hVi-5l-GF7" kind="presentation" identifier="toLobby" modalTransitionStyle="flipHorizontal" id="4bZ-Yv-yRi"/>
+                                    <segue destination="hVi-5l-GF7" kind="presentation" identifier="toLobby" id="IAN-KA-JPW"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gy2-oS-67t">
