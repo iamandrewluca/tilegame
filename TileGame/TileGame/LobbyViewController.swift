@@ -35,6 +35,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
         var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: Identifiers.lobbyHeader, forIndexPath: indexPath) as! LobbyCollectionViewHeader
 
+        header.headerLabel.text = "+3 start to open"
         return header
     }
         

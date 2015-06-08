@@ -10,7 +10,7 @@
         <!--Lobby View Controller-->
         <scene sceneID="4UA-Yu-eTw">
             <objects>
-                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LpQ-tW-sWV"/>
                         <viewControllerLayoutGuide type="bottom" id="FmE-Qk-mbX"/>
@@ -22,9 +22,9 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
+                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="Tile_Game" customModuleProvider="target"/>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="TileGame" customModuleProvider="target">
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="Tile_Game" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
@@ -51,6 +51,10 @@
                                         </view>
                                         <size key="customSize" width="145" height="145"/>
                                         <connections>
+                                            <outlet property="firstStar" destination="Bd7-bt-FbB" id="xpn-ht-AQq"/>
+                                            <outlet property="levelNumber" destination="IjY-oN-Ef8" id="7Rb-6k-arO"/>
+                                            <outlet property="secondStar" destination="fh7-7u-ikp" id="dTm-6k-kh7"/>
+                                            <outlet property="thirdStar" destination="soA-Ok-G1M" id="J44-1x-uqU"/>
                                             <segue destination="BV1-FR-VrT" kind="presentation" identifier="toGameScene" id="ozx-9X-m1N"/>
                                         </connections>
                                     </collectionViewCell>
@@ -93,7 +97,7 @@
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="maK-i9-Uhn"/>
                         <viewControllerLayoutGuide type="bottom" id="khH-OB-KpY"/>
@@ -134,7 +138,7 @@
         <!--Menu View Controller-->
         <scene sceneID="YeG-pP-hkt">
             <objects>
-                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="g3A-T0-zAz"/>
                         <viewControllerLayoutGuide type="bottom" id="tR4-x1-aXD"/>

@@ -10,6 +10,11 @@ import UIKit
 
 class LobbyCollectionViewCell: UICollectionViewCell {
     
+    @IBOutlet weak var levelNumber: UILabel!
+    @IBOutlet weak var firstStar: UIImageView!
+    @IBOutlet weak var secondStar: UIImageView!
+    @IBOutlet weak var thirdStar: UIImageView!
+
     override init(frame: CGRect) {
         super.init(frame: frame)
     }
@@ -19,14 +24,19 @@ class LobbyCollectionViewCell: UICollectionViewCell {
     }
     
     override func awakeFromNib() {
-        
-        layer.cornerRadius = 10
-        
         backgroundColor = UIColor.whiteColor()
+        layer.cornerRadius = 10
         layer.masksToBounds = false
         layer.shadowOpacity = 0.25
         layer.shadowColor = UIColor.grayColor().CGColor
         layer.shadowRadius = 2.0
         layer.shadowOffset = CGSizeZero
+    }
+
+    override func prepareForReuse() {
+        firstStar.image = UIImage(named: "NoStar")
+        secondStar.image = UIImage(named: "NoStar")
+        thirdStar.image = UIImage(named: "NoStar")
+        levelNumber.text = "0"
     }
 }

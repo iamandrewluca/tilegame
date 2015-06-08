@@ -40,6 +40,7 @@
 		75CF0F911B0CC29800A13514 /* section_1_level_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 75CF0F8B1B0CC29800A13514 /* section_1_level_3.json */; };
 		75CF0F921B0CC29800A13514 /* section_1_level_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 75CF0F8C1B0CC29800A13514 /* section_1_level_4.json */; };
 		75CF0F931B0CC29800A13514 /* section_1_level_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 75CF0F8D1B0CC29800A13514 /* section_1_level_5.json */; };
+		75D793431B25ECFD00DB19B4 /* Levels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D793421B25ECFD00DB19B4 /* Levels.swift */; };
 		75F09C001AE08064003C061B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F09BFF1AE08064003C061B /* Helpers.swift */; };
 		75FFAE291ADFBEDD009C087F /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FFAE281ADFBEDC009C087F /* Level.swift */; };
 		75FFAE2B1ADFCA42009C087F /* levelsInfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 75FFAE2A1ADFCA42009C087F /* levelsInfo.json */; };
@@ -93,6 +94,7 @@
 		75CF0F8B1B0CC29800A13514 /* section_1_level_3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = section_1_level_3.json; sourceTree = "<group>"; };
 		75CF0F8C1B0CC29800A13514 /* section_1_level_4.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = section_1_level_4.json; sourceTree = "<group>"; };
 		75CF0F8D1B0CC29800A13514 /* section_1_level_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = section_1_level_5.json; sourceTree = "<group>"; };
+		75D793421B25ECFD00DB19B4 /* Levels.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Levels.swift; sourceTree = "<group>"; };
 		75F09BFF1AE08064003C061B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		75FFAE281ADFBEDC009C087F /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		75FFAE2A1ADFCA42009C087F /* levelsInfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levelsInfo.json; sourceTree = "<group>"; };
@@ -243,6 +245,7 @@
 				15C836791ACFC1F900784FEC /* Constants.swift */,
 				75F09BFF1AE08064003C061B /* Helpers.swift */,
 				75B52BF31B086AF300DCDB91 /* Identifiers.swift */,
+				75D793421B25ECFD00DB19B4 /* Levels.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -261,9 +264,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		151B5A7D1AC9BA92002BD68C /* TileGame */ = {
+		151B5A7D1AC9BA92002BD68C /* Tile Game */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "TileGame" */;
+			buildConfigurationList = 151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "Tile Game" */;
 			buildPhases = (
 				151B5A7A1AC9BA92002BD68C /* Sources */,
 				151B5A7B1AC9BA92002BD68C /* Frameworks */,
@@ -273,7 +276,7 @@
 			);
 			dependencies = (
 			);
-			name = TileGame;
+			name = "Tile Game";
 			productName = TileGame;
 			productReference = 151B5A7E1AC9BA92002BD68C /* Tile Game.app */;
 			productType = "com.apple.product-type.application";
@@ -327,7 +330,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				151B5A7D1AC9BA92002BD68C /* TileGame */,
+				151B5A7D1AC9BA92002BD68C /* Tile Game */,
 				151B5A961AC9BA92002BD68C /* TileGameTests */,
 			);
 		};
@@ -377,6 +380,7 @@
 			files = (
 				151B5A881AC9BA92002BD68C /* GameScene.swift in Sources */,
 				15A905921AC9C10700B37BEB /* LobbyViewController.swift in Sources */,
+				75D793431B25ECFD00DB19B4 /* Levels.swift in Sources */,
 				151B5A8A1AC9BA92002BD68C /* GameViewController.swift in Sources */,
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
 				75776FF71AEE6BEB00086C37 /* Header.swift in Sources */,
@@ -406,7 +410,7 @@
 /* Begin PBXTargetDependency section */
 		151B5A991AC9BA92002BD68C /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 151B5A7D1AC9BA92002BD68C /* TileGame */;
+			target = 151B5A7D1AC9BA92002BD68C /* Tile Game */;
 			targetProxy = 151B5A981AC9BA92002BD68C /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -580,7 +584,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "TileGame" */ = {
+		151B5AA11AC9BA92002BD68C /* Build configuration list for PBXNativeTarget "Tile Game" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				151B5AA21AC9BA92002BD68C /* Debug */,
