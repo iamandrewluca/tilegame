@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LobbyCollectionViewHeader: UICollectionReusableView {
+class LobbyHeader: UICollectionReusableView {
     @IBOutlet weak var headerLabel: UILabel!
     override init(frame: CGRect) {
         super.init(frame: frame)

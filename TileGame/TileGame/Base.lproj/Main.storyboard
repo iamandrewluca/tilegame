@@ -22,7 +22,7 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
+                                <collectionViewLayout key="collectionViewLayout" id="Z1h-jc-6fC" customClass="LobbyLayout" customModule="TileGame" customModuleProvider="target"/>
                                 <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="hVi-5l-GF7" id="7br-pb-e9b"/>
@@ -49,10 +49,10 @@
                             <constraint firstAttribute="trailing" secondItem="U4j-Tx-gDr" secondAttribute="trailing" id="gEw-Dl-up4"/>
                         </constraints>
                     </view>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="backButton" destination="HPL-oc-2zd" id="ho0-Ux-ClG"/>
                         <outlet property="collectionView" destination="U4j-Tx-gDr" id="jxx-N7-ZK9"/>
-                        <outlet property="collectionViewLayout" destination="CoM-D4-BSY" id="XBg-AO-LeE"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YuP-Lq-O8e" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -253,7 +253,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TILE GAME" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6bE-Yk-stg">
-                                <rect key="frame" x="0.0" y="62" width="600" height="123"/>
+                                <rect key="frame" x="0.0" y="42" width="600" height="123"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="123" id="wSH-Sl-SbG"/>
                                 </constraints>
@@ -308,6 +308,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Xxq-kg-H16"/>
+                    <nil key="simulatedStatusBarMetrics"/>
                     <connections>
                         <outlet property="adsButton" destination="2ou-rw-0a4" id="Y67-2W-9zz"/>
                         <outlet property="musicButton" destination="Gy2-oS-67t" id="NGR-KZ-seT"/>

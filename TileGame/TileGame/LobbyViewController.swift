@@ -11,7 +11,6 @@ import UIKit
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     
     @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var collectionViewLayout: LobbyCollectionViewLayout!
     @IBOutlet weak var backButton: UIButton!
 
     var levels: Levels!
@@ -32,14 +31,14 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-            Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCollectionViewCell
+            Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCell
 
         setupCellWithIndexPath(cell, indexPath: indexPath)
 
         return cell
     }
 
-    private func setupCellWithIndexPath(cell: LobbyCollectionViewCell, indexPath: NSIndexPath) {
+    private func setupCellWithIndexPath(cell: LobbyCell, indexPath: NSIndexPath) {
         let cellLevel = String(1 + indexPath.section * levels.levelsPerSection + indexPath.item)
         cell.levelNumber.text = cellLevel
 
@@ -62,7 +61,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
             withReuseIdentifier: Identifiers.lobbyHeader,
-            forIndexPath: indexPath) as! LobbyCollectionViewHeader
+            forIndexPath: indexPath) as! LobbyHeader
 
         header.headerLabel.text = "+3 start to open"
         return header
@@ -75,7 +74,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        collectionView!.registerNib(UINib(nibName: "LobbyCollectionViewHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
+        collectionView!.registerNib(UINib(nibName: "LobbyHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
+
+        collectionView!.registerNib(UINib(nibName: "LobbyCell", bundle: nil), forCellWithReuseIdentifier: Identifiers.lobbyCell)
 
         setButton(UIImage(named: "Back"),
             tintColor: UIColor.grayColor(),
@@ -104,7 +105,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         if let identifier = segue.identifier {
             if identifier == Identifiers.gameSceneSegue {
-                let cell = sender as! LobbyCollectionViewCell
+                let cell = sender as! LobbyCell
                 let indexPath = self.collectionView.indexPathForCell(cell)!
                 let gameCtrl: GameViewController = segue.destinationViewController as! GameViewController
                 gameCtrl.section = indexPath.section

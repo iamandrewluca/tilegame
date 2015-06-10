@@ -24,6 +24,8 @@ class LobbyCell: UICollectionViewCell {
     }
     
     override func awakeFromNib() {
+        super.awakeFromNib()
+        
         backgroundColor = UIColor.whiteColor()
         layer.cornerRadius = 10
         layer.masksToBounds = false

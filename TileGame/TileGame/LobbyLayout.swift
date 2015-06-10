@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class LobbyCollectionViewLayout : UICollectionViewLayout {
+class LobbyLayout : UICollectionViewLayout {
     
     var cellInsets = UIEdgeInsetsZero
     var headerInsets = UIEdgeInsetsZero
