@@ -10,7 +10,7 @@
         <!--Lobby View Controller-->
         <scene sceneID="4UA-Yu-eTw">
             <objects>
-                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="hVi-5l-GF7" customClass="LobbyViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="LpQ-tW-sWV"/>
                         <viewControllerLayoutGuide type="bottom" id="FmE-Qk-mbX"/>
@@ -22,43 +22,8 @@
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="U4j-Tx-gDr">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="Tile_Game" customModuleProvider="target"/>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="LobbyCell" id="Lr6-EG-pVm" customClass="LobbyCollectionViewCell" customModule="Tile_Game" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
-                                        <autoresizingMask key="autoresizingMask"/>
-                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center">
-                                            <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                            <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="Bd7-bt-FbB">
-                                                    <rect key="frame" x="8" y="97" width="40" height="40"/>
-                                                </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="fh7-7u-ikp">
-                                                    <rect key="frame" x="52" y="97" width="40" height="40"/>
-                                                </imageView>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="soA-Ok-G1M">
-                                                    <rect key="frame" x="97" y="97" width="40" height="40"/>
-                                                </imageView>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="9999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IjY-oN-Ef8">
-                                                    <rect key="frame" x="8" y="20" width="129" height="69"/>
-                                                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="50"/>
-                                                    <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
-                                            </subviews>
-                                            <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        </view>
-                                        <size key="customSize" width="145" height="145"/>
-                                        <connections>
-                                            <outlet property="firstStar" destination="Bd7-bt-FbB" id="xpn-ht-AQq"/>
-                                            <outlet property="levelNumber" destination="IjY-oN-Ef8" id="7Rb-6k-arO"/>
-                                            <outlet property="secondStar" destination="fh7-7u-ikp" id="dTm-6k-kh7"/>
-                                            <outlet property="thirdStar" destination="soA-Ok-G1M" id="J44-1x-uqU"/>
-                                            <segue destination="BV1-FR-VrT" kind="presentation" identifier="toGameScene" id="ozx-9X-m1N"/>
-                                        </connections>
-                                    </collectionViewCell>
-                                </cells>
+                                <collectionViewLayout key="collectionViewLayout" id="CoM-D4-BSY" customClass="LobbyCollectionViewLayout" customModule="TileGame" customModuleProvider="target"/>
+                                <cells/>
                                 <connections>
                                     <outlet property="dataSource" destination="hVi-5l-GF7" id="7br-pb-e9b"/>
                                     <outlet property="delegate" destination="hVi-5l-GF7" id="3Nz-W5-ACH"/>
@@ -97,7 +62,7 @@
         <!--Game View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BV1-FR-VrT" customClass="GameViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="maK-i9-Uhn"/>
                         <viewControllerLayoutGuide type="bottom" id="khH-OB-KpY"/>
@@ -138,7 +103,7 @@
         <!--Menu View Controller-->
         <scene sceneID="YeG-pP-hkt">
             <objects>
-                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="Tile_Game" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="H2m-Iu-GgB" customClass="MenuViewController" customModule="TileGame" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="g3A-T0-zAz"/>
                         <viewControllerLayoutGuide type="bottom" id="tR4-x1-aXD"/>
@@ -360,6 +325,5 @@
     </scenes>
     <resources>
         <image name="Back" width="48" height="48"/>
-        <image name="NoStar" width="40" height="38"/>
     </resources>
 </document>

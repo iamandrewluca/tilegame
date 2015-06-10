@@ -8,7 +8,7 @@
 
 import UIKit
 
-class LobbyCollectionViewCell: UICollectionViewCell {
+class LobbyCell: UICollectionViewCell {
     
     @IBOutlet weak var levelNumber: UILabel!
     @IBOutlet weak var firstStar: UIImageView!

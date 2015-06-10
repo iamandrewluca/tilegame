@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+class Menu: UIViewController {
 
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var soundButton: UIButton!

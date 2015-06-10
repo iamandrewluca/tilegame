@@ -83,14 +83,14 @@ class Levels {
         return Array<Array<Int>>()
     }
     
-    func starsInSection(section: Int, level: Int) -> Int {
-        if level > 5 || level < 0 {
+    func starsAtIndexPath(indexPath: NSIndexPath) -> Int {
+        if indexPath.item > 5 || indexPath.item < 0 {
             return 0
         }
-        if section >= unlockedSections || section < 0 {
+        if indexPath.section >= unlockedSections || indexPath.section < 0 {
             return 0
         }
 
-        return levelsInfo[section][level]
+        return levelsInfo[indexPath.section][indexPath.item]
     }
 }

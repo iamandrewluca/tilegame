@@ -28,15 +28,41 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         return levels.totalSections
     }
     
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+
         var cell = collectionView.dequeueReusableCellWithReuseIdentifier(
             Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCollectionViewCell
-        
+
+        setupCellWithIndexPath(cell, indexPath: indexPath)
+
         return cell
     }
+
+    private func setupCellWithIndexPath(cell: LobbyCollectionViewCell, indexPath: NSIndexPath) {
+        let cellLevel = String(1 + indexPath.section * levels.levelsPerSection + indexPath.item)
+        cell.levelNumber.text = cellLevel
+
+        let levelStars = rand() % 4//levels.starsAtIndexPath(indexPath)
+
+        if levelStars > 0 {
+            cell.firstStar.image = UIImage(named: "Star")
+            if levelStars > 1 {
+                cell.secondStar.image = UIImage(named: "Star")
+                if levelStars > 2 {
+                    cell.thirdStar.image = UIImage(named: "Star")
+                }
+            }
+        }
+    }
     
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
-        var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind, withReuseIdentifier: Identifiers.lobbyHeader, forIndexPath: indexPath) as! LobbyCollectionViewHeader
+    func collectionView(collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+
+        var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+            withReuseIdentifier: Identifiers.lobbyHeader,
+            forIndexPath: indexPath) as! LobbyCollectionViewHeader
 
         header.headerLabel.text = "+3 start to open"
         return header
@@ -50,10 +76,16 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewDidLoad()
         
         collectionView!.registerNib(UINib(nibName: "LobbyCollectionViewHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
-        
-        let backImage = UIImage(named: "Back")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        backButton.setImage(backImage, forState: UIControlState.Normal)
-        backButton.tintColor = UIColor.grayColor();
+
+        setButton(UIImage(named: "Back"),
+            tintColor: UIColor.grayColor(),
+            state: UIControlState.Normal)
+    }
+
+    private func setButton(image : UIImage!, tintColor : UIColor, state : UIControlState) {
+        let backImage = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
+        backButton.setImage(backImage, forState: state)
+        backButton.tintColor = tintColor
     }
 
     override func didReceiveMemoryWarning() {
