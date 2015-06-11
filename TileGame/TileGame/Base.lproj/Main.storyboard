@@ -112,211 +112,225 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WSZ-e5-uhR">
-                                <rect key="frame" x="250" y="250" width="100" height="100"/>
-                                <color key="backgroundColor" red="0.60000002384185791" green="0.40000000596046448" blue="0.20000000298023224" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="WSZ-e5-uhR" secondAttribute="height" multiplier="1:1" id="InC-qS-Ivh"/>
-                                    <constraint firstAttribute="height" constant="100" id="zTw-Tv-oGr">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="200"/>
-                                    </constraint>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
-                                <state key="normal" title="Play">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="35"/>
-                                </variation>
-                                <connections>
-                                    <segue destination="hVi-5l-GF7" kind="show" identifier="toLobby" id="IAN-KA-JPW"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Gy2-oS-67t">
-                                <rect key="frame" x="280" y="358" width="70" height="70"/>
-                                <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="Gy2-oS-67t" secondAttribute="height" multiplier="1:1" id="fhd-09-FYr"/>
-                                    <constraint firstAttribute="width" constant="70" id="nT1-M2-rlB">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="140"/>
-                                    </constraint>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Music">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="musicButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="HZO-zm-5py"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4fm-Xg-xqV">
-                                <rect key="frame" x="177" y="284" width="65" height="65"/>
-                                <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="65" id="HsB-TP-rfu">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="130"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" secondItem="4fm-Xg-xqV" secondAttribute="height" multiplier="1:1" id="rlE-aT-Ta9"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Reset">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="soundButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="zQw-Ox-Xhw"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="O9u-Fb-0JF">
-                                <rect key="frame" x="217" y="357" width="55" height="55"/>
-                                <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="O9u-Fb-0JF" secondAttribute="height" multiplier="1:1" id="X6R-Df-lP7"/>
-                                    <constraint firstAttribute="width" constant="55" id="XbI-3p-nbm">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="110"/>
-                                    </constraint>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Sound">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="resetButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="gjt-cz-8Nb"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ash-oP-8tH">
-                                <rect key="frame" x="358" y="290" width="60" height="60"/>
-                                <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="60" id="Ktp-Va-aVW">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="120"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" secondItem="Ash-oP-8tH" secondAttribute="height" multiplier="1:1" id="eWJ-SE-EIP"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Share">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="shareButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="MyA-BB-Nsq"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="2ou-rw-0a4">
-                                <rect key="frame" x="358" y="358" width="45" height="45"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="45" id="pUT-nz-fQO">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="90"/>
-                                    </constraint>
-                                    <constraint firstAttribute="width" secondItem="2ou-rw-0a4" secondAttribute="height" multiplier="1:1" id="w35-TC-BJO"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Ads">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="adsButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="TPy-tx-RwM"/>
-                                </connections>
-                            </button>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OQI-CE-dAA">
-                                <rect key="frame" x="358" y="232" width="50" height="50"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" secondItem="OQI-CE-dAA" secondAttribute="height" multiplier="1:1" id="2J5-7T-1eG"/>
-                                    <constraint firstAttribute="width" constant="50" id="Yfx-2i-rzw">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="100"/>
-                                    </constraint>
-                                </constraints>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
-                                <state key="normal" title="Rate">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
-                                </variation>
-                                <connections>
-                                    <action selector="rateButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="Fsl-OL-o4P"/>
-                                </connections>
-                            </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="TILE GAME" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6bE-Yk-stg">
-                                <rect key="frame" x="0.0" y="42" width="600" height="123"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SWIPER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6bE-Yk-stg">
+                                <rect key="frame" x="0.0" y="50" width="600" height="123"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="123" id="wSH-Sl-SbG"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Optima-ExtraBlack" family="Optima" pointSize="50"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
+                                <variation key="heightClass=regular-widthClass=regular">
+                                    <fontDescription key="fontDescription" name="Optima-ExtraBlack" family="Optima" pointSize="100"/>
+                                </variation>
                             </label>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQs-n2-ThA">
+                                <rect key="frame" x="175" y="200" width="250" height="200"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="26j-9c-pph">
+                                        <rect key="frame" x="75" y="20" width="100" height="100"/>
+                                        <color key="backgroundColor" red="0.60000002379999995" green="0.40000000600000002" blue="0.20000000300000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="100" id="bJy-Ho-GNk">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="200"/>
+                                            </constraint>
+                                            <constraint firstAttribute="width" secondItem="26j-9c-pph" secondAttribute="height" multiplier="1:1" id="kBC-EN-tHL"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="20"/>
+                                        <state key="normal" title="Play">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="35"/>
+                                        </variation>
+                                        <connections>
+                                            <segue destination="hVi-5l-GF7" kind="show" identifier="toLobby" id="ys0-x0-qE9"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DtV-6a-6eI">
+                                        <rect key="frame" x="105" y="128" width="70" height="70"/>
+                                        <color key="backgroundColor" red="0.0" green="1" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="DtV-6a-6eI" secondAttribute="height" multiplier="1:1" id="GX3-3z-Vvb"/>
+                                            <constraint firstAttribute="width" constant="70" id="yFI-Y4-Fqu">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="140"/>
+                                            </constraint>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Music">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="musicButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="J0s-l7-3lL"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMB-KR-eW1">
+                                        <rect key="frame" x="2" y="54" width="65" height="65"/>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="65" id="5bv-Rv-70E">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="130"/>
+                                            </constraint>
+                                            <constraint firstAttribute="width" secondItem="QMB-KR-eW1" secondAttribute="height" multiplier="1:1" id="LO7-3I-8jH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Reset">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="resetButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="W3o-xg-KBS"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ve-i5-aQE">
+                                        <rect key="frame" x="42" y="127" width="55" height="55"/>
+                                        <color key="backgroundColor" red="0.0" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="55" id="ZDe-JR-rvT">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="110"/>
+                                            </constraint>
+                                            <constraint firstAttribute="width" secondItem="3ve-i5-aQE" secondAttribute="height" multiplier="1:1" id="unG-2X-ZOZ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Sound">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="soundButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="Ipf-NZ-PRj"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8gs-PM-9Sj">
+                                        <rect key="frame" x="183" y="60" width="60" height="60"/>
+                                        <color key="backgroundColor" red="1" green="0.5" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="cgt-Wa-AHQ">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="120"/>
+                                            </constraint>
+                                            <constraint firstAttribute="width" secondItem="8gs-PM-9Sj" secondAttribute="height" multiplier="1:1" id="yHl-qf-Y6r"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Share">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="shareButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="J5t-hv-E0g"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dif-Bp-1iU">
+                                        <rect key="frame" x="183" y="128" width="45" height="45"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="Dif-Bp-1iU" secondAttribute="height" multiplier="1:1" id="Ur1-t9-geN"/>
+                                            <constraint firstAttribute="width" constant="45" id="epQ-nc-bhe">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="90"/>
+                                            </constraint>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Ads">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="adsButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="a5J-zl-3XZ"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ecT-kQ-Rr9">
+                                        <rect key="frame" x="183" y="2" width="50" height="50"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="ecT-kQ-Rr9" secondAttribute="height" multiplier="1:1" id="5oY-2p-LKz"/>
+                                            <constraint firstAttribute="width" constant="50" id="xOY-RY-kzP">
+                                                <variation key="heightClass=regular-widthClass=regular" constant="100"/>
+                                            </constraint>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="15"/>
+                                        <state key="normal" title="Rate">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <variation key="heightClass=regular-widthClass=regular">
+                                            <fontDescription key="fontDescription" name="HelveticaNeue-Thin" family="Helvetica Neue" pointSize="30"/>
+                                        </variation>
+                                        <connections>
+                                            <action selector="rateButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="6ic-US-g0Z"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="8gs-PM-9Sj" firstAttribute="leading" secondItem="26j-9c-pph" secondAttribute="trailing" constant="8" id="0SF-NT-B6T"/>
+                                    <constraint firstItem="26j-9c-pph" firstAttribute="leading" secondItem="QMB-KR-eW1" secondAttribute="trailing" constant="8" id="2Nx-wc-LC2"/>
+                                    <constraint firstItem="8gs-PM-9Sj" firstAttribute="width" secondItem="8gs-PM-9Sj" secondAttribute="height" multiplier="1:1" id="3iV-q8-auL"/>
+                                    <constraint firstAttribute="height" constant="250" id="6uQ-Xg-e0w"/>
+                                    <constraint firstItem="26j-9c-pph" firstAttribute="width" secondItem="26j-9c-pph" secondAttribute="height" multiplier="1:1" id="7yP-cc-af8"/>
+                                    <constraint firstItem="3ve-i5-aQE" firstAttribute="top" secondItem="QMB-KR-eW1" secondAttribute="bottom" constant="8" id="ABe-vm-nuJ"/>
+                                    <constraint firstItem="Dif-Bp-1iU" firstAttribute="leading" secondItem="26j-9c-pph" secondAttribute="trailing" constant="8" id="Chd-Kh-BHu"/>
+                                    <constraint firstItem="3ve-i5-aQE" firstAttribute="width" secondItem="3ve-i5-aQE" secondAttribute="height" multiplier="1:1" id="D7x-cO-5b7"/>
+                                    <constraint firstAttribute="height" constant="200" id="DyW-xd-cpc">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="450"/>
+                                    </constraint>
+                                    <constraint firstItem="ecT-kQ-Rr9" firstAttribute="leading" secondItem="26j-9c-pph" secondAttribute="trailing" constant="8" id="HmX-72-Fbd"/>
+                                    <constraint firstItem="Dif-Bp-1iU" firstAttribute="leading" secondItem="DtV-6a-6eI" secondAttribute="trailing" constant="8" id="MfG-EU-ys0"/>
+                                    <constraint firstAttribute="centerX" secondItem="26j-9c-pph" secondAttribute="centerX" id="PgO-jd-XK3"/>
+                                    <constraint firstItem="DtV-6a-6eI" firstAttribute="width" secondItem="DtV-6a-6eI" secondAttribute="height" multiplier="1:1" id="RE3-SK-vfc"/>
+                                    <constraint firstItem="8gs-PM-9Sj" firstAttribute="top" secondItem="ecT-kQ-Rr9" secondAttribute="bottom" constant="8" id="V2B-KQ-Mfp"/>
+                                    <constraint firstItem="ecT-kQ-Rr9" firstAttribute="width" secondItem="ecT-kQ-Rr9" secondAttribute="height" multiplier="1:1" id="VgM-GF-vea"/>
+                                    <constraint firstItem="3ve-i5-aQE" firstAttribute="top" secondItem="26j-9c-pph" secondAttribute="bottom" constant="7" id="W20-4m-hvK"/>
+                                    <constraint firstAttribute="height" constant="300" id="ZHC-Og-HcI"/>
+                                    <constraint firstItem="Dif-Bp-1iU" firstAttribute="width" secondItem="Dif-Bp-1iU" secondAttribute="height" multiplier="1:1" id="Zpm-aW-LoM"/>
+                                    <constraint firstAttribute="width" constant="250" id="au5-HY-T2h">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="500"/>
+                                    </constraint>
+                                    <constraint firstItem="DtV-6a-6eI" firstAttribute="leading" secondItem="3ve-i5-aQE" secondAttribute="trailing" constant="8" id="gk0-1d-e8g"/>
+                                    <constraint firstItem="Dif-Bp-1iU" firstAttribute="top" secondItem="26j-9c-pph" secondAttribute="bottom" constant="8" id="h9f-2r-rdt"/>
+                                    <constraint firstAttribute="centerY" secondItem="26j-9c-pph" secondAttribute="centerY" constant="30" id="syU-yf-XDX"/>
+                                    <constraint firstItem="DtV-6a-6eI" firstAttribute="top" secondItem="26j-9c-pph" secondAttribute="bottom" constant="8" id="tUT-rX-Mwe"/>
+                                    <constraint firstItem="QMB-KR-eW1" firstAttribute="width" secondItem="QMB-KR-eW1" secondAttribute="height" multiplier="1:1" id="yXf-ug-ixj"/>
+                                    <constraint firstItem="Dif-Bp-1iU" firstAttribute="top" secondItem="8gs-PM-9Sj" secondAttribute="bottom" constant="8" id="zFf-PU-boj"/>
+                                </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="6uQ-Xg-e0w"/>
+                                        <exclude reference="ZHC-Og-HcI"/>
+                                    </mask>
+                                </variation>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="7" id="CKc-M6-KVb">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="Gy2-oS-67t" secondAttribute="trailing" constant="8" id="HWC-jF-z4N">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="Ash-oP-8tH" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="IBK-Dd-wff">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
                             <constraint firstItem="6bE-Yk-stg" firstAttribute="leading" secondItem="wRq-hc-cVR" secondAttribute="leadingMargin" constant="-16" id="K5h-hJ-2Ac"/>
-                            <constraint firstItem="OQI-CE-dAA" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="NxC-XL-QZX">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="leading" secondItem="WSZ-e5-uhR" secondAttribute="trailing" constant="8" id="SvR-Du-3d3">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="Ash-oP-8tH" firstAttribute="top" secondItem="OQI-CE-dAA" secondAttribute="bottom" constant="8" id="TLz-aD-Zyq">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="O9u-Fb-0JF" firstAttribute="top" secondItem="4fm-Xg-xqV" secondAttribute="bottom" constant="8" id="Urf-ve-vfq">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="8" id="cB2-07-WuX">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="2ou-rw-0a4" firstAttribute="top" secondItem="Ash-oP-8tH" secondAttribute="bottom" constant="8" id="cIr-0d-GBd">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
                             <constraint firstAttribute="trailingMargin" secondItem="6bE-Yk-stg" secondAttribute="trailing" constant="-16" id="dGQ-I5-uH2"/>
-                            <constraint firstAttribute="centerX" secondItem="WSZ-e5-uhR" secondAttribute="centerX" id="f3L-EF-cCY"/>
-                            <constraint firstItem="Gy2-oS-67t" firstAttribute="leading" secondItem="O9u-Fb-0JF" secondAttribute="trailing" constant="8" id="gly-Qb-cqr">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstAttribute="centerY" secondItem="WSZ-e5-uhR" secondAttribute="centerY" id="kWB-1J-g7H"/>
-                            <constraint firstItem="6bE-Yk-stg" firstAttribute="top" secondItem="g3A-T0-zAz" secondAttribute="bottom" constant="42" id="tIL-3W-rlP"/>
-                            <constraint firstItem="Gy2-oS-67t" firstAttribute="top" secondItem="WSZ-e5-uhR" secondAttribute="bottom" constant="8" id="vBY-yy-si8">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
-                            <constraint firstItem="WSZ-e5-uhR" firstAttribute="leading" secondItem="4fm-Xg-xqV" secondAttribute="trailing" constant="8" id="wUF-lp-5tx">
-                                <variation key="heightClass=regular-widthClass=regular" constant="16"/>
-                            </constraint>
+                            <constraint firstAttribute="centerX" secondItem="RQs-n2-ThA" secondAttribute="centerX" id="ggV-lc-IRb"/>
+                            <constraint firstItem="6bE-Yk-stg" firstAttribute="top" secondItem="g3A-T0-zAz" secondAttribute="bottom" constant="50" id="tIL-3W-rlP"/>
+                            <constraint firstAttribute="centerY" secondItem="RQs-n2-ThA" secondAttribute="centerY" id="wBb-sM-EfZ"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Xxq-kg-H16"/>
                     <nil key="simulatedStatusBarMetrics"/>
                     <connections>
-                        <outlet property="adsButton" destination="2ou-rw-0a4" id="Y67-2W-9zz"/>
-                        <outlet property="musicButton" destination="Gy2-oS-67t" id="NGR-KZ-seT"/>
-                        <outlet property="playButton" destination="WSZ-e5-uhR" id="jVn-8q-Fpx"/>
-                        <outlet property="rateButton" destination="OQI-CE-dAA" id="Z1x-np-dgB"/>
-                        <outlet property="resetButton" destination="4fm-Xg-xqV" id="pot-Ih-U4b"/>
-                        <outlet property="shareButton" destination="Ash-oP-8tH" id="9li-rp-l0L"/>
-                        <outlet property="soundButton" destination="O9u-Fb-0JF" id="GG8-cT-bym"/>
+                        <outlet property="adsButton" destination="Dif-Bp-1iU" id="SHw-gy-fEh"/>
+                        <outlet property="buttonsContainer" destination="RQs-n2-ThA" id="G4a-Yd-bLl"/>
+                        <outlet property="buttonsHorizontalConstraint" destination="ggV-lc-IRb" id="3pU-V3-qZ0"/>
+                        <outlet property="buttonsVerticalConstraint" destination="wBb-sM-EfZ" id="hPg-UT-d80"/>
+                        <outlet property="musicButton" destination="DtV-6a-6eI" id="gK0-gt-Zn4"/>
+                        <outlet property="playButton" destination="26j-9c-pph" id="RAE-xY-Qkx"/>
+                        <outlet property="rateButton" destination="ecT-kQ-Rr9" id="h1S-rW-GKV"/>
+                        <outlet property="resetButton" destination="QMB-KR-eW1" id="i7I-ks-GNj"/>
+                        <outlet property="shareButton" destination="8gs-PM-9Sj" id="Mzb-Jm-zOo"/>
+                        <outlet property="soundButton" destination="3ve-i5-aQE" id="7xF-h5-xts"/>
+                        <outlet property="titleLabel" destination="6bE-Yk-stg" id="Lk3-wW-vhB"/>
+                        <outlet property="titleTopConstraint" destination="tIL-3W-rlP" id="vgZ-Wt-Kcz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6cK-T8-reb" userLabel="First Responder" sceneMemberID="firstResponder"/>

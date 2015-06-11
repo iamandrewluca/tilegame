@@ -9,12 +9,14 @@
 import UIKit
 
 class LobbyHeader: UICollectionReusableView {
+
+    // MARK: IBOutlets
+
     @IBOutlet weak var headerLabel: UILabel!
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
+
+    // MARK: UICollectionReusableView
     
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    override func prepareForReuse() {
+        headerLabel.text = ""
     }
 }

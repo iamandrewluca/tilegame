@@ -9,11 +9,15 @@
 import UIKit
 
 class LobbyCell: UICollectionViewCell {
+
+    // MARK: IBOutlets
     
     @IBOutlet weak var levelNumber: UILabel!
     @IBOutlet weak var firstStar: UIImageView!
     @IBOutlet weak var secondStar: UIImageView!
     @IBOutlet weak var thirdStar: UIImageView!
+
+    // MARK: UICollectionViewCell
     
     override func awakeFromNib() {
         super.awakeFromNib()

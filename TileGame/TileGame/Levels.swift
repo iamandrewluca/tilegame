@@ -14,7 +14,8 @@ class Levels {
     var levelsInfo: Array<Array<Int>>
     var unlockedSections: Int
     var totalSections: Int
-    var levelsPerSection = 6
+    static var levelsPerSection = 6
+    static var starsToPassSection = 9
     
     init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
@@ -92,5 +93,14 @@ class Levels {
         }
 
         return levelsInfo[indexPath.section][indexPath.item]
+    }
+
+    func starsInSection(section: Int) -> Int {
+
+        if section < 0 || section >= unlockedSections {
+            return 0
+        }
+
+        return levelsInfo[section].reduce(0, combine: +)
     }
 }

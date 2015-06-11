@@ -10,6 +10,18 @@ import UIKit
 
 class MenuViewController: UIViewController {
 
+    // MARK: Members
+
+    var levels = Levels()
+    var started = false
+
+    // MARK: IBOutlets
+
+    @IBOutlet weak var buttonsHorizontalConstraint: NSLayoutConstraint!
+    @IBOutlet weak var buttonsVerticalConstraint: NSLayoutConstraint!
+    @IBOutlet weak var titleTopConstraint: NSLayoutConstraint!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var buttonsContainer: UIView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var soundButton: UIButton!
     @IBOutlet weak var resetButton: UIButton!
@@ -18,21 +30,8 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
 
-    var levels = Levels()
-    
-    override func prefersStatusBarHidden() -> Bool {
-        return true
-    }
+    // MARK: IBActions
 
-    override func viewDidLoad() {
-        super.viewDidLoad()
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        setupButtons()
-    }
-    
     @IBAction func soundButtonPressed(sender: AnyObject) {
         println("sound")
     }
@@ -51,15 +50,74 @@ class MenuViewController: UIViewController {
     @IBAction func rateButtonPressed(sender: AnyObject) {
         println("rate")
     }
-    
+
+    // MARK: UIViewController
+
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+
+        if !started {
+            prepareMenu()
+        }
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+
+        if !started {
+            started = true
+            animateMenu()
+        }
+    }
+
+    override func prefersStatusBarHidden() -> Bool {
+        return true
+    }
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupButtons()
+    }
+
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
+        // Dispose of any resources that can be recreated.
+    }
+
+    // MARK: Methods
+
+    private func animateMenu() {
+        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+
+            self.titleTopConstraint.constant = self.view.bounds.height / 5 / 2
+            self.buttonsHorizontalConstraint.constant = 0
+            self.view.layoutIfNeeded()
+            }, completion: nil);
+    }
+
+    private func prepareMenu() {
+        let fifthPart = self.view.bounds.height / 5
+
+        buttonsVerticalConstraint.constant = -fifthPart
+        buttonsHorizontalConstraint.constant = self.view.bounds.width / 2 + buttonsContainer.bounds.width / 2
+
+        titleTopConstraint.constant = -titleLabel.bounds.height
+    }
+
     func setupButtons() {
-        self.soundButton.backgroundColor = Constants.Color1
+
+        self.playButton.backgroundColor = Constants.Color2
         self.resetButton.backgroundColor = Constants.Color2
+        self.soundButton.backgroundColor = Constants.Color1
         self.musicButton.backgroundColor = Constants.Color3
         self.adsButton.backgroundColor = Constants.Color4
         self.shareButton.backgroundColor = Constants.Color5
         self.rateButton.backgroundColor = Constants.Color1
-        self.playButton.backgroundColor = Constants.Color2
         
         var ratio: CGFloat = 1
         
@@ -117,11 +175,6 @@ class MenuViewController: UIViewController {
         self.rateButton.layer.mask = rateLayer
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
