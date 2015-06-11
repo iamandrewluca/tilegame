@@ -9,14 +9,13 @@
 import UIKit
 
 class LobbyViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
-    
-    @IBOutlet weak var collectionView: UICollectionView!
-    @IBOutlet weak var backButton: UIButton!
 
     var levels: Levels!
     
+    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var backButton: UIButton!
     @IBAction func goBack(sender: AnyObject) {
-        self.dismissViewControllerAnimated(true, completion: nil)
+        navigationController!.popViewControllerAnimated(true)
     }
     
     func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -27,15 +26,27 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         return levels.totalSections
     }
     
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
-        var cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-            Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCell
+        var cell: UICollectionViewCell!
 
-        setupCellWithIndexPath(cell, indexPath: indexPath)
+        if indexPath.section <= levels.unlockedSections {
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(
+                Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCell
+
+            setupCellWithIndexPath(cell as! LobbyCell, indexPath: indexPath)
+        } else {
+            cell = collectionView.dequeueReusableCellWithReuseIdentifier(
+                Identifiers.lobbyLockedCell, forIndexPath: indexPath) as! LobbyLockedCell
+
+            setupLockedCellWithIndexPath(cell as! LobbyLockedCell, indexPath: indexPath)
+        }
 
         return cell
+    }
+
+    private func setupLockedCellWithIndexPath(cell: LobbyLockedCell, indexPath: NSIndexPath) {
+
     }
 
     private func setupCellWithIndexPath(cell: LobbyCell, indexPath: NSIndexPath) {
@@ -78,9 +89,19 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         collectionView!.registerNib(UINib(nibName: "LobbyCell", bundle: nil), forCellWithReuseIdentifier: Identifiers.lobbyCell)
 
+        collectionView!.registerNib(UINib(nibName: "LobbyLockedCell", bundle: nil), forCellWithReuseIdentifier: Identifiers.lobbyLockedCell)
+
         setButton(UIImage(named: "Back"),
             tintColor: UIColor.grayColor(),
             state: UIControlState.Normal)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+
+        collectionView.scrollToItemAtIndexPath(
+            NSIndexPath(forItem: 0, inSection: levels.unlockedSections),
+            atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: true)
     }
 
     private func setButton(image : UIImage!, tintColor : UIColor, state : UIControlState) {
@@ -93,26 +114,16 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
 
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
-    // MARK: - Navigation
+        if indexPath.section <= levels.unlockedSections {
+            let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        if let identifier = segue.identifier {
-            if identifier == Identifiers.gameSceneSegue {
-                let cell = sender as! LobbyCell
-                let indexPath = self.collectionView.indexPathForCell(cell)!
-                let gameCtrl: GameViewController = segue.destinationViewController as! GameViewController
-                gameCtrl.section = indexPath.section
-                gameCtrl.level = indexPath.item
-            }
+            gameVC.section = indexPath.section
+            gameVC.level = indexPath.item
+
+            navigationController!.presentViewController(gameVC, animated: true, completion: nil)
         }
     }
-
-
 }

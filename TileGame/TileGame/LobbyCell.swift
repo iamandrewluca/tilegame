@@ -1,5 +1,5 @@
 //
-//  LobbyCollectionViewCell.swift
+//  LobbyCell.swift
 //  TileGame
 //
 //  Created by Andrei Luca on 3/30/15.
@@ -14,14 +14,6 @@ class LobbyCell: UICollectionViewCell {
     @IBOutlet weak var firstStar: UIImageView!
     @IBOutlet weak var secondStar: UIImageView!
     @IBOutlet weak var thirdStar: UIImageView!
-
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-
-    required init(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
     
     override func awakeFromNib() {
         super.awakeFromNib()

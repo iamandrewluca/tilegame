@@ -1,5 +1,5 @@
 //
-//  LobbyCollectionViewLayout.swift
+//  LobbyLayout.swift
 //  TileGame
 //
 //  Created by Andrei Luca on 5/15/15.

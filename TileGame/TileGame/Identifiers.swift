@@ -11,6 +11,7 @@ import UIKit
 
 class Identifiers {
     static let lobbyCell = "LobbyCell"
+    static let lobbyLockedCell = "LobbyLockedCell"
     static let lobbyHeader = "LobbyHeader"
     
     static let gameSceneSegue = "toGameScene"

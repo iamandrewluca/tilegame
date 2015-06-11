@@ -12,7 +12,16 @@ class LobbyLockedCell: UICollectionViewCell {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
+
+        backgroundColor = UIColor.whiteColor()
+        layer.cornerRadius = 10
+        layer.masksToBounds = false
+        layer.shadowOpacity = 0.25
+        layer.shadowColor = UIColor.grayColor().CGColor
+        layer.shadowRadius = 2.0
+        layer.shadowOffset = CGSizeZero
     }
+
+
 
 }
