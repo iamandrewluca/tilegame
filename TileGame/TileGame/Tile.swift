@@ -7,13 +7,12 @@
 //
 
 import SpriteKit
+import UIKit
 
 class Tile: SKSpriteNode {
-    
-    var row: Int
-    var column: Int
+
+    var place: (row: Int, column: Int)
     var type: TileType
-    var visited: Bool = false
     var childTile: Tile? {
         didSet {
             if let tile = childTile {
@@ -24,20 +23,16 @@ class Tile: SKSpriteNode {
             }
         }
     }
-    
-    // tipa "delegate"
-    var delegate: GameScene?
+
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     init(tileRow: Int, tileColumn: Int, tileType: TileType, tileDelegate: GameScene) {
-        
-        row = tileRow
-        column = tileColumn
+        place.row = tileRow
+        place.column = tileColumn
         type = tileType
-        delegate = tileDelegate
         
         if tileType == TileType.Star {
             super.init(texture: Constants.starTexture, color: SKColor.yellowColor(), size: Constants.tileSize)
@@ -45,26 +40,26 @@ class Tile: SKSpriteNode {
             super.init(texture: Constants.tileTexture, color: tileType.tileColor, size: Constants.tileSize)
         }
         
-        position = Constants.boardPositions[row][column]
+        position = Constants.boardPositions[place.row][place.column]
         
         colorBlendFactor = 1.0
         userInteractionEnabled = true
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.delegate?.tileDragBegan(self, touch: touches.first as! UITouch)
+//        self.delegate?.tileDragBegan(self, touch: touches.first as! UITouch)
     }
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.delegate?.tileDragMoved(self, touch: touches.first as! UITouch)
+//        self.delegate?.tileDragMoved(self, touch: touches.first as! UITouch)
     }
     
     override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        self.delegate?.tileDragCancelled(self, touch: touches.first as! UITouch)
+//        self.delegate?.tileDragCancelled(self, touch: touches.first as! UITouch)
     }
     
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        self.delegate?.tileDragEnded(self, touch: touches.first as! UITouch)
+//        self.delegate?.tileDragEnded(self, touch: touches.first as! UITouch)
     }
 }
 
@@ -94,9 +89,9 @@ enum TileType: Int {
 }
 
 enum Direction: Int {
-    case Right = 0, Up, Left, Down, None
+    case None = -1, Right, Up, Left, Down
 }
 
 enum Orientation: Int {
-    case Horizontal = 0, Vertical, None
+    case None = -1, Horizontal, Vertical
 }

@@ -10,29 +10,28 @@ import SpriteKit
 import Foundation
 
 class GameScene: SKScene {
-    
+
+    // MARK: Members
+
+    var levelsInfo = LevelsInfo.sharedInstance
+    var level = (section: 0, number: 0)
+
     var header: Header!
-    var canSwipe = true
-    var boardBackground: SKSpriteNode!
-    var tileNodes = SKNode()
-    var tilesBoard: [[Tile?]] = Array(count: Constants.boardSize,
-        repeatedValue: Array(count: Constants.boardSize,
-            repeatedValue: Tile?.None))
-    
-    var currentLevel: Level!
-    
-    // will be used when switching from one level to another
-    var newLevel: Level!
-    
+    var menu: Menu!
+    var board: Board!
+
+    var gameState: GameState!
+
+    // MARK: SKScene
+
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
-        
+
+        // move to view contorller
         Constants.sceneView = view
-        
-        prepareBoard()
-        prepareUI()
-        showGame()
     }
+
+    // MARK: Methods
     
     func prepareBoard() {
         
@@ -87,7 +86,7 @@ class GameScene: SKScene {
         for var i = 0; i < currentLevel.colorTargets.count; ++i {
             header.colorLabels[i]!.text = "0/\(currentLevel.colorTargets[i])"
         }
-        header.levelTopLabel.text = "\(currentLevel.level + 1)"
+        header.levelTopLabel.text = "\(currentLevel.indexPath.item + 1)"
         self.addChild(header)
     }
     
@@ -386,5 +385,9 @@ class GameScene: SKScene {
                 
             }
         }
+    }
+
+    enum GameState {
+        case Play, Pause, Stop, Hold
     }
 }

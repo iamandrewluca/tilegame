@@ -9,9 +9,8 @@
 import Foundation
 
 class Level {
-    
-    var section = 0
-    var level = 0
+
+    var indexPath: NSIndexPath!
     
     var levelType: LevelType? = LevelType.FreeTime
     var levelTypeCounter: Int = 0
@@ -22,16 +21,14 @@ class Level {
     var currentTargets = Array(count: 5, repeatedValue: 0)
     var colorStars = Array(count: 5, repeatedValue: false)
     
-    init(levelNumber: Int, sectionNumber: Int) {
-        level = levelNumber
-        section = sectionNumber
-        
+    init(indexPath: NSIndexPath) {
+        self.indexPath = indexPath
         populateLevel()
     }
     
     func populateLevel() {
         
-        if let level = loadJSONFromBundle("section_\(section)_level_\(level)") {
+        if let level = loadJSONFromBundle("section_\(indexPath.section)_level_\(indexPath.item)") {
             
             // get level type
             if let type = level["levelType"] as? Int, counter = level["levelTypeCounter"] as? Int {

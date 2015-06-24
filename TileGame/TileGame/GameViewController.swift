@@ -10,23 +10,24 @@ import UIKit
 import SpriteKit
 
 class GameViewController: UIViewController {
-    
-    var section: Int = 0
-    var level: Int = 0
+
+    // MARK: Members
+
+    var level = (section: 0, number: 0)
+
+    // MARK: UIViewController
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         let skView = self.view as! SKView
-        
-        let scene = GameScene(size: skView.frame.size)
-
-        scene.currentLevel = Level(levelNumber: level, sectionNumber: section)
-        
-        scene.scaleMode = .AspectFill
-        
         skView.showsFPS = true
         skView.showsNodeCount = true
+
+        let scene = GameScene(size: skView.frame.size)
+        scene.scaleMode = SKSceneScaleMode.AspectFill
+        scene.level = level
+
         skView.presentScene(scene)
     }
 

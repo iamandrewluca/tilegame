@@ -1,5 +1,5 @@
 //
-//  Levels.swift
+//  LevelsInfo.swift
 //  TileGame
 //
 //  Created by Andrei Luca on 6/8/15.
@@ -8,29 +8,42 @@
 
 import Foundation
 
-class Levels {
+class LevelsInfo {
 
-    var levelsInfoPath: String
-    var levelsInfo: Array<Array<Int>>
-    var unlockedSections: Int
-    var totalSections: Int
-    static var levelsPerSection = 6
-    static var starsToPassSection = 9
+    // MARK: Members
+
+    static let sharedInstance: LevelsInfo! = LevelsInfo()
+    var levelsInfoPath: String!
+    var levelsInfo: Array<Array<Int>>!
+    var unlockedSections: Int = 0
+    var totalSections: Int = 0
+    let levelsPerSection = 6
+    let starsToPassSection = 9
+
+    // MARK: LevelsInfo
     
     init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
             NSSearchPathDirectory.DocumentDirectory,
             NSSearchPathDomainMask.UserDomainMask, true) as Array
         let documentsDirecotry = documentDirectories.first as! String
+
         levelsInfoPath = documentsDirecotry + "/levelsinfo.json"
 
-        levelsInfo = Levels.loadLevels(levelsInfoPath)
+        levelsInfo = loadLevelsInfo(levelsInfoPath)
+        println(levelsInfo)
 
         unlockedSections = levelsInfo.count
-        totalSections = Levels.getTotalSections()
+        totalSections = getTotalSections()
     }
 
-    private class func getTotalSections() -> Int {
+    // MARK: Methods
+
+    func loadLevel(indexPath: NSIndexPath) -> Level {
+        return Level(indexPath: indexPath)
+    }
+
+    private func getTotalSections() -> Int {
         if let path = NSBundle.mainBundle().pathForResource("levelsinfo", ofType: "json") {
             if let data = NSFileManager.defaultManager().contentsAtPath(path) {
                 if let json = NSJSONSerialization.JSONObjectWithData(data,
@@ -43,9 +56,12 @@ class Levels {
         return 0
     }
 
-    private func createTestJson() {
+    private class func createTestJson(levelsInfoPath: String) {
         var testDict = Dictionary<String, Array<Array<Int>>>()
         var level = Array<Int>()
+        level.append(0)
+        level.append(1)
+        level.append(2)
         level.append(3)
         level.append(4)
         level.append(5)
@@ -63,16 +79,14 @@ class Levels {
             contents: data, attributes: nil)
     }
 
-    private func clearJsonFile() {
+    private class func clearJsonFile(levelsInfoPath: String) {
         NSFileManager.defaultManager().removeItemAtPath(levelsInfoPath, error: nil)
     }
     
-    private class func loadLevels(levelsInfoPath: String) -> Array<Array<Int>> {
+    private func loadLevelsInfo(levelsInfoPath: String) -> Array<Array<Int>> {
         let fileManager = NSFileManager.defaultManager()
         if fileManager.fileExistsAtPath(levelsInfoPath) {
-            println("file exists")
             if let data = fileManager.contentsAtPath(levelsInfoPath) {
-                println("data loaded")
                 if let json = NSJSONSerialization.JSONObjectWithData(data,
                     options: NSJSONReadingOptions.allZeros,
                     error: nil) as? [String:Array<Array<Int>>] {
@@ -81,26 +95,27 @@ class Levels {
             }
         }
 
-        return Array<Array<Int>>()
+        return Array(count: 1, repeatedValue: Array(count: 6, repeatedValue: 0))
     }
     
     func starsAtIndexPath(indexPath: NSIndexPath) -> Int {
-        if indexPath.item > 5 || indexPath.item < 0 {
-            return 0
-        }
-        if indexPath.section >= unlockedSections || indexPath.section < 0 {
-            return 0
+
+        if indexPath.section >= 0 &&
+            indexPath.section < unlockedSections &&
+            indexPath.item >= 0 &&
+            indexPath.item < 6 {
+                return levelsInfo[indexPath.section][indexPath.item];
         }
 
-        return levelsInfo[indexPath.section][indexPath.item]
+        return 0
     }
 
     func starsInSection(section: Int) -> Int {
 
-        if section < 0 || section >= unlockedSections {
-            return 0
+        if section >= 0 && section < unlockedSections {
+            return levelsInfo[section].reduce(0, combine: +)
         }
 
-        return levelsInfo[section].reduce(0, combine: +)
+        return 0
     }
 }

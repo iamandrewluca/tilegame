@@ -12,7 +12,7 @@ class MenuViewController: UIViewController {
 
     // MARK: Members
 
-    var levels = Levels()
+    var levelsInfo = LevelsInfo.sharedInstance
     var started = false
 
     // MARK: IBOutlets
@@ -64,7 +64,6 @@ class MenuViewController: UIViewController {
     override func viewDidAppear(animated: Bool) {
         super.viewDidAppear(animated)
 
-
         if !started {
             started = true
             animateMenu()
@@ -92,7 +91,7 @@ class MenuViewController: UIViewController {
     // MARK: Methods
 
     private func animateMenu() {
-        UIView.animateWithDuration(0.8, delay: 0, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: {
 
             self.titleTopConstraint.constant = self.view.bounds.height / 5 / 2
             self.buttonsHorizontalConstraint.constant = 0
@@ -181,12 +180,5 @@ class MenuViewController: UIViewController {
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
-        
-        if let identifier = segue.identifier {
-            if identifier == Identifiers.lobbySegue {
-                let lobby = segue.destinationViewController as! LobbyViewController
-                lobby.levels = levels
-            }
-        }
     }
 }
