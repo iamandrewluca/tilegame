@@ -16,6 +16,16 @@ class Board: SKNode {
     var tiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
     var back = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: SKSpriteNode?.None))
 
+    var startPosition = CGPointZero
+    var currentPosition = CGPointZero
+    var lastPosition = CGPointZero
+    var endPosition = CGPointZero
+
+    var limits = Array(count: 4, repeatedValue: (row: 0, column: 0))
+    var currentOrientation = Orientation.None
+    var startDirection = Direction.None
+    var currentDirection = Direction.None
+
     // MARK: Methods
 
     func addBackTile(row: Int, column: Int) {
@@ -45,50 +55,27 @@ class Board: SKNode {
     }
 
 
-
-
-
-
-
-
-    func moveTile(tile: Tile, to: (row: Int, column: Int)) {
-        var aux = currentLevel.mainTiles[tile.row][tile.column]
-        currentLevel.mainTiles[tile.row][tile.column] = currentLevel.mainTiles[to.row][to.column]
-        currentLevel.mainTiles[to.row][to.column] = aux
-
-        aux = currentLevel.childTiles[tile.row][tile.column]
-        currentLevel.childTiles[tile.row][tile.column] = currentLevel.childTiles[to.row][to.column]
-        currentLevel.childTiles[to.row][to.column] = aux
-
-        tilesBoard[to.row][to.column] = tile
-        tilesBoard[tile.row][tile.column] = nil
-
-        tile.row = to.row
-        tile.column = to.column
+    func moveTile(tile: Tile, to place: (row: Int, column: Int)) {
+        tile.place = place
+        var moveAction = SKAction.moveTo(Constants.boardPositions[place.row][place.column], duration: 1)
     }
 
     func destroyTile(tile: Tile) {
 
-        self.currentLevel.mainTiles[tile.row][tile.column] = TileType.Empty
-        self.currentLevel.childTiles[tile.row][tile.column] = TileType.Empty
         tile.removeFromParent()
 
         if let childTile = tile.childTile {
 
             if childTile.type != TileType.Star {
 
+                childTile.runAction(SKAction.scaleTo(1, duration: 0.2))
+                childTile.removeFromParent()
                 childTile.position = tile.position
                 childTile.userInteractionEnabled = true
-                childTile.row = tile.row
-                childTile.column = tile.column
-                childTile.runAction(SKAction.scaleTo(1, duration: 0))
-                self.currentLevel.mainTiles[tile.row][tile.column] = childTile.type
-                self.tilesBoard[tile.row][tile.column] = childTile
-                childTile.removeFromParent()
                 self.addChild(childTile)
 
             } else {
-
+                // fly star
             }
         }
     }
@@ -97,6 +84,7 @@ class Board: SKNode {
 
         var neighbours = Array<Tile>()
         var lastTiles = Array<Tile>()
+        var visited = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: false))
 
         lastTiles.append(startTile)
 
@@ -105,30 +93,30 @@ class Board: SKNode {
             var nextTiles = Array<Tile>()
 
             for tile in lastTiles {
-                if !tile.visited && tile.type == startTile.type {
-                    tile.visited = true
+                if !visited[tile.place.row][tile.place.column] && tile.type == startTile.type {
+                    visited[tile.place.row][tile.place.column] = true
                     neighbours.append(tile)
 
-                    if tile.row - 1 >= 0 {
-                        if let neighbour = tilesBoard[tile.row - 1][tile.column] {
+                    if tile.place.row - 1 >= 0 {
+                        if let neighbour = tiles[tile.place.row - 1][tile.place.column] {
                             nextTiles.append(neighbour)
                         }
                     }
 
-                    if tile.row + 1 < Constants.boardSize {
-                        if let neighbour = tilesBoard[tile.row + 1][tile.column] {
+                    if tile.place.row + 1 < Constants.boardSize {
+                        if let neighbour = tiles[tile.place.row + 1][tile.place.column] {
                             nextTiles.append(neighbour)
                         }
                     }
 
-                    if tile.column - 1 >= 0 {
-                        if let neighbour = tilesBoard[tile.row][tile.column - 1] {
+                    if tile.place.column - 1 >= 0 {
+                        if let neighbour = tiles[tile.place.row][tile.place.column - 1] {
                             nextTiles.append(neighbour)
                         }
                     }
 
-                    if tile.column + 1 < Constants.boardSize {
-                        if let neighbour = tilesBoard[tile.row][tile.column + 1] {
+                    if tile.place.column + 1 < Constants.boardSize {
+                        if let neighbour = tiles[tile.place.row][tile.place.column + 1] {
                             nextTiles.append(neighbour)
                         }
                     }
@@ -140,52 +128,38 @@ class Board: SKNode {
             nextTiles.removeAll(keepCapacity: true)
         }
 
-        for tile in neighbours {
-            tile.visited = false
-        }
-
         return neighbours
     }
-
-    var startPosition = CGPointZero
-    var currentPosition = CGPointZero
-    var lastPosition = CGPointZero
-    var endPosition = CGPointZero
-
-    var limits = Array(count: 4, repeatedValue: (row: Int(), column: Int()))
-    var currentOrientation = Orientation.None
-    var startDirection = Direction.None
-    var currentDirection = Direction.None
 
     func calculateLimits(tile: Tile) {
 
         // set all limits to current position
         for var i = 0; i < limits.count; ++i {
-            limits[i] = (tile.row, tile.column)
+            limits[i] = tile.place
         }
 
         // right check
-        for var i = tile.column + 1; i < Constants.boardSize; ++i {
-            if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
-            limits[Direction.Right.rawValue] = (tile.row, i)
+        for var i = tile.place.column + 1; i < Constants.boardSize; ++i {
+            if tiles[tile.place.row][i] != nil { break }
+            limits[Direction.Right.rawValue] = (tile.place.row, i)
         }
 
         // up check
-        for var i = tile.row - 1; i >= 0; --i {
-            if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
-            limits[Direction.Up.rawValue] = (i, tile.column)
+        for var i = tile.place.row - 1; i >= 0; --i {
+            if tiles[i][tile.place.column] != nil { break }
+            limits[Direction.Up.rawValue] = (i, tile.place.column)
         }
 
         // left check
-        for var i = tile.column - 1; i >= 0; --i {
-            if currentLevel.mainTiles[tile.row][i] != TileType.Empty { break }
-            limits[Direction.Left.rawValue] = (tile.row, i)
+        for var i = tile.place.column - 1; i >= 0; --i {
+            if tiles[tile.place.row][i] != nil { break }
+            limits[Direction.Left.rawValue] = (tile.place.row, i)
         }
 
         // down check
-        for var i = tile.row + 1; i < Constants.boardSize; ++i {
-            if currentLevel.mainTiles[i][tile.column] != TileType.Empty { break }
-            limits[Direction.Down.rawValue] = (i, tile.column)
+        for var i = tile.place.row + 1; i < Constants.boardSize; ++i {
+            if tiles[i][tile.place.column] != nil { break }
+            limits[Direction.Down.rawValue] = (i, tile.place.column)
         }
     }
 
@@ -193,7 +167,7 @@ class Board: SKNode {
 
         calculateLimits(tile)
 
-        startPosition = touch.locationInNode(self)
+        startPosition = position
         currentPosition = startPosition
         lastPosition = startPosition
         endPosition = startPosition
@@ -234,9 +208,13 @@ class Board: SKNode {
         return orientation
     }
 
+    func getPlacePoition(place: (row: Int, column: Int)) -> CGPoint {
+        return Constants.boardPositions[place.row][place.column]
+    }
+
     func tileDragMoved(tile: Tile, at position: CGPoint) {
 
-        currentPosition = touch.locationInNode(self)
+        currentPosition = position
         var delta = currentPosition - lastPosition
         var deltaFromStart = currentPosition - startPosition
 
@@ -254,8 +232,8 @@ class Board: SKNode {
 
                 var minColumn = limits[Direction.Left.rawValue].column
                 var maxColumn = limits[Direction.Right.rawValue].column
-                var minX = Constants.boardPositions[tile.row][minColumn].x
-                var maxX = Constants.boardPositions[tile.row][maxColumn].x
+                var minX = getPlacePoition((tile.place.row, minColumn)).x
+                var maxX = getPlacePoition((tile.place.row, maxColumn)).x
 
                 tile.position.x = clamp(minX, maxX, currentPosition.x)
 
@@ -269,13 +247,13 @@ class Board: SKNode {
 
                 var minRow = limits[Direction.Down.rawValue].row
                 var maxRow = limits[Direction.Up.rawValue].row
-                var minY = Constants.boardPositions[minRow][tile.column].y
-                var maxY = Constants.boardPositions[maxRow][tile.column].y
+                var minY = getPlacePoition((minRow, tile.place.column)).y
+                var maxY = getPlacePoition((maxRow, tile.place.column)).y
 
                 tile.position.y = clamp(minY, maxY, currentPosition.y)
             }
 
-            var startTilePosition = Constants.boardPositions[tile.row][tile.column]
+            var startTilePosition = getPlacePoition(tile.place)
 
             if startTilePosition == tile.position {
                 currentOrientation = Orientation.None
@@ -286,17 +264,17 @@ class Board: SKNode {
     }
 
     func tileDragCancelled(tile: Tile, at position: CGPoint) {
-        tileDragEnded(tile, touch: touch)
+        tileDragEnded(tile, at: position)
     }
 
     func tileDragEnded(tile: Tile, at position: CGPoint) {
 
         if currentOrientation != Orientation.None {
 
-            endPosition = touch.locationInNode(self)
+            endPosition = position
             var delta = endPosition - startPosition
 
-            var limitPoint = getRowColumnPosition(limits[currentDirection.rawValue])
+            var limitPoint = getPlacePoition(limits[currentDirection.rawValue])
             var middle = (limitPoint + startPosition) / 2
 
             var moveAction: SKAction!
@@ -326,12 +304,10 @@ class Board: SKNode {
                 moveAction = nil
             }
 
-            tile.runAction(moveAction) {
-                var tilesToDestroy = self.getNeighbours(tile)
-                if tilesToDestroy.count >= 3 {
-                    for tile in tilesToDestroy {
-                        self.destroyTile(tile)
-                    }
+            var tilesToDestroy = self.getNeighbours(tile)
+            if tilesToDestroy.count >= 3 {
+                for tile in tilesToDestroy {
+                    self.destroyTile(tile)
                 }
             }
         }

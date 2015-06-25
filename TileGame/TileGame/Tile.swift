@@ -11,8 +11,14 @@ import UIKit
 
 class Tile: SKSpriteNode {
 
-    var place = (row: 0, column: 0)
     var type: TileType
+    var place = (row: 0, column: 0) {
+        didSet {
+            if let child = childTile {
+                child.place = place
+            }
+        }
+    }
     var childTile: Tile? {
         didSet {
             if let tile = childTile {
@@ -23,7 +29,6 @@ class Tile: SKSpriteNode {
             }
         }
     }
-
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -49,7 +54,6 @@ class Tile: SKSpriteNode {
         }
         
         position = Constants.boardPositions[place.row][place.column]
-        
 
     }
     
