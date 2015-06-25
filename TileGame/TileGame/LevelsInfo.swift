@@ -39,10 +39,6 @@ class LevelsInfo {
 
     // MARK: Methods
 
-    func loadLevel(indexPath: NSIndexPath) -> Level {
-        return Level(indexPath: indexPath)
-    }
-
     private func getTotalSections() -> Int {
         if let path = NSBundle.mainBundle().pathForResource("levelsinfo", ofType: "json") {
             if let data = NSFileManager.defaultManager().contentsAtPath(path) {

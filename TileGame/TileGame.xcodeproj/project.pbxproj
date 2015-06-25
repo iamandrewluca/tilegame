@@ -47,7 +47,6 @@
 		75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754E910F1B05519A0030C303 /* LobbyLayout.swift */; };
 		75F371981B3AD3B6007325A0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F371971B3AD3B6007325A0 /* Menu.swift */; };
 		75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F371991B3AD3C1007325A0 /* Board.swift */; };
-		75FFAE291ADFBEDD009C087F /* Level.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FFAE281ADFBEDC009C087F /* Level.swift */; };
 		75FFAE2B1ADFCA42009C087F /* levelsinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 75FFAE2A1ADFCA42009C087F /* levelsinfo.json */; };
 /* End PBXBuildFile section */
 
@@ -106,7 +105,6 @@
 		75F09BFF1AE08064003C061B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		75F371971B3AD3B6007325A0 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		75F371991B3AD3C1007325A0 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
-		75FFAE281ADFBEDC009C087F /* Level.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Level.swift; sourceTree = "<group>"; };
 		75FFAE2A1ADFCA42009C087F /* levelsinfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levelsinfo.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -245,7 +243,6 @@
 				15A905991AC9D05400B37BEB /* Tile.swift */,
 				151B5A871AC9BA92002BD68C /* GameScene.swift */,
 				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
-				75FFAE281ADFBEDC009C087F /* Level.swift */,
 				75776FF61AEE6BEB00086C37 /* Header.swift */,
 				75F371971B3AD3B6007325A0 /* Menu.swift */,
 				75F371991B3AD3C1007325A0 /* Board.swift */,
@@ -410,7 +407,6 @@
 				15C8367C1ACFC20000784FEC /* Settings.swift in Sources */,
 				75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */,
 				15A905901AC9C06C00B37BEB /* MenuViewController.swift in Sources */,
-				75FFAE291ADFBEDD009C087F /* Level.swift in Sources */,
 				75B52BF41B086AF300DCDB91 /* Identifiers.swift in Sources */,
 				75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */,
 				15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */,
