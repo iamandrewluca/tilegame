@@ -37,6 +37,8 @@ class Board: SKNode {
 
         back[row][column] = backTile
 
+        backTile.zPosition = -1
+
         addChild(backTile)
     }
 
@@ -49,34 +51,41 @@ class Board: SKNode {
         }
 
         tiles[row][column] = tile
-        tile.zPosition = 1
+        tile.zPosition = 0
 
         addChild(tile)
     }
 
 
     func moveTile(tile: Tile, to place: (row: Int, column: Int)) {
+        tiles[place.row][place.column] = tile
+        tiles[tile.place.row][tile.place.column] = Tile?.None
         tile.place = place
-        var moveAction = SKAction.moveTo(Constants.boardPositions[place.row][place.column], duration: 1)
     }
 
     func destroyTile(tile: Tile) {
 
-        tile.removeFromParent()
+        tiles[tile.place.row][tile.place.column] = Tile?.None
 
         if let childTile = tile.childTile {
 
             if childTile.type != TileType.Star {
 
-                childTile.runAction(SKAction.scaleTo(1, duration: 0.2))
                 childTile.removeFromParent()
+                self.addChild(childTile)
+                tile.childTile = Tile?.None
                 childTile.position = tile.position
                 childTile.userInteractionEnabled = true
-                self.addChild(childTile)
+                tiles[tile.place.row][tile.place.column] = childTile
+                childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
             } else {
                 // fly star
             }
+        }
+
+        tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
+            tile.removeFromParent()
         }
     }
 
@@ -282,21 +291,21 @@ class Board: SKNode {
             switch currentOrientation {
             case Orientation.Horizontal:
                 if endPosition.x > middle.x {
-                    var position = getRowColumnPosition(limits[Direction.Right.rawValue])
+                    var position = getPlacePoition(limits[Direction.Right.rawValue])
                     moveAction = SKAction.moveToX(position.x, duration: 0.2)
                     moveTile(tile, to: limits[Direction.Right.rawValue])
                 } else {
-                    var position = getRowColumnPosition(limits[Direction.Left.rawValue])
+                    var position = getPlacePoition(limits[Direction.Left.rawValue])
                     moveAction = SKAction.moveToX(position.x, duration: 0.2)
                     moveTile(tile, to: limits[Direction.Left.rawValue])
                 }
             case Orientation.Vertical:
                 if endPosition.y > middle.y {
-                    var position = getRowColumnPosition(limits[Direction.Up.rawValue])
+                    var position = getPlacePoition(limits[Direction.Up.rawValue])
                     moveAction = SKAction.moveToY(position.y, duration: 0.2)
                     moveTile(tile, to: limits[Direction.Up.rawValue])
                 } else {
-                    var position = getRowColumnPosition(limits[Direction.Down.rawValue])
+                    var position = getPlacePoition(limits[Direction.Down.rawValue])
                     moveAction = SKAction.moveToY(position.y, duration: 0.2)
                     moveTile(tile, to: limits[Direction.Down.rawValue])
                 }
@@ -304,10 +313,12 @@ class Board: SKNode {
                 moveAction = nil
             }
 
-            var tilesToDestroy = self.getNeighbours(tile)
-            if tilesToDestroy.count >= 3 {
-                for tile in tilesToDestroy {
-                    self.destroyTile(tile)
+            tile.runAction(moveAction) {
+                var tilesToDestroy = self.getNeighbours(tile)
+                if tilesToDestroy.count >= 3 {
+                    for tile in tilesToDestroy {
+                        self.destroyTile(tile)
+                    }
                 }
             }
         }

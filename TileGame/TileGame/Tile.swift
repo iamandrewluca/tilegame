@@ -23,6 +23,7 @@ class Tile: SKSpriteNode {
         didSet {
             if let tile = childTile {
                 childTile?.position = CGPointZero
+                childTile?.zPosition = 1
                 childTile?.userInteractionEnabled = false
                 childTile?.runAction(SKAction.scaleTo(0.5, duration: 0))
                 self.addChild(tile)
@@ -50,7 +51,7 @@ class Tile: SKSpriteNode {
             colorBlendFactor = 1.0
             userInteractionEnabled = true
         } else {
-            super.init(texture: Constants.tileTexture, color: SKColor.clearColor(), size: Constants.tileSize)
+            super.init(texture: nil, color: SKColor.clearColor(), size: Constants.tileSize)
         }
         
         position = Constants.boardPositions[place.row][place.column]
@@ -90,12 +91,8 @@ enum TileType: Int {
         case .Color5:
             return Constants.Color5
         default:
-            return SKColor.redColor()
+            return SKColor.clearColor()
         }
-    }
-    
-    static func random() -> TileType {
-        return TileType(rawValue: Int(arc4random_uniform(6) + 1))!
     }
 }
 
