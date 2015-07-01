@@ -10,10 +10,46 @@ import Foundation
 import SpriteKit
 
 class Header: SKNode {
-    
+
+    var colorTargets = Array(count: 5, repeatedValue: 0)
+    var currentTargets = Array(count: 5, repeatedValue: 0)
+    var colorStars = Array(count: 5, repeatedValue: false)
+
     var colorLabels = Array(count: 5, repeatedValue: SKLabelNode?.None)
     var levelTopLabel = SKLabelNode()
     var levelBottomLabel = SKLabelNode()
+
+    func addStar(tile: Tile, forColor: TileType) {
+
+        println(tile.position)
+
+        let scenePosition = scene?.convertPoint(tile.position, fromNode: (scene as! GameScene).board)
+        let headerPosition = scene?.convertPoint(scenePosition!, toNode: (scene as! GameScene).header)
+
+        tile.position = headerPosition!
+
+        tile.removeFromParent()
+        addChild(tile)
+
+        println(scenePosition!)
+
+        tile.runAction(SKAction.group([
+            SKAction.moveTo(Constants.headerPositions[forColor.rawValue - 1], duration: 0.2),
+            SKAction.scaleTo(0.25, duration: 0.2),
+            SKAction.rotateByAngle(-15 * CGFloat(M_PI) / 180, duration: 0.2)]))
+    }
+
+    func addColor(value: Int, forColor: TileType) {
+
+        let pos = forColor.rawValue - 1
+
+        currentTargets[pos] += value
+        colorLabels[pos]!.text = String("\(currentTargets[pos])/\(colorTargets[pos])")
+    }
+
+    func setColorTarget(value: Int, forColor: TileType) {
+        colorTargets[forColor.rawValue - 1] = value
+    }
     
     override init() {
         super.init()

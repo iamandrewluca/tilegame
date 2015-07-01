@@ -78,7 +78,7 @@ class Constants {
                 
                 starShape.fillColor = SKColor.blackColor()
                 starShape.setScale(0.75)
-                starShape.zRotation = 30
+                starShape.zRotation = -15 * CGFloat(M_PI) / 180
                 starShape.position = CGPointMake(tileShape.frame.width / 2, tileShape.frame.height / 2)
                 tileShape.addChild(starShape)
                 

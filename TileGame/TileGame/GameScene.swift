@@ -16,10 +16,6 @@ class GameScene: SKScene {
     var levelType: LevelType! = LevelType.None
     var levelTypeCounter: Int = 0
 
-    var colorTargets = Array(count: 5, repeatedValue: 0)
-    var currentTargets = Array(count: 5, repeatedValue: 0)
-    var colorStars = Array(count: 5, repeatedValue: false)
-
     var levelsInfo = LevelsInfo.sharedInstance
     var level = (section: 0, number: 0)
 
@@ -80,9 +76,8 @@ class GameScene: SKScene {
 
             // get tiles targets
             if let targets = level["colorTargets"] as? Array<Int> {
-                for var i = 0; i < colorTargets.count; ++i {
-                    colorTargets[i] = targets[i]
-                    header.colorLabels[i]?.text = String("0/\(colorTargets[i])")
+                for var i = 0; i < targets.count; ++i {
+                    header.setColorTarget(targets[i], forColor: TileType(rawValue: i + 1)!)
                 }
             }
 

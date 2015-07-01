@@ -69,19 +69,20 @@ class Board: SKNode {
 
         if let childTile = tile.childTile {
 
+            childTile.removeFromParent()
+            self.addChild(childTile)
+            childTile.position = tile.position
+
             if childTile.type != TileType.Star {
 
-                childTile.removeFromParent()
-                self.addChild(childTile)
-                tile.childTile = Tile?.None
-                childTile.position = tile.position
-                childTile.userInteractionEnabled = true
                 tiles[tile.place.row][tile.place.column] = childTile
                 childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
             } else {
-                // fly star
+                (scene as! GameScene).header.addStar(childTile, forColor: tile.type)
             }
+
+            tile.childTile = Tile?.None
         }
 
         tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
@@ -316,6 +317,8 @@ class Board: SKNode {
             tile.runAction(moveAction) {
                 var tilesToDestroy = self.getNeighbours(tile)
                 if tilesToDestroy.count >= 3 {
+
+                    (self.scene as! GameScene).header.addColor(tilesToDestroy.count, forColor: tile.type)
                     for tile in tilesToDestroy {
                         self.destroyTile(tile)
                     }

@@ -57,6 +57,14 @@ class Tile: SKSpriteNode {
         position = Constants.boardPositions[place.row][place.column]
 
     }
+
+    override func removeFromParent() {
+        super.removeFromParent()
+
+        if type != TileType.Star {
+            userInteractionEnabled = true
+        }
+    }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         (self.scene as! GameScene).tileDragBegan(self, touch: touches.first as! UITouch)
