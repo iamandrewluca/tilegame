@@ -110,7 +110,7 @@ class Constants {
     private static var tileSpacing: CGFloat = 0.0
     private static var boardMargin: CGFloat = 0.0
     private static var yStart: CGFloat = 0.0
-    private static var tileCornerRadius: CGFloat = 0.0
+    static var tileCornerRadius: CGFloat = 0.0
     
     private static func calculateBoardPositions() {
         for var i = 0; i < boardSize; ++i {

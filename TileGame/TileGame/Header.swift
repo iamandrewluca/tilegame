@@ -21,22 +21,22 @@ class Header: SKNode {
 
     func addStar(tile: Tile, forColor: TileType) {
 
-        println(tile.position)
+        let scenePosition = scene!.convertPoint(tile.position, fromNode: (scene as! GameScene).board)
+        let headerPosition = scene!.convertPoint(scenePosition, toNode: (scene as! GameScene).header)
 
-        let scenePosition = scene?.convertPoint(tile.position, fromNode: (scene as! GameScene).board)
-        let headerPosition = scene?.convertPoint(scenePosition!, toNode: (scene as! GameScene).header)
-
-        tile.position = headerPosition!
+        tile.position = headerPosition
 
         tile.removeFromParent()
         addChild(tile)
 
-        println(scenePosition!)
-
-        tile.runAction(SKAction.group([
+        let moveAction = SKAction.group([
             SKAction.moveTo(Constants.headerPositions[forColor.rawValue - 1], duration: 0.2),
-            SKAction.scaleTo(0.25, duration: 0.2),
-            SKAction.rotateByAngle(-15 * CGFloat(M_PI) / 180, duration: 0.2)]))
+            SKAction.scaleTo(0.30, duration: 0.2),
+            SKAction.rotateByAngle(-15 * CGFloat(M_PI) / 180, duration: 0.2)])
+
+        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
+
+        tile.runAction(moveAction)
     }
 
     func addColor(value: Int, forColor: TileType) {
@@ -141,7 +141,7 @@ class Header: SKNode {
             
             tileStar.colorBlendFactor = 1.0
             tileStar.position = Constants.headerPositions[i]
-            tileStar.position.y += Constants.tileSize.width / 8
+//            tileStar.position.y += Constants.tileSize.width / 8
             addChild(tileStar)
         }
     }

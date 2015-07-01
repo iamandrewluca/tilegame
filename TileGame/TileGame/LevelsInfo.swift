@@ -31,7 +31,6 @@ class LevelsInfo {
         levelsInfoPath = documentsDirecotry + "/levelsinfo.json"
 
         levelsInfo = loadLevelsInfo(levelsInfoPath)
-        println(levelsInfo)
 
         unlockedSections = levelsInfo.count
         totalSections = getTotalSections()

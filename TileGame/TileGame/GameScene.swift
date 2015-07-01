@@ -22,6 +22,7 @@ class GameScene: SKScene {
     var header: Header!
     var menu: Menu!
     var board: Board!
+    var overlay: SKSpriteNode!
 
     var gameState: GameState = GameState.Hold
 
@@ -30,17 +31,29 @@ class GameScene: SKScene {
     override func didMoveToView(view: SKView) {
         /* Setup your scene here */
 
-        // move to view contorller
+        // this must moved to view contorller
         Constants.sceneView = view
 
-        header = Header()
         board = Board()
+        board.zPosition = -2
+
+        overlay = SKSpriteNode(color: SKColor.blackColor(), size: size);
+        overlay.anchorPoint = CGPointZero
+        overlay.alpha = 0.75
+        overlay.zPosition = -1
+
+        header = Header()
+        header.zPosition = 1
+
         menu = Menu()
+        menu.zPosition = 0
 
         populateScene()
 
-        addChild(header)
         addChild(board)
+        addChild(overlay)
+        addChild(header)
+        addChild(menu)
     }
 
     // MARK: Methods
