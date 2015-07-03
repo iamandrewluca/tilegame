@@ -11,6 +11,8 @@ import SpriteKit
 
 class Header: SKNode {
 
+    // MARK: Members
+
     var colorTargets = Array(count: 5, repeatedValue: 0)
     var currentTargets = Array(count: 5, repeatedValue: 0)
     var colorStars = Array(count: 5, repeatedValue: false)
@@ -18,6 +20,8 @@ class Header: SKNode {
     var colorLabels = Array(count: 5, repeatedValue: SKLabelNode?.None)
     var levelTopLabel = SKLabelNode()
     var levelBottomLabel = SKLabelNode()
+
+    // MARK: Methods
 
     func addStar(tile: Tile, forColor: TileType) {
 
@@ -50,6 +54,8 @@ class Header: SKNode {
     func setColorTarget(value: Int, forColor: TileType) {
         colorTargets[forColor.rawValue - 1] = value
     }
+
+    // MARK: SKNode
     
     override init() {
         super.init()
@@ -141,34 +147,36 @@ class Header: SKNode {
             
             tileStar.colorBlendFactor = 1.0
             tileStar.position = Constants.headerPositions[i]
-//            tileStar.position.y += Constants.tileSize.width / 8
+            tileStar.position.y += Constants.tileSize.width / 8
             addChild(tileStar)
         }
-    }
-    
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        //
-    }
-    
-    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
-        //
-    }
-    
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-        let touch = touches.first as! UITouch
-        let point = touch.locationInNode(self)
-        let node = self.nodeAtPoint(point)
-        
-        if node.name == "pause" {
-            println("pause")
-        }
-    }
-    
-    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
-        //
     }
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    // MARK: Touches
+
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        let touch = touches.first as! UITouch
+        let point = touch.locationInNode(self)
+        let node = self.nodeAtPoint(point)
+
+        if node.name == "pause" {
+            (scene as! GameScene).toogleMenu()
+        }
+    }
+
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesBegan(touches, withEvent: event)
+    }
+    
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesCancelled(touches, withEvent: event)
+    }
+    
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesMoved(touches, withEvent: event)
     }
 }

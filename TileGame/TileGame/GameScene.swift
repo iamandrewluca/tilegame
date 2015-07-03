@@ -39,8 +39,8 @@ class GameScene: SKScene {
 
         overlay = SKSpriteNode(color: SKColor.blackColor(), size: size);
         overlay.anchorPoint = CGPointZero
-        overlay.alpha = 0.75
         overlay.zPosition = -1
+        overlay.name = "overlay"
 
         header = Header()
         header.zPosition = 1
@@ -51,12 +51,34 @@ class GameScene: SKScene {
         populateScene()
 
         addChild(board)
-        addChild(overlay)
         addChild(header)
-        addChild(menu)
     }
 
-    // MARK: Methods
+    // MARK: Touches
+
+    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesEnded(touches, withEvent: event)
+
+        var overlay = nodeAtPoint((touches.first as! UITouch).locationInNode(self))
+
+        if overlay.name == "overlay" {
+            toogleMenu()
+        }
+    }
+
+    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesBegan(touches, withEvent: event)
+    }
+
+    override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+        super.touchesMoved(touches, withEvent: event)
+    }
+
+    override func touchesCancelled(touches: Set<NSObject>!, withEvent event: UIEvent!) {
+        super.touchesCancelled(touches, withEvent: event)
+    }
+
+    // MARK: Drag
     
     func tileDragBegan(tile: Tile, touch: UITouch) {
         board.tileDragBegan(tile, at: touch.locationInNode(self))
@@ -74,7 +96,29 @@ class GameScene: SKScene {
         board.tileDragEnded(tile, at: touch.locationInNode(self))
     }
     
-    
+    // MARK: Methods
+
+    func toogleMenu() {
+
+        if gameState != GameState.Pause {
+            gameState = GameState.Pause
+            overlay.alpha = 0
+            addChild(overlay)
+            overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+            menu.alpha = 0
+            addChild(menu)
+            menu.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+        } else {
+            gameState = GameState.Play
+
+            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
+                self.overlay.removeFromParent()
+            })
+            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
+                self.menu.removeFromParent()
+            })
+        }
+    }
 
     func populateScene() {
 
