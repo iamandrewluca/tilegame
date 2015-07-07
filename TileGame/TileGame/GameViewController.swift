@@ -25,6 +25,7 @@ class GameViewController: UIViewController {
         skView.showsNodeCount = true
 
         let scene = GameScene(size: skView.frame.size)
+        scene.controller = self
         scene.scaleMode = SKSceneScaleMode.AspectFill
         scene.level = level
 

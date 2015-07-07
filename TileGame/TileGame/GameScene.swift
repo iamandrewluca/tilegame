@@ -13,6 +13,8 @@ class GameScene: SKScene {
 
     // MARK: Members
 
+    var controller: GameViewController!
+
     var levelType: LevelType! = LevelType.None
     var levelTypeCounter: Int = 0
 
@@ -24,11 +26,12 @@ class GameScene: SKScene {
     var board: Board!
     var overlay: SKSpriteNode!
 
-    var gameState: GameState = GameState.Hold
+    var gameState: GameState = GameState.Stop
 
     // MARK: SKScene
 
     override func didMoveToView(view: SKView) {
+        super.didMoveToView(view)
         /* Setup your scene here */
 
         // this must moved to view contorller
@@ -41,12 +44,14 @@ class GameScene: SKScene {
         overlay.anchorPoint = CGPointZero
         overlay.zPosition = -1
         overlay.name = "overlay"
+        overlay.alpha = 0
 
         header = Header()
         header.zPosition = 1
 
         menu = Menu()
         menu.zPosition = 0
+        menu.alpha = 0
 
         populateScene()
 
@@ -98,23 +103,29 @@ class GameScene: SKScene {
     
     // MARK: Methods
 
+    func goToLobby() {
+        controller!.dismissViewControllerAnimated(true, completion: nil)
+    }
+
     func toogleMenu() {
 
         if gameState != GameState.Pause {
-            gameState = GameState.Pause
-            overlay.alpha = 0
-            addChild(overlay)
-            overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
-            menu.alpha = 0
-            addChild(menu)
-            menu.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+
+            if overlay.parent == nil && menu.parent == nil {
+                gameState = GameState.Pause
+
+                addChild(overlay)
+                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.2))
+                addChild(menu)
+                menu.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.2))
+            }
         } else {
             gameState = GameState.Play
 
-            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
+            overlay.runAction(SKAction.fadeOutWithDuration(0.2), completion: {
                 self.overlay.removeFromParent()
             })
-            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
+            menu.runAction(SKAction.fadeOutWithDuration(0.2), completion: {
                 self.menu.removeFromParent()
             })
         }
@@ -189,7 +200,7 @@ class GameScene: SKScene {
     }
 
     enum GameState {
-        case Play, Pause, Stop, Hold
+        case Play, Pause, Stop, Win, Lost
     }
 
     enum LevelType: Int {
