@@ -64,9 +64,10 @@ class GameScene: SKScene {
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         super.touchesEnded(touches, withEvent: event)
 
-        var overlay = nodeAtPoint((touches.first as! UITouch).locationInNode(self))
+        let location = (touches.first as! UITouch).locationInNode(self)
+        let node = nodeAtPoint(location)
 
-        if overlay.name == "overlay" {
+        if node.name == "overlay" {
             toogleMenu()
         }
     }
@@ -115,18 +116,19 @@ class GameScene: SKScene {
                 gameState = GameState.Pause
 
                 addChild(overlay)
-                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.2))
                 addChild(menu)
-                menu.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.2))
+                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+                menu.runAction(SKAction.fadeInWithDuration(0.3))
             }
         } else {
             gameState = GameState.Play
 
-            overlay.runAction(SKAction.fadeOutWithDuration(0.2), completion: {
-                self.overlay.removeFromParent()
-            })
-            menu.runAction(SKAction.fadeOutWithDuration(0.2), completion: {
+            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
                 self.menu.removeFromParent()
+            })
+
+            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: {
+                self.overlay.removeFromParent()
             })
         }
     }

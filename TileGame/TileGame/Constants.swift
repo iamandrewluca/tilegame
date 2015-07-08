@@ -22,7 +22,9 @@ class Constants {
                 // 6 tiles + 5 spaces + 2 margins = deviceWidth
                 tileWidth = sceneSize.width * 8 / 57
                 tileWidth.roundDecimals(numberOfDecimals: 1)
+
                 tileCornerRadius = tileWidth / 4
+                tileCornerRadius.roundDecimals(numberOfDecimals: 0)
 
                 tileSize = CGSizeMake(tileWidth, tileWidth)
                 
@@ -32,8 +34,6 @@ class Constants {
                 boardMargin = (sceneSize.width - 6*tileWidth - 5*tileSpacing) / 2
                 
                 yStart = (sceneSize.height - sceneSize.width) / 2 + boardMargin + tileWidth / 2
-                
-                let ratio = UIScreen.mainScreen().scale
                 
                 let pausePath = getPausePath(tileWidth / 2 * ratio, height: tileWidth / 2 * ratio)
                 let starPath = getStarPath(0, y: 0, radius: tileWidth / 4 * ratio, sides: 5, pointyness: 2)
@@ -105,6 +105,8 @@ class Constants {
     static var tileSize: CGSize = CGSizeZero
     static var sceneSize: CGSize = CGSizeZero
     static var boardSize = 6
+
+    static let ratio = UIScreen.mainScreen().scale
     
     private static var tileWidth: CGFloat = 0.0
     private static var tileSpacing: CGFloat = 0.0
