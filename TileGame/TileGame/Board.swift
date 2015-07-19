@@ -13,6 +13,35 @@ class Board: SKNode {
 
     // MARK: Members
 
+    static let tileCornerRadius = Tile.tileLength / 4
+
+    static let tileSpacing = Tile.tileLength / 8
+
+    // boardSize x boardSize
+    static let boardSize = 6
+
+    static let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * tileSpacing) / 2
+
+    static let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
+        boardHorizontalMargin + Tile.tileLength / 2
+
+    static let boardPositions = { () -> [[CGPoint]] in
+
+        var board = Array(count: boardSize,
+            repeatedValue: Array(count: boardSize,
+                repeatedValue: CGPoint.zeroPoint))
+
+        for var i = 0; i < boardSize; ++i {
+            for var j = 0; j < boardSize; ++j {
+                board[i][j] = CGPoint(
+                    x: boardHorizontalMargin + Tile.tileLength / 2 + CGFloat(j) * (tileSpacing + Tile.tileLength),
+                    y: boardVerticalMargin + CGFloat(boardSize - 1 - i) * (tileSpacing + Tile.tileLength))
+            }
+        }
+
+        return board
+    }()
+
     var tiles = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
     var back = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: SKSpriteNode?.None))
 
@@ -26,14 +55,20 @@ class Board: SKNode {
     var startDirection = Direction.None
     var currentDirection = Direction.None
 
+    // MARK: SKNode
+
+    deinit {
+        println("board deinit")
+    }
+
     // MARK: Methods
 
     func addBackTile(row: Int, column: Int) {
 
-        var backTile = SKSpriteNode(texture: Constants.tileTexture,
-            color: UIColor.whiteColor(), size: Constants.tileSize)
+        var backTile = SKSpriteNode(texture: GameScene.tileTexture,
+            color: UIColor.whiteColor(), size: Tile.tileSize)
 
-        backTile.position = Constants.boardPositions[row][column]
+        backTile.position = Board.boardPositions[row][column]
 
         back[row][column] = backTile
 
@@ -113,7 +148,7 @@ class Board: SKNode {
                         }
                     }
 
-                    if tile.place.row + 1 < Constants.boardSize {
+                    if tile.place.row + 1 < Board.boardSize {
                         if let neighbour = tiles[tile.place.row + 1][tile.place.column] {
                             nextTiles.append(neighbour)
                         }
@@ -125,7 +160,7 @@ class Board: SKNode {
                         }
                     }
 
-                    if tile.place.column + 1 < Constants.boardSize {
+                    if tile.place.column + 1 < Board.boardSize {
                         if let neighbour = tiles[tile.place.row][tile.place.column + 1] {
                             nextTiles.append(neighbour)
                         }
@@ -149,7 +184,7 @@ class Board: SKNode {
         }
 
         // right check
-        for var i = tile.place.column + 1; i < Constants.boardSize; ++i {
+        for var i = tile.place.column + 1; i < Board.boardSize; ++i {
             if tiles[tile.place.row][i] != nil { break }
             limits[Direction.Right.rawValue] = (tile.place.row, i)
         }
@@ -167,7 +202,7 @@ class Board: SKNode {
         }
 
         // down check
-        for var i = tile.place.row + 1; i < Constants.boardSize; ++i {
+        for var i = tile.place.row + 1; i < Board.boardSize; ++i {
             if tiles[i][tile.place.column] != nil { break }
             limits[Direction.Down.rawValue] = (i, tile.place.column)
         }
@@ -219,7 +254,7 @@ class Board: SKNode {
     }
 
     func getPlacePoition(place: (row: Int, column: Int)) -> CGPoint {
-        return Constants.boardPositions[place.row][place.column]
+        return Board.boardPositions[place.row][place.column]
     }
 
     func tileDragMoved(tile: Tile, at position: CGPoint) {

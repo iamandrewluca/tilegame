@@ -21,6 +21,7 @@ class LobbyLayout : UICollectionViewLayout {
     var spacingX: CGFloat = 0
     var spacingY: CGFloat = 0
     var rowsPerSection = 0
+    var collectionWidth = UIScreen.mainScreen().bounds.width
     
     var layoutInfo: Dictionary<String, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>!
 
@@ -37,10 +38,10 @@ class LobbyLayout : UICollectionViewLayout {
     
     override func prepareLayout() {
         
-        headerSize.width = collectionView!.bounds.width
+        headerSize.width = collectionWidth
         rowsPerSection = collectionView!.numberOfItemsInSection(0) / numberOfColumns
         
-        spacingX = collectionView!.bounds.size.width + cellInsets.left -
+        spacingX = collectionWidth + cellInsets.left -
             CGFloat(numberOfColumns) * (cellSize.width + cellInsets.right + cellInsets.left)
         
         spacingX = spacingX / CGFloat(numberOfColumns + 1)
@@ -61,7 +62,7 @@ class LobbyLayout : UICollectionViewLayout {
                 
                 if indexPath.item == 0 {
                     var headerAttributes = UICollectionViewLayoutAttributes(
-                        forSupplementaryViewOfKind: Identifiers.lobbyHeader, withIndexPath: indexPath)
+                        forSupplementaryViewOfKind: LobbyHeader.identifier, withIndexPath: indexPath)
                     
                     headerAttributes.frame = frameForHeaderAtIndexPath(indexPath)
                     headerLayoutInfo[indexPath] = headerAttributes
@@ -74,8 +75,8 @@ class LobbyLayout : UICollectionViewLayout {
             }
         }
         
-        newLayoutInfo[Identifiers.lobbyCell] = cellLayoutInfo
-        newLayoutInfo[Identifiers.lobbyHeader] = headerLayoutInfo
+        newLayoutInfo[LobbyCell.identifier] = cellLayoutInfo
+        newLayoutInfo[LobbyHeader.identifier] = headerLayoutInfo
         layoutInfo = newLayoutInfo
     }
     
@@ -127,9 +128,8 @@ class LobbyLayout : UICollectionViewLayout {
     }
     
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        return layoutInfo[Identifiers.lobbyCell]![indexPath]
+        return layoutInfo[LobbyCell.identifier]![indexPath]
     }
-    
     
     override func collectionViewContentSize() -> CGSize {
         var rowCount = rowsPerSection * collectionView!.numberOfSections()
@@ -140,15 +140,15 @@ class LobbyLayout : UICollectionViewLayout {
         
         var height = headersHeight + cellsHeight
         
-        return CGSizeMake(collectionView!.bounds.size.width, height)
+        return CGSizeMake(collectionWidth, height)
     }
     
     override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
         
         var attribute: UICollectionViewLayoutAttributes!
         
-        if elementKind == Identifiers.lobbyHeader {
-            attribute = layoutInfo[Identifiers.lobbyHeader]![indexPath]
+        if elementKind == LobbyHeader.identifier {
+            attribute = layoutInfo[LobbyHeader.identifier]![indexPath]
         }
         
         return attribute

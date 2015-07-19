@@ -10,6 +10,14 @@ import UIKit
 
 class LobbyLockedCell: UICollectionViewCell {
 
+    // MARK: Members
+
+
+    static let identifier = "LobbyLockedCell"
+
+
+    // MARK: UICollectionViewCell
+
     override func awakeFromNib() {
         super.awakeFromNib()
 

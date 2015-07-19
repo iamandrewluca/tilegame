@@ -13,29 +13,48 @@ class GameScene: SKScene {
 
     // MARK: Members
 
+    // STATIC TEXTURES
+    private static var texturesAreCreated = false
+    static var tileTexture: SKTexture! = SKTexture()
+    static var starTexture: SKTexture! = SKTexture()
+    static var tile2RoundCornersTexture: SKTexture = SKTexture()
+    static var headerTexture: SKTexture = SKTexture()
+
     var controller: GameViewController!
 
-    var levelType: LevelType! = LevelType.None
-    var levelTypeCounter: Int = 0
+    var levelType: LevelType!
+    var levelTypeCounter: Int!
 
     var levelsInfo = LevelsInfo.sharedInstance
-    var level = (section: 0, number: 0)
+    var level: (section: Int, number: Int)!
 
     var header: Header!
     var menu: Menu!
     var board: Board!
     var overlay: SKSpriteNode!
 
-    var gameState: GameState = GameState.Stop
+    var gameState: GameState!
+
+    var counter: Counter!
+    var moves: Int!
+    var currentMoves: Int!
+
 
     // MARK: SKScene
+
+    deinit {
+        println("gs deinit")
+    }
 
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
         /* Setup your scene here */
 
-        // this must moved to view contorller
-        Constants.sceneView = view
+        // Create textures one time only
+        if !GameScene.texturesAreCreated {
+            GameScene.createTextures(view)
+            GameScene.texturesAreCreated = true
+        }
 
         board = Board()
         board.zPosition = -2
@@ -49,11 +68,13 @@ class GameScene: SKScene {
         header = Header()
         header.zPosition = 1
 
-        menu = Menu()
+        menu = Menu(view: view)
         menu.zPosition = 0
         menu.alpha = 0
 
         populateScene()
+
+        backgroundColor = UIColor(red: 255 / 255, green: 237 / 255, blue: 218 / 255, alpha: 0.25)
 
         addChild(board)
         addChild(header)
@@ -104,6 +125,26 @@ class GameScene: SKScene {
     
     // MARK: Methods
 
+    func gameOver() {
+
+    }
+
+    func showAd() {
+        
+    }
+
+    func nextLevel() {
+
+    }
+
+    func restartLevel() {
+
+    }
+
+    func share() {
+
+    }
+
     func goToLobby() {
         controller!.dismissViewControllerAnimated(true, completion: nil)
     }
@@ -131,6 +172,52 @@ class GameScene: SKScene {
                 self.overlay.removeFromParent()
             })
         }
+    }
+
+    private static func createTextures(view: SKView) {
+
+        let screenRatio = Constants.screenRatio
+
+        let starPath = getStarPath(0, 0, Tile.tileLength / 4 * screenRatio, 5, 2)
+        let roundRectPath = UIBezierPath(
+            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio , Tile.tileLength * screenRatio),
+            cornerRadius: Board.tileCornerRadius * screenRatio).CGPath
+
+        let tile2RoundCornersPath = UIBezierPath(
+            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
+            byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.BottomRight,
+            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
+
+        let tile2RoundCornersShape = SKShapeNode()
+        tile2RoundCornersShape.path = tile2RoundCornersPath.CGPath
+        tile2RoundCornersShape.fillColor = SKColor.whiteColor()
+        tile2RoundCornersTexture = view.textureFromNode(tile2RoundCornersShape)
+
+        let headerBackgroundPath = UIBezierPath(
+            roundedRect: CGRectMake(0, 0, Constants.screenSize.width * screenRatio, Tile.tileLength * screenRatio),
+            byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.TopRight,
+            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
+
+        let headerBackgroundShape = SKShapeNode()
+        headerBackgroundShape.path = headerBackgroundPath.CGPath
+        headerBackgroundShape.fillColor = SKColor.whiteColor()
+        headerTexture = view.textureFromNode(headerBackgroundShape)
+
+        let tileShape = SKShapeNode()
+        tileShape.fillColor = UIColor.whiteColor()
+        tileShape.path = roundRectPath
+        tileTexture = view.textureFromNode(tileShape)
+
+        let starShape = SKShapeNode()
+        starShape.fillColor = SKColor.whiteColor()
+        starShape.path = starPath
+        starTexture = view.textureFromNode(starShape)
+
+        starShape.fillColor = SKColor.blackColor()
+        starShape.setScale(0.75)
+        starShape.zRotation = -15 * CGFloat(M_PI) / 180
+        starShape.position = CGPointMake(tileShape.frame.width / 2, tileShape.frame.height / 2)
+        tileShape.addChild(starShape)
     }
 
     func populateScene() {

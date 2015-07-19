@@ -17,6 +17,10 @@ class GameViewController: UIViewController {
 
     // MARK: UIViewController
 
+    deinit {
+        println("gvc deinit")
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -35,6 +39,7 @@ class GameViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
+        println("memory warning")
     }
 
     override func prefersStatusBarHidden() -> Bool {

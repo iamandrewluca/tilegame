@@ -11,7 +11,17 @@ import UIKit
 
 class Tile: SKSpriteNode {
 
+    // MARK: Static Members
+
+    // 6*x+5*(x/8)+2*(x/4)=deviceWidth
+    // 6 tiles + 5 spaces + 2 margins = deviceWidth
+    static let tileLength = Constants.screenSize.width * 8 / 57
+    static let tileSize = CGSize(width: tileLength, height: tileLength)
+
+    // MARK: Members
+
     var type: TileType
+
     var place = (row: 0, column: 0) {
         didSet {
             if let child = childTile {
@@ -19,6 +29,7 @@ class Tile: SKSpriteNode {
             }
         }
     }
+
     var childTile: Tile? {
         didSet {
             if let tile = childTile {
@@ -30,6 +41,10 @@ class Tile: SKSpriteNode {
             }
         }
     }
+
+    // MARK: Methods
+
+    // MARK: SKSpriteNode
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -43,18 +58,18 @@ class Tile: SKSpriteNode {
         if type != TileType.Unknown {
 
             if tileType == TileType.Star {
-                super.init(texture: Constants.starTexture, color: SKColor.yellowColor(), size: Constants.tileSize)
+                super.init(texture: GameScene.starTexture, color: SKColor.yellowColor(), size: Tile.tileSize)
             } else {
-                super.init(texture: Constants.tileTexture, color: tileType.tileColor, size: Constants.tileSize)
+                super.init(texture: GameScene.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
             }
 
             colorBlendFactor = 1.0
             userInteractionEnabled = true
         } else {
-            super.init(texture: nil, color: SKColor.clearColor(), size: Constants.tileSize)
+            super.init(texture: nil, color: SKColor.clearColor(), size: Tile.tileSize)
         }
         
-        position = Constants.boardPositions[place.row][place.column]
+        position = Board.boardPositions[place.row][place.column]
 
     }
 
@@ -65,6 +80,8 @@ class Tile: SKSpriteNode {
             userInteractionEnabled = true
         }
     }
+
+    // MARK: Touches
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         (self.scene as! GameScene).tileDragBegan(self, touch: touches.first as! UITouch)

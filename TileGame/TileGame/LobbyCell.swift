@@ -10,6 +10,10 @@ import UIKit
 
 class LobbyCell: UICollectionViewCell {
 
+    // MARK: Members
+
+    static let identifier = "LobbyCell"
+
     // MARK: IBOutlets
     
     @IBOutlet weak var levelNumber: UILabel!

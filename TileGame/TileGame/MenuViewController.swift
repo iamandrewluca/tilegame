@@ -78,6 +78,10 @@ class MenuViewController: UIViewController {
         super.viewDidLoad()
     }
 
+    func method() {
+        println("what")
+    }
+
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         setupButtons()
@@ -172,13 +176,5 @@ class MenuViewController: UIViewController {
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.TopLeft,
             cornerRadii: CGSizeMake(20, 20) * ratio).CGPath
         self.rateButton.layer.mask = rateLayer
-    }
-
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
     }
 }

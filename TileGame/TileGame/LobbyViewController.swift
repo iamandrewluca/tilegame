@@ -23,7 +23,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: Members
 
+    static let gameSceneSegueIdentifier = "toGameScene"
+
     var levelsInfo = LevelsInfo.sharedInstance
+    var gameVC: GameViewController!
 
     // MARK: Methods
 
@@ -31,7 +34,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         var starsToPass  = levelsInfo.starsToPassSection - levelsInfo.starsInSection(indexPath.section - 1)
 
-        view.headerLabel.text = "\(starsToPass) stars in section \(indexPath.section) to unlock"
+        view.headerLabel.text = "+\(starsToPass) stars in section \(indexPath.section) to unlock"
     }
 
     private func setupSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
@@ -61,12 +64,6 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     }
 
-    private func setButton(image : UIImage!, tintColor : UIColor, state : UIControlState) {
-        let backImage = image.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate)
-        backButton.setImage(backImage, forState: state)
-        backButton.tintColor = tintColor
-    }
-
     // MARK: UIViewController
 
     override func prefersStatusBarHidden() -> Bool {
@@ -76,15 +73,11 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        collectionView!.registerNib(UINib(nibName: "LobbyHeader", bundle: nil), forSupplementaryViewOfKind: Identifiers.lobbyHeader, withReuseIdentifier: Identifiers.lobbyHeader)
+        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil), forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
 
-        collectionView!.registerNib(UINib(nibName: "LobbyCell", bundle: nil), forCellWithReuseIdentifier: Identifiers.lobbyCell)
+        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyCell.identifier)
 
-        collectionView!.registerNib(UINib(nibName: "LobbyLockedCell", bundle: nil), forCellWithReuseIdentifier: Identifiers.lobbyLockedCell)
-
-        setButton(UIImage(named: "Back"),
-            tintColor: UIColor.grayColor(),
-            state: UIControlState.Normal)
+        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyLockedCell.identifier)
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -118,12 +111,12 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         if indexPath.section < levelsInfo.unlockedSections {
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-                Identifiers.lobbyCell, forIndexPath: indexPath) as! LobbyCell
+                LobbyCell.identifier, forIndexPath: indexPath) as! LobbyCell
 
             setupCellWithIndexPath(cell as! LobbyCell, indexPath: indexPath)
         } else {
             cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-                Identifiers.lobbyLockedCell, forIndexPath: indexPath) as! LobbyLockedCell
+                LobbyLockedCell.identifier, forIndexPath: indexPath) as! LobbyLockedCell
 
             setupLockedCellWithIndexPath(cell as! LobbyLockedCell, indexPath: indexPath)
         }
@@ -134,7 +127,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 
         var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
-            withReuseIdentifier: Identifiers.lobbyHeader,
+            withReuseIdentifier: LobbyHeader.identifier,
             forIndexPath: indexPath) as! LobbyHeader
 
         if indexPath.section < levelsInfo.unlockedSections {
@@ -149,7 +142,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
         if indexPath.section < levelsInfo.unlockedSections {
-            let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
+
+            if gameVC == nil {
+                gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
+            }
 
             gameVC.level = (indexPath.section, indexPath.item)
 

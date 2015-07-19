@@ -29,16 +29,23 @@ class Menu: SKNode {
 
     // MARK: SKNode
 
-    override init() {
+    deinit {
+        println("menu deinit")
+    }
+
+    private override init() {
+        super.init()
+    }
+
+    convenience init(view: SKView) {
+        self.init()
 
         if !Menu.nodesAreCreated {
-            Menu.createNodes()
+            Menu.createNodes(view)
             Menu.nodesAreCreated = true
         } else {
             Menu.firstBackground.removeFromParent()
         }
-
-        super.init()
 
         userInteractionEnabled = true
 
@@ -51,38 +58,38 @@ class Menu: SKNode {
 
     // MARK: Methods
 
-    static func createNodes() {
+    static func createNodes(view: SKView) {
 
-        let ratio = Constants.ratio
+        let ratio = Constants.screenRatio
 
         // first background
 
         let firstBackgroundSize = CGSizeMake(
-            Constants.boardPositions[5][5].x - Constants.boardPositions[5][0].x,
-            Constants.boardPositions[1][0].y - Constants.boardPositions[5][0].y)
+            Board.boardPositions[5][5].x - Board.boardPositions[5][0].x,
+            Board.boardPositions[1][0].y - Board.boardPositions[5][0].y)
 
         let firstBackgroundShape = SKShapeNode()
         firstBackgroundShape.fillColor = SKColor.whiteColor()
         firstBackgroundShape.path = UIBezierPath(
             roundedRect: CGRectMake(0, 0, firstBackgroundSize.width * ratio, firstBackgroundSize.height * ratio),
-            cornerRadius: Constants.tileCornerRadius * 2).CGPath
+            cornerRadius: Board.tileCornerRadius * 2).CGPath
 
         firstBackground = SKSpriteNode(
-            texture: Constants.sceneView!.textureFromNode(firstBackgroundShape),
+            texture: view.textureFromNode(firstBackgroundShape),
             color: SKColor.lightGrayColor(),
             size: firstBackgroundSize)
 
         firstBackground.colorBlendFactor = 1.0
-        firstBackground.position = Constants.boardPositions[5][0]
+        firstBackground.position = Board.boardPositions[5][0]
         firstBackground.anchorPoint = CGPointZero
 
         // second background
 
         let secondBackgroundSize = CGSizeMake(
-            firstBackgroundSize.width - Constants.tileSize.width / 4,
-            firstBackgroundSize.height - Constants.tileSize.height / 4)
+            firstBackgroundSize.width - Tile.tileSize.width / 4,
+            firstBackgroundSize.height - Tile.tileLength / 4)
 
-        var cornerDiff = Constants.tileCornerRadius - Constants.tileSize.width / 8
+        var cornerDiff = Board.tileCornerRadius - Tile.tileLength / 8
         let secondBackgroundCorner = (cornerDiff > 0) ? cornerDiff : 0.0
 
         let secondBackgroundShape = SKShapeNode()
@@ -92,18 +99,18 @@ class Menu: SKNode {
             cornerRadius: secondBackgroundCorner * ratio).CGPath
 
         secondBackground = SKSpriteNode(
-            texture: Constants.sceneView?.textureFromNode(secondBackgroundShape),
+            texture: view.textureFromNode(secondBackgroundShape),
             color: SKColor.whiteColor(),
             size: secondBackgroundSize)
 
         secondBackground.colorBlendFactor = 1.0
         secondBackground.anchorPoint = CGPointZero
-        secondBackground.position = CGPointMake(Constants.tileSize.width / 8, Constants.tileSize.height / 8)
+        secondBackground.position = CGPointMake(Tile.tileLength / 8, Tile.tileLength / 8)
 
         // add middle
 
         middleBackground = SKSpriteNode(
-            color: SKColor.grayColor(),
+            color: SKColor.lightGrayColor(),
             size: CGSizeMake(secondBackgroundSize.width, secondBackgroundSize.height / 3))
 
         middleBackground.anchorPoint = CGPointZero
@@ -111,7 +118,7 @@ class Menu: SKNode {
 
         // add buttons
 
-        let buttonMargin = Constants.tileSize.width / 8
+        let buttonMargin = Tile.tileSize.width / 8
         let buttonHeight = secondBackgroundSize.height / 3 - buttonMargin * 2
         let buttonWidth = (secondBackgroundSize.width - 4 * buttonMargin) / 3
 
@@ -154,6 +161,7 @@ class Menu: SKNode {
         topLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         topLabel.position.x = adButton.size.width / 2
         topLabel.position.y = adButton.size.height / 2
+        topLabel.name = ButtonType.Ad.rawValue
 
         // add middle label
 
@@ -204,20 +212,19 @@ class Menu: SKNode {
         }
 
         if node.name == ButtonType.Restart.rawValue {
-            // restart
+            (scene as! GameScene).restartLevel()
         }
 
         if node.name == ButtonType.Share.rawValue {
-            // share
+            (scene as! GameScene).share()
         }
 
         if node.name == ButtonType.Next.rawValue {
-            // next
+            (scene as! GameScene).nextLevel()
         }
 
         if node.name == ButtonType.Ad.rawValue {
-            // video ad
-            println("video")
+            (scene as! GameScene).showAd()
         }
     }
 

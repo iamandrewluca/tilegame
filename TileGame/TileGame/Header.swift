@@ -13,6 +13,24 @@ class Header: SKNode {
 
     // MARK: Members
 
+    static var headerPositions = { () -> [CGPoint] in
+
+        var points = Array(count: 5, repeatedValue: CGPoint.zeroPoint)
+
+        let smallTileWidth = Tile.tileLength / 2
+        let widthWithoutLR = Constants.screenSize.width - Tile.tileLength * 2
+        let yMiddle = Tile.tileLength / 2
+        let space = (widthWithoutLR - 5 * smallTileWidth) / 6
+        let startX = Tile.tileLength + space + smallTileWidth / 2
+
+        for var i = 0; i < 5; ++i {
+            let x = startX + CGFloat(i) * (space + smallTileWidth)
+            points[i] = CGPointMake(x, yMiddle)
+        }
+
+        return points
+    }()
+
     var colorTargets = Array(count: 5, repeatedValue: 0)
     var currentTargets = Array(count: 5, repeatedValue: 0)
     var colorStars = Array(count: 5, repeatedValue: false)
@@ -34,7 +52,7 @@ class Header: SKNode {
         addChild(tile)
 
         let moveAction = SKAction.group([
-            SKAction.moveTo(Constants.headerPositions[forColor.rawValue - 1], duration: 0.2),
+            SKAction.moveTo(Header.headerPositions[forColor.rawValue - 1], duration: 0.2),
             SKAction.scaleTo(0.30, duration: 0.2),
             SKAction.rotateByAngle(-15 * CGFloat(M_PI) / 180, duration: 0.2)])
 
@@ -60,14 +78,14 @@ class Header: SKNode {
     override init() {
         super.init()
         
-        self.position = CGPointMake(0, Constants.sceneSize.height - Constants.tileSize.width)
+        self.position = CGPointMake(0, Constants.screenSize.height - Tile.tileLength)
         userInteractionEnabled = true
         
         // add header background
         let headerBackground = SKSpriteNode(
-            texture: Constants.headerTexture,
+            texture: GameScene.headerTexture,
             color: SKColor.grayColor(),
-            size: CGSizeMake(Constants.sceneSize.width, Constants.tileSize.width))
+            size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
         
         headerBackground.colorBlendFactor = 1.0
         headerBackground.anchorPoint = CGPointZero
@@ -75,15 +93,15 @@ class Header: SKNode {
         
         // add left icon
         let leftIcon = SKSpriteNode(
-            texture: Constants.tile2RoundCornersTexture,
+            texture: GameScene.tile2RoundCornersTexture,
             color: SKColor.whiteColor(),
-            size: Constants.tileSize)
+            size: Tile.tileSize)
         
         leftIcon.anchorPoint = CGPointZero
         addChild(leftIcon)
         
         // add labels to left icon
-        let pos = CGPointMake(Constants.tileSize.width / 2, Constants.tileSize.width / 2)
+        let pos = CGPointMake(Tile.tileLength / 2, Tile.tileLength / 2)
         
         levelTopLabel.position = pos
         levelTopLabel.position.y += 5
@@ -106,28 +124,22 @@ class Header: SKNode {
         
         // add right icon
         let rightIcon = SKSpriteNode(
-            texture: Constants.tile2RoundCornersTexture,
+            texture: GameScene.tile2RoundCornersTexture,
             color: SKColor.whiteColor(),
-            size: Constants.tileSize)
+            size: Tile.tileSize)
+
+        var pause = SKSpriteNode(imageNamed: "Pause")
+        pause.zRotation = degree2radian(90)
+        pause.anchorPoint = CGPoint.zeroPoint
         
+        rightIcon.addChild(pause)
         rightIcon.anchorPoint = CGPointMake(1.0, 0)
-        rightIcon.position = CGPointMake(Constants.sceneSize.width, Constants.tileSize.width)
-        rightIcon.zRotation = Constants.degree2radian(90)
+        rightIcon.position = CGPointMake(Constants.screenSize.width, Tile.tileLength)
+        rightIcon.zRotation = degree2radian(90)
         rightIcon.name = "pause"
         addChild(rightIcon)
         
-        // add pause to right icon
-        let pause = SKSpriteNode(
-            texture: Constants.pauseTexture,
-            color: SKColor.blackColor(),
-            size: CGSizeMake(Constants.tileSize.width / 2, Constants.tileSize.width / 2))
-        
-        pause.name = "pause"
-        pause.zRotation = Constants.degree2radian(90)
-        pause.position = CGPointMake(-Constants.tileSize.width / 2, Constants.tileSize.width / 2)
-        rightIcon.addChild(pause)
-        
-        for var i = 0; i < Constants.headerPositions.count; ++i {
+        for var i = 0; i < Header.headerPositions.count; ++i {
             
             // add labels
             colorLabels[i] = SKLabelNode()
@@ -135,25 +147,30 @@ class Header: SKNode {
             colorLabels[i]!.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
             colorLabels[i]!.text = "0/0"
             colorLabels[i]!.fontSize = 10
-            colorLabels[i]!.position = Constants.headerPositions[i]
-            colorLabels[i]!.position.y -= Constants.tileSize.width / 3
+            colorLabels[i]!.position = Header.headerPositions[i]
+            colorLabels[i]!.position.y -= Tile.tileLength / 3
             addChild(colorLabels[i]!)
             
             // add tileStars
             var tileStar = SKSpriteNode(
-                texture: Constants.tileStarTexture,
+                texture: GameScene.starTexture,
                 color: TileType(rawValue: i + 1)?.tileColor,
-                size: CGSizeMake(Constants.tileSize.width / 2, Constants.tileSize.width / 2))
+                size: CGSizeMake(Tile.tileLength / 2, Tile.tileLength / 2))
             
             tileStar.colorBlendFactor = 1.0
-            tileStar.position = Constants.headerPositions[i]
-            tileStar.position.y += Constants.tileSize.width / 8
+            tileStar.position = Header.headerPositions[i]
+            tileStar.position.y += Tile.tileLength / 8
             addChild(tileStar)
         }
     }
 
+
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+
+    deinit {
+        println("heaer deinit")
     }
 
     // MARK: Touches

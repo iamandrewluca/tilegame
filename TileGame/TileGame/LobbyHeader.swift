@@ -10,6 +10,10 @@ import UIKit
 
 class LobbyHeader: UICollectionReusableView {
 
+    // MARK: Members
+
+    static let identifier = "LobbyHeader"
+
     // MARK: IBOutlets
 
     @IBOutlet weak var headerLabel: UILabel!
