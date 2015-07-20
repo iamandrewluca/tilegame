@@ -131,7 +131,7 @@ class Header: SKNode {
         var pause = SKSpriteNode(imageNamed: "Pause")
         pause.zRotation = degree2radian(90)
         pause.anchorPoint = CGPoint.zeroPoint
-        
+
         rightIcon.addChild(pause)
         rightIcon.anchorPoint = CGPointMake(1.0, 0)
         rightIcon.position = CGPointMake(Constants.screenSize.width, Tile.tileLength)

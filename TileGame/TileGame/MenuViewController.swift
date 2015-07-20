@@ -24,7 +24,7 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var buttonsContainer: UIView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var soundButton: UIButton!
-    @IBOutlet weak var resetButton: UIButton!
+    @IBOutlet weak var themeButton: UIButton!
     @IBOutlet weak var musicButton: UIButton!
     @IBOutlet weak var adsButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
@@ -35,8 +35,8 @@ class MenuViewController: UIViewController {
     @IBAction func soundButtonPressed(sender: AnyObject) {
         println("sound")
     }
-    @IBAction func resetButtonPressed(sender: AnyObject) {
-        println("reset")
+    @IBAction func themeButtonPressed(sender: AnyObject) {
+        println("theme")
     }
     @IBAction func musicButtonPressed(sender: AnyObject) {
         println("music")
@@ -76,15 +76,15 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupButtons()
     }
 
-    func method() {
-        println("what")
+    override func awakeFromNib() {
     }
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        setupButtons()
+//        setupButtons()
     }
 
     override func didReceiveMemoryWarning() {
@@ -114,67 +114,77 @@ class MenuViewController: UIViewController {
 
     func setupButtons() {
 
-        self.playButton.backgroundColor = Constants.Color2
-        self.resetButton.backgroundColor = Constants.Color2
-        self.soundButton.backgroundColor = Constants.Color1
-        self.musicButton.backgroundColor = Constants.Color3
-        self.adsButton.backgroundColor = Constants.Color4
-        self.shareButton.backgroundColor = Constants.Color5
-        self.rateButton.backgroundColor = Constants.Color1
-        
-        var ratio: CGFloat = 1
+        var sizeRatio: CGFloat = 1
         
         if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
-            ratio = 2
+            sizeRatio = 2
         }
         
         let playLayer = CAShapeLayer()
         playLayer.path = UIBezierPath(
             roundedRect: self.playButton.bounds,
             byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSizeMake(30, 30) * ratio).CGPath
+            cornerRadii: CGSizeMake(30, 30) * sizeRatio).CGPath
         self.playButton.layer.mask = playLayer
         
         let musicLayer = CAShapeLayer()
         musicLayer.path = UIBezierPath(
             roundedRect: self.musicButton.bounds,
             byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.BottomRight | UIRectCorner.TopRight,
-            cornerRadii: CGSizeMake(25, 25) * ratio).CGPath
+            cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
         self.musicButton.layer.mask = musicLayer
         
         let soundLayer = CAShapeLayer()
         soundLayer.path = UIBezierPath(
             roundedRect: self.soundButton.bounds,
             byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.TopLeft | UIRectCorner.BottomRight,
-            cornerRadii: CGSizeMake(25, 25) * ratio).CGPath
+            cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
         self.soundButton.layer.mask = soundLayer
         
         let resetLayer = CAShapeLayer()
         resetLayer.path = UIBezierPath(
-            roundedRect: self.resetButton.bounds,
+            roundedRect: self.themeButton.bounds,
             byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.TopLeft | UIRectCorner.BottomRight,
-            cornerRadii: CGSizeMake(20, 20) * ratio).CGPath
-        self.resetButton.layer.mask = resetLayer
+            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
+        self.themeButton.layer.mask = resetLayer
         
         let shareLayer = CAShapeLayer()
         shareLayer.path = UIBezierPath(
             roundedRect: self.shareButton.bounds,
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.BottomLeft,
-            cornerRadii: CGSizeMake(20, 20) * ratio).CGPath
+            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.shareButton.layer.mask = shareLayer
         
         let adsLayer = CAShapeLayer()
         adsLayer.path = UIBezierPath(
             roundedRect: self.adsButton.bounds,
             byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSizeMake(20, 20) * ratio).CGPath
+            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.adsButton.layer.mask = adsLayer
         
         let rateLayer = CAShapeLayer()
         rateLayer.path = UIBezierPath(
             roundedRect: self.rateButton.bounds,
             byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.TopLeft,
-            cornerRadii: CGSizeMake(20, 20) * ratio).CGPath
+            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.rateButton.layer.mask = rateLayer
+    }
+
+    func setupColors() {
+        self.playButton.backgroundColor = Constants.Color2
+        self.themeButton.backgroundColor = Constants.Color4
+        self.soundButton.backgroundColor = Constants.Color1
+        self.musicButton.backgroundColor = Constants.Color3
+        self.adsButton.backgroundColor = Constants.Color2
+        self.shareButton.backgroundColor = Constants.Color5
+        self.rateButton.backgroundColor = Constants.Color1
+
+        self.playButton.titleLabel?.textColor = Constants.textColor
+        self.themeButton.titleLabel?.textColor = Constants.textColor
+        self.soundButton.titleLabel?.textColor = Constants.textColor
+        self.musicButton.titleLabel?.textColor = Constants.textColor
+        self.adsButton.titleLabel?.textColor = Constants.textColor
+        self.shareButton.titleLabel?.textColor = Constants.textColor
+        self.rateButton.titleLabel?.textColor = Constants.textColor
     }
 }
