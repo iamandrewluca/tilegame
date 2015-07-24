@@ -44,11 +44,11 @@ class LobbyLayout : UICollectionViewLayout {
             rowsPerSection = 2.0
         }
 
-        println(collectionWidth)
-
-//        if collectionWidth < 321 {
-//            cellSize = CGSize(width: 135, height: 135)
-//        }
+        if collectionWidth >= 768 {
+            cellSize = CGSize(width: 165, height: 165)
+        } else if collectionWidth <= 320 {
+            cellSize = CGSize(width: 125, height: 125)
+        }
 
         spacingBetweenCells = (collectionWidth - columnsPerSection * cellSize.width) / (columnsPerSection + 1)
 
