@@ -12,13 +12,23 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: IB Outlets
 
+    @IBOutlet weak var navigationView: UIView!
     @IBOutlet weak var collectionView: UICollectionView!
     @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var leaderboardButton: UIButton!
+    @IBOutlet weak var navigationHeaderHeight: NSLayoutConstraint!
+    @IBOutlet weak var backButtonContainer: UIView!
+    @IBOutlet weak var leaderboardButtonContainer: UIView!
+    @IBOutlet weak var middleLabel: UILabel!
 
     // MARK: IB Actions
 
     @IBAction func goBack(sender: AnyObject) {
         navigationController!.popViewControllerAnimated(true)
+    }
+
+    @IBAction func openLeaderboard(sender: AnyObject) {
+        println("leaderboard")
     }
 
     // MARK: Members
@@ -64,6 +74,41 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     }
 
+    private func registerNibsForCollectionView() {
+        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil), forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
+
+        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyCell.identifier)
+
+        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyLockedCell.identifier)
+    }
+
+    private func setupViews() {
+
+        navigationHeaderHeight.constant = Tile.tileLength
+
+        let backMask = CAShapeLayer()
+        backMask.path = UIBezierPath(
+            roundedRect: CGRect(x: 0, y: 0, width: Tile.tileLength, height: Tile.tileLength),
+            byRoundingCorners: UIRectCorner.TopRight,
+            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).CGPath
+
+        let leaderboardMask = CAShapeLayer()
+        leaderboardMask.path = UIBezierPath(
+            roundedRect: CGRect(x: 0, y: 0, width: Tile.tileLength, height: Tile.tileLength),
+            byRoundingCorners: UIRectCorner.TopLeft,
+            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).CGPath
+
+        leaderboardButtonContainer.layer.mask = leaderboardMask
+        backButtonContainer.layer.mask = backMask
+
+        backButtonContainer.backgroundColor = Constants.navigationButtonColor
+        leaderboardButtonContainer.backgroundColor = Constants.navigationButtonColor
+        navigationView.backgroundColor = Constants.navigationBackgroundColor
+        middleLabel.textColor = Constants.textColor
+        collectionView.backgroundColor = Constants.backgroundColor
+        
+    }
+
     // MARK: UIViewController
 
     override func prefersStatusBarHidden() -> Bool {
@@ -72,12 +117,13 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        registerNibsForCollectionView()
+        middleLabel.text = "\(levelsInfo.totalStars()) stars"
+    }
 
-        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil), forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
-
-        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyCell.identifier)
-
-        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyLockedCell.identifier)
+    override func updateViewConstraints() {
+        super.updateViewConstraints()
+        setupViews()
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -126,17 +172,22 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 
-        var header = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
-            withReuseIdentifier: LobbyHeader.identifier,
-            forIndexPath: indexPath) as! LobbyHeader
+        var supplementaryView: UICollectionReusableView!
 
-        if indexPath.section < levelsInfo.unlockedSections {
-            setupSectionHeaderAtIndexPath(header, indexPath: indexPath)
-        } else {
-            setupLockedSectionHeaderAtIndexPath(header, indexPath: indexPath)
+        if kind == LobbyHeader.identifier {
+
+            supplementaryView = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+                withReuseIdentifier: LobbyHeader.identifier,
+                forIndexPath: indexPath) as! LobbyHeader
+
+            if indexPath.section < levelsInfo.unlockedSections {
+                setupSectionHeaderAtIndexPath(supplementaryView as! LobbyHeader, indexPath: indexPath)
+            } else {
+                setupLockedSectionHeaderAtIndexPath(supplementaryView as! LobbyHeader, indexPath: indexPath)
+            }
         }
 
-        return header
+        return supplementaryView
     }
 
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {

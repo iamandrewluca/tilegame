@@ -26,7 +26,8 @@ class LobbyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        backgroundColor = UIColor.whiteColor()
+        backgroundColor = Constants.cellBackgroundColor
+        levelNumber.textColor = Constants.textColor
         layer.cornerRadius = 10
         layer.masksToBounds = false
         layer.shadowOpacity = 0.25

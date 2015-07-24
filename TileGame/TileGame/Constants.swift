@@ -11,10 +11,11 @@ import SpriteKit
 
 class Constants {
 
-    // MARK: Screen
+    // MARK: Device
 
     static let screenSize = UIScreen.mainScreen().bounds.size
     static let screenRatio = UIScreen.mainScreen().scale + 2
+    static let isIphone = (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone) ? true : false
 
     // MARK: Fonts
 
@@ -77,6 +78,7 @@ class Constants {
     static var tileBackgroundColor: UIColor { return gameColors[gameTheme][1] }
     static var navigationButtonColor: UIColor { return gameColors[gameTheme][1] }
     static var starColor: UIColor { return UIColor.yellowColor() }
+    static var noStarColor: UIColor { return UIColor.lightGrayColor() }
     static var overlayColor: UIColor { return UIColor.brownColor() }
 
     static var lightColor: UIColor { return gameColors[0][0] }

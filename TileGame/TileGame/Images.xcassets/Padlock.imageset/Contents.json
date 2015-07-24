@@ -3,17 +3,17 @@
     {
       "idiom" : "universal",
       "scale" : "1x",
-      "filename" : "Closed_Lock_64.png"
+      "filename" : "Password-50.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "Closed_Lock_128.png"
+      "filename" : "Password-64.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "Closed_Lock_256.png"
+      "filename" : "Password-100.png"
     }
   ],
   "info" : {

@@ -113,4 +113,8 @@ class LevelsInfo {
 
         return 0
     }
+
+    func totalStars() -> Int {
+        return levelsInfo.reduce([], combine: +).reduce(0, combine: +)
+    }
 }

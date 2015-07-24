@@ -10,71 +10,193 @@ import Foundation
 import UIKit
 
 class LobbyLayout : UICollectionViewLayout {
+
+    // MARK: Members
     
     var cellInsets = UIEdgeInsetsZero
     var headerInsets = UIEdgeInsetsZero
+    var sectionInsets = UIEdgeInsetsZero
     
     var cellSize = CGSizeMake(145, 145)
-    var headerSize = CGSizeMake(0, 48)
+    var headerSize = CGSizeMake(0, Tile.tileLength)
+    var sectionSize = CGSize.zeroSize
     
-    var numberOfColumns: Int
-    var spacingX: CGFloat = 0
-    var spacingY: CGFloat = 0
+    var numberOfColumns: Int = 2
+    var spacing: CGFloat = 0
     var rowsPerSection = 0
-    var collectionWidth = UIScreen.mainScreen().bounds.width
+    var collectionWidth = Constants.screenSize.width
     
-    var layoutInfo: Dictionary<String, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>!
+    var layoutInfo: [String : [NSIndexPath : UICollectionViewLayoutAttributes]]!
+
+    var isLayoutPrepared = false
+
+    // MARK: LobbyLayout
 
     required init(coder aDecoder: NSCoder) {
-        
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
-            numberOfColumns = 3
-        } else {
-            numberOfColumns = 2
-        }
-        
+
         super.init(coder: aDecoder)
+        
+        if Constants.isIphone {
+            numberOfColumns = 2
+        } else {
+            numberOfColumns = 3
+        }
     }
+
+    // MARK: UICollectionViewLayout
     
     override func prepareLayout() {
-        
+
+        super.prepareLayout()
+
+        if !isLayoutPrepared {
+            isLayoutPrepared = true
+
+            createCellLayoutAttributes()
+        }
+
+        createHeaderLayoutAttributes()
+    }
+
+    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
+
+        var allAttributes = [UICollectionViewLayoutAttributes]()
+
+        for (elementIdentifier, elementsInfo) in layoutInfo {
+            for (indexPath, attributes) in elementsInfo {
+                if rect.intersects(attributes.frame) {
+                    allAttributes.append(attributes)
+                }
+            }
+        }
+
+        return allAttributes
+    }
+
+    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+        return layoutInfo[LobbyCell.identifier]![indexPath]
+    }
+
+    override func collectionViewContentSize() -> CGSize {
+//        var rowCount = rowsPerSection * collectionView!.numberOfSections()
+//
+//        var headersHeight = CGFloat(collectionView!.numberOfSections()) * (headerSize.height + headerInsets.top + headerInsets.bottom + spacing)
+//
+//        var cellsHeight = CGFloat(rowCount) * (cellSize.height + cellInsets.top + cellInsets.bottom + spacing)
+//
+//        var height = headersHeight + cellsHeight
+
+        var oneSectionFrame = frameForSection(0)
+        oneSectionFrame.size.height *= CGFloat(collectionView!.numberOfSections())
+
+        return oneSectionFrame.size
+
+//        return CGSizeMake(collectionWidth, height)
+    }
+
+    override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
+
+        var attributes = super.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)
+
+        if elementKind == LobbyHeader.identifier {
+            attributes = layoutInfo[LobbyHeader.identifier]![indexPath]
+        }
+
+        return attributes
+    }
+
+    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+        return true
+    }
+
+    // MARK: Methods
+
+    func frameForSection(section: Int) -> CGRect {
+
+        var firstIndexPath = NSIndexPath(forItem: 0, inSection: section)
+        var lastIndexPath = NSIndexPath(forItem: 5, inSection: section)
+
+        var firstCellTop = layoutAttributesForItemAtIndexPath(firstIndexPath).frame.origin.y
+        var lastCellBottom = CGRectGetMaxY(layoutAttributesForItemAtIndexPath(lastIndexPath).frame)
+
+        var frame = CGRectZero
+        frame.size.width = collectionWidth
+        frame.origin.y = firstCellTop
+        frame.size.height = lastCellBottom - firstCellTop
+
+        frame.origin.y -= headerSize.height
+        frame.size.height += headerSize.height
+
+        frame.origin.y -= sectionInsets.top
+        frame.size.height += sectionInsets.top
+
+        frame.size.height += sectionInsets.bottom
+
+        return frame
+    }
+
+    func createHeaderLayoutAttributes() {
+
+        var headerLayoutInfo = [NSIndexPath : UICollectionViewLayoutAttributes]()
+
+        for i in 0..<collectionView!.numberOfSections() {
+
+            var indexPath = NSIndexPath(forItem: 0, inSection: i)
+
+            var attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: LobbyHeader.identifier, withIndexPath: indexPath)
+
+            var sectionFrame = frameForSection(i)
+
+
+            let minimumY = max(collectionView!.contentOffset.y + collectionView!.contentInset.top, sectionFrame.origin.y)
+            let maximumY = CGRectGetMaxY(sectionFrame) - headerSize.height - collectionView!.contentInset.bottom
+
+            attributes.frame = CGRectMake(0, min(minimumY, maximumY), collectionWidth, headerSize.height)
+            attributes.zIndex = 1
+
+            headerLayoutInfo[indexPath] = attributes
+        }
+
+        layoutInfo[LobbyHeader.identifier] = headerLayoutInfo
+    }
+
+    func createCellLayoutAttributes() {
         headerSize.width = collectionWidth
         rowsPerSection = collectionView!.numberOfItemsInSection(0) / numberOfColumns
-        
-        spacingX = collectionWidth + cellInsets.left -
+
+        spacing = collectionWidth + cellInsets.left -
             CGFloat(numberOfColumns) * (cellSize.width + cellInsets.right + cellInsets.left)
-        
-        spacingX = spacingX / CGFloat(numberOfColumns + 1)
-        spacingY = spacingX
-        
-        var newLayoutInfo = Dictionary<String, Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>>()
-        var cellLayoutInfo = Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>()
-        var headerLayoutInfo = Dictionary<NSIndexPath, UICollectionViewLayoutAttributes>()
-        
+
+        spacing = spacing / CGFloat(numberOfColumns + 1)
+
+        var newLayoutInfo = [String : [NSIndexPath : UICollectionViewLayoutAttributes]]()
+        var cellLayoutInfo = [NSIndexPath : UICollectionViewLayoutAttributes]()
+        var headerLayoutInfo = [NSIndexPath : UICollectionViewLayoutAttributes]()
+
         var sectionCount = collectionView?.numberOfSections()
         var indexPath: NSIndexPath!
-        
+
         for var section = 0; section < sectionCount; ++section {
             var itemCount = collectionView!.numberOfItemsInSection(section)
-            
+
             for var item = 0; item < itemCount; ++item {
                 indexPath = NSIndexPath(forItem: item, inSection: section)
-                
+
                 if indexPath.item == 0 {
                     var headerAttributes = UICollectionViewLayoutAttributes(
                         forSupplementaryViewOfKind: LobbyHeader.identifier, withIndexPath: indexPath)
-                    
+
                     headerAttributes.frame = frameForHeaderAtIndexPath(indexPath)
                     headerLayoutInfo[indexPath] = headerAttributes
                 }
 
                 var itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
                 itemAttributes.frame = frameForCellAtIndexPath(indexPath)
-                
+
                 cellLayoutInfo[indexPath] = itemAttributes
             }
         }
-        
+
         newLayoutInfo[LobbyCell.identifier] = cellLayoutInfo
         newLayoutInfo[LobbyHeader.identifier] = headerLayoutInfo
         layoutInfo = newLayoutInfo
@@ -85,7 +207,7 @@ class LobbyLayout : UICollectionViewLayout {
         var headerFrame = CGRectZero
         headerFrame.size = headerSize
         
-        headerFrame.origin.y = CGFloat(indexPath.section) * (headerSize.height + spacingY + CGFloat(rowsPerSection) * (cellSize.height + spacingY))
+        headerFrame.origin.y = CGFloat(indexPath.section) * (headerSize.height + spacing + CGFloat(rowsPerSection) * (cellSize.height + spacing))
         
         return headerFrame
     }
@@ -98,59 +220,9 @@ class LobbyLayout : UICollectionViewLayout {
         var cellFrame = frameForHeaderAtIndexPath(indexPath)
         cellFrame.size = cellSize
         
-        cellFrame.origin.x = spacingX + CGFloat(columnInSection) * (cellSize.width + spacingX)
-        cellFrame.origin.y += headerSize.height + spacingY + CGFloat(rowInSection) * (cellSize.height + spacingY)
+        cellFrame.origin.x = spacing + CGFloat(columnInSection) * (cellSize.width + spacing)
+        cellFrame.origin.y += headerSize.height + spacing + CGFloat(rowInSection) * (cellSize.height + spacing)
         
         return cellFrame
-//        var originX: CGFloat = floor(spacingX + cellInsets.left + CGFloat(column) * (cellSize.width + spacingX + cellInsets.right))
-//        
-//        var headersTotalHeight: CGFloat = (headerSize.height + headerInsets.bottom) + CGFloat(indexPath.section) * (headerSize.height + headerInsets.top + headerInsets.bottom)
-//        
-//        var cellsTotalHeight: CGFloat = CGFloat(row) * (cellSize.height + cellInsets.top + cellInsets.bottom + spacingY)
-//    
-//        var originY: CGFloat = floor(headersTotalHeight + spacingY + cellInsets.top + cellsTotalHeight)
-//        
-//        return CGRectMake(originX, originY, cellSize.width, cellSize.height)
-    }
-    
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [AnyObject]? {
-        var allAttributes = Array<UICollectionViewLayoutAttributes>()
-        
-        for (elementIdentifier, elementsInfo) in layoutInfo {
-            for (indexPath, attributes) in elementsInfo {
-                if CGRectIntersectsRect(rect, attributes.frame) {
-                    allAttributes.append(attributes)
-                }
-            }
-        }
-
-        return allAttributes
-    }
-    
-    override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        return layoutInfo[LobbyCell.identifier]![indexPath]
-    }
-    
-    override func collectionViewContentSize() -> CGSize {
-        var rowCount = rowsPerSection * collectionView!.numberOfSections()
-        
-        var headersHeight = CGFloat(collectionView!.numberOfSections()) * (headerSize.height + headerInsets.top + headerInsets.bottom + spacingY)
-        
-        var cellsHeight = CGFloat(rowCount) * (cellSize.height + cellInsets.top + cellInsets.bottom + spacingY)
-        
-        var height = headersHeight + cellsHeight
-        
-        return CGSizeMake(collectionWidth, height)
-    }
-    
-    override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes! {
-        
-        var attribute: UICollectionViewLayoutAttributes!
-        
-        if elementKind == LobbyHeader.identifier {
-            attribute = layoutInfo[LobbyHeader.identifier]![indexPath]
-        }
-        
-        return attribute
     }
 }

@@ -14,7 +14,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="145" height="145"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Padlock" translatesAutoresizingMaskIntoConstraints="NO" id="k4o-QB-WhP">
-                        <rect key="frame" x="40" y="41" width="64" height="64"/>
+                        <rect key="frame" x="47" y="48" width="50" height="50"/>
                     </imageView>
                 </subviews>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -26,6 +26,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="Padlock" width="64" height="64"/>
+        <image name="Padlock" width="50" height="50"/>
     </resources>
 </document>

@@ -23,4 +23,10 @@ class LobbyHeader: UICollectionReusableView {
     override func prepareForReuse() {
         headerLabel.text = ""
     }
+
+    override func awakeFromNib() {
+        super.awakeFromNib()
+        backgroundColor = Constants.headerBackgroundColor
+        headerLabel.textColor = Constants.textColor
+    }
 }

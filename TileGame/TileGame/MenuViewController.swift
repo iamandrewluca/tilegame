@@ -76,7 +76,8 @@ class MenuViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupButtons()
+
+        setupColors()
     }
 
     override func awakeFromNib() {
@@ -84,7 +85,7 @@ class MenuViewController: UIViewController {
 
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-//        setupButtons()
+        setupButtons()
     }
 
     override func didReceiveMemoryWarning() {
