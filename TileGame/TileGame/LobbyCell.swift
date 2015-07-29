@@ -25,21 +25,25 @@ class LobbyCell: UICollectionViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        backgroundColor = Constants.cellBackgroundColor
-        levelNumber.textColor = Constants.textColor
-        layer.cornerRadius = 10
+
+        layer.cornerRadius = Board.tileCornerRadius
         layer.masksToBounds = false
         layer.shadowOpacity = 0.25
         layer.shadowColor = UIColor.grayColor().CGColor
         layer.shadowRadius = 2.0
         layer.shadowOffset = CGSizeZero
+
+        backgroundColor = Constants.cellBackgroundColor
+        levelNumber.textColor = Constants.textColor
+        firstStar.tintColor = Constants.noStarColor
+        secondStar.tintColor = Constants.noStarColor
+        thirdStar.tintColor = Constants.noStarColor
     }
 
     override func prepareForReuse() {
-        firstStar.image = UIImage(named: "NoStar")
-        secondStar.image = UIImage(named: "NoStar")
-        thirdStar.image = UIImage(named: "NoStar")
+        firstStar.tintColor = Constants.noStarColor
+        secondStar.tintColor = Constants.noStarColor
+        thirdStar.tintColor = Constants.noStarColor
         levelNumber.text = "0"
     }
 }

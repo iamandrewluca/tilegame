@@ -36,55 +36,22 @@ class Header: SKNode {
     var colorStars = Array(count: 5, repeatedValue: false)
 
     var colorLabels = Array(count: 5, repeatedValue: SKLabelNode?.None)
-    var levelTopLabel = SKLabelNode()
-    var levelBottomLabel = SKLabelNode()
-
-    // MARK: Methods
-
-    func addStar(tile: Tile, forColor: TileType) {
-
-        let scenePosition = scene!.convertPoint(tile.position, fromNode: (scene as! GameScene).board)
-        let headerPosition = scene!.convertPoint(scenePosition, toNode: (scene as! GameScene).header)
-
-        tile.position = headerPosition
-
-        tile.removeFromParent()
-        addChild(tile)
-
-        let moveAction = SKAction.group([
-            SKAction.moveTo(Header.headerPositions[forColor.rawValue - 1], duration: 0.2),
-            SKAction.scaleTo(0.30, duration: 0.2),
-            SKAction.rotateByAngle(-15 * CGFloat(M_PI) / 180, duration: 0.2)])
-
-        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
-
-        tile.runAction(moveAction)
-    }
-
-    func addColor(value: Int, forColor: TileType) {
-
-        let pos = forColor.rawValue - 1
-
-        currentTargets[pos] += value
-        colorLabels[pos]!.text = String("\(currentTargets[pos])/\(colorTargets[pos])")
-    }
-
-    func setColorTarget(value: Int, forColor: TileType) {
-        colorTargets[forColor.rawValue - 1] = value
-    }
+    var leftTopLabel = SKLabelNode()
+    var leftBottomLabel = SKLabelNode()
 
     // MARK: SKNode
     
     override init() {
         super.init()
+
+        userInteractionEnabled = true
         
         self.position = CGPointMake(0, Constants.screenSize.height - Tile.tileLength)
-        userInteractionEnabled = true
         
         // add header background
         let headerBackground = SKSpriteNode(
-            texture: GameScene.headerTexture,
-            color: SKColor.grayColor(),
+            texture: GameScene.headerBackgroundTexture,
+            color: Constants.navigationBackgroundColor,
             size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
         
         headerBackground.colorBlendFactor = 1.0
@@ -93,74 +60,98 @@ class Header: SKNode {
         
         // add left icon
         let leftIcon = SKSpriteNode(
-            texture: GameScene.tile2RoundCornersTexture,
-            color: SKColor.whiteColor(),
+            texture: GameScene.headerLeftCornerTexture,
+            color: Constants.navigationButtonColor,
             size: Tile.tileSize)
-        
-        leftIcon.anchorPoint = CGPointZero
+
+        leftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
+        leftIcon.colorBlendFactor = 1.0
         addChild(leftIcon)
         
         // add labels to left icon
-        let pos = CGPointMake(Tile.tileLength / 2, Tile.tileLength / 2)
-        
-        levelTopLabel.position = pos
-        levelTopLabel.position.y += 5
-        levelTopLabel.fontColor = SKColor.blackColor()
-        levelTopLabel.fontSize = 16
-        levelTopLabel.text = "10"
-        levelTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        levelTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
 
-        levelBottomLabel.position = pos
-        levelBottomLabel.position.y -= 8
-        levelBottomLabel.fontColor = SKColor.blackColor()
-        levelBottomLabel.fontSize = 8
-        levelBottomLabel.text = "LEVEL"
-        levelBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        levelBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        
-        leftIcon.addChild(levelTopLabel)
-        leftIcon.addChild(levelBottomLabel)
+        let tileTwoThirds = Tile.tileLength / 3 * 2
+
+        leftBottomLabel.fontColor = Constants.textColor
+        leftBottomLabel.fontName = Constants.secondaryFont
+        leftBottomLabel.text = "SECONDS"
+        leftBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
+        leftBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        leftBottomLabel.fontSize *= tileTwoThirds / leftBottomLabel.frame.width
+
+        leftTopLabel.fontColor = Constants.textColor
+        leftTopLabel.fontName = Constants.primaryFont
+        leftTopLabel.text = "999"
+        leftTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Baseline
+        leftTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+
+        let heightWithoutBottom = tileTwoThirds - leftBottomLabel.frame.height
+        let aspectRatio = min(tileTwoThirds / leftTopLabel.frame.width , heightWithoutBottom / leftTopLabel.frame.height)
+
+        leftTopLabel.fontSize *= aspectRatio
+
+        let downMove = Tile.tileLength / 2 - leftBottomLabel.frame.height - Tile.tileLength / 3 / 2
+
+        leftTopLabel.position.y -= downMove
+        leftBottomLabel.position.y -= downMove
+
+        leftIcon.addChild(leftTopLabel)
+        leftIcon.addChild(leftBottomLabel)
         
         // add right icon
         let rightIcon = SKSpriteNode(
-            texture: GameScene.tile2RoundCornersTexture,
-            color: SKColor.whiteColor(),
+            texture: GameScene.headerRightCornerTexture,
+            color: Constants.navigationButtonColor,
             size: Tile.tileSize)
 
-        var pause = SKSpriteNode(imageNamed: "Pause")
-        pause.zRotation = degree2radian(90)
-        pause.anchorPoint = CGPoint.zeroPoint
+        rightIcon.colorBlendFactor = 1.0
+
+        var pause = SKSpriteNode(texture: SKTexture(imageNamed: "Pause"), color: Constants.textColor, size: Tile.tileSize / 2)
+        pause.colorBlendFactor = 1.0
+        pause.name = "pause"
 
         rightIcon.addChild(pause)
-        rightIcon.anchorPoint = CGPointMake(1.0, 0)
-        rightIcon.position = CGPointMake(Constants.screenSize.width, Tile.tileLength)
-        rightIcon.zRotation = degree2radian(90)
+        rightIcon.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
         rightIcon.name = "pause"
         addChild(rightIcon)
         
         for var i = 0; i < Header.headerPositions.count; ++i {
+
+            // add top tiles
+            var tile = SKSpriteNode(
+                texture: GameScene.tileTexture,
+                color: TileType(rawValue: i + 1)?.tileColor,
+                size: CGSizeMake(Tile.tileLength / 2, Tile.tileLength / 2))
+
+            var star = SKSpriteNode(
+                texture: GameScene.starTexture,
+                color: Constants.navigationBackgroundColor,
+                size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
+            star.colorBlendFactor = 1.0
+            star.zRotation = degree2radian(-15)
+            tile.addChild(star)
+
+            tile.colorBlendFactor = 1.0
+            tile.position = Header.headerPositions[i]
+            tile.position.y += Tile.tileLength / 8
+            addChild(tile)
             
             // add labels
             colorLabels[i] = SKLabelNode()
+            colorLabels[i]!.fontColor = Constants.textColor
+            colorLabels[i]!.fontName = Constants.secondaryFont
+            colorLabels[i]!.text = "99/99"
             colorLabels[i]!.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
             colorLabels[i]!.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-            colorLabels[i]!.text = "0/0"
-            colorLabels[i]!.fontSize = 10
+
+
+            colorLabels[i]!.fontSize *= Tile.tileLength / 8 * 1.5 / colorLabels[i]!.frame.height
+
             colorLabels[i]!.position = Header.headerPositions[i]
-            colorLabels[i]!.position.y -= Tile.tileLength / 3
+            colorLabels[i]!.position.y -= Tile.tileLength / 8 * 2.5
             addChild(colorLabels[i]!)
             
-            // add tileStars
-            var tileStar = SKSpriteNode(
-                texture: GameScene.starTexture,
-                color: TileType(rawValue: i + 1)?.tileColor,
-                size: CGSizeMake(Tile.tileLength / 2, Tile.tileLength / 2))
-            
-            tileStar.colorBlendFactor = 1.0
-            tileStar.position = Header.headerPositions[i]
-            tileStar.position.y += Tile.tileLength / 8
-            addChild(tileStar)
+
         }
     }
 
@@ -195,5 +186,42 @@ class Header: SKNode {
     
     override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
         super.touchesMoved(touches, withEvent: event)
+    }
+
+    // MARK: Methods
+
+    func addStar(tile: Tile, forColor: TileType) {
+
+        let scenePosition = scene!.convertPoint(tile.position, fromNode: (scene as! GameScene).board)
+        let headerPosition = scene!.convertPoint(scenePosition, toNode: (scene as! GameScene).header)
+
+        tile.position = headerPosition
+
+        tile.removeFromParent()
+        addChild(tile)
+
+        var finalPosition = Header.headerPositions[forColor.rawValue - 1]
+        finalPosition.y += Tile.tileLength / 8
+
+        let moveAction = SKAction.group([
+            SKAction.moveTo(finalPosition, duration: 0.2),
+            SKAction.scaleTo(2/6, duration: 0.2),
+            SKAction.rotateByAngle(degree2radian(-15), duration: 0.2)])
+
+        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
+
+        tile.runAction(moveAction)
+    }
+
+    func addColor(value: Int, forColor: TileType) {
+
+        let pos = forColor.rawValue - 1
+
+        currentTargets[pos] += value
+        colorLabels[pos]!.text = String("\(currentTargets[pos])/\(colorTargets[pos])")
+    }
+
+    func setColorTarget(value: Int, forColor: TileType) {
+        colorTargets[forColor.rawValue - 1] = value
     }
 }

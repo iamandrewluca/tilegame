@@ -16,7 +16,7 @@ class Counter {
     private var timer: NSTimer = NSTimer()
 
     // you can't change current elapsed time
-    private(set) var counter: NSTimeInterval = 0
+    var counter: NSTimeInterval = 0
 
     // interval after timer is invalidated
     var endInterval: NSTimeInterval = 0

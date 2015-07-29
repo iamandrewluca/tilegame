@@ -16,52 +16,52 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vrq-o6-uZx">
-                        <rect key="frame" x="0.0" y="0.0" width="145" height="99"/>
+                        <rect key="frame" x="0.0" y="0.0" width="145" height="101"/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="50"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="WK3-kP-FMl">
-                        <rect key="frame" x="0.0" y="99" width="145" height="46"/>
+                        <rect key="frame" x="0.0" y="101" width="145" height="44"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="rWc-Ct-En6">
-                                <rect key="frame" x="6" y="0.0" width="40" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="rWc-Ct-En6">
+                                <rect key="frame" x="6" y="0.0" width="40" height="38"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="rWc-Ct-En6" secondAttribute="height" id="lev-6d-GyZ"/>
+                                    <constraint firstAttribute="width" secondItem="rWc-Ct-En6" secondAttribute="height" multiplier="40:38" id="lev-6d-GyZ"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="5Dz-8F-b61">
-                                <rect key="frame" x="52" y="0.0" width="41" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="5Dz-8F-b61">
+                                <rect key="frame" x="52" y="0.0" width="41" height="38"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="5Dz-8F-b61" secondAttribute="height" id="E6P-Qk-sF7"/>
+                                    <constraint firstAttribute="width" secondItem="5Dz-8F-b61" secondAttribute="height" multiplier="40:38" id="E6P-Qk-sF7"/>
                                 </constraints>
                             </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="NoStar" translatesAutoresizingMaskIntoConstraints="NO" id="xJ6-yx-wiy">
-                                <rect key="frame" x="99" y="0.0" width="40" height="40"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="xJ6-yx-wiy">
+                                <rect key="frame" x="99" y="0.0" width="40" height="38"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="xJ6-yx-wiy" secondAttribute="height" id="9et-9m-dou"/>
+                                    <constraint firstAttribute="width" secondItem="xJ6-yx-wiy" secondAttribute="height" multiplier="40:38" id="9et-9m-dou"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-2z-Oai">
-                                <rect key="frame" x="0.0" y="0.0" width="6" height="46"/>
+                                <rect key="frame" x="0.0" y="0.0" width="6" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="wc6-SG-2bQ"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HiU-NM-2TC">
-                                <rect key="frame" x="46" y="0.0" width="6" height="46"/>
+                                <rect key="frame" x="46" y="0.0" width="6" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="J90-f9-uQA"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpl-JT-GCZ">
-                                <rect key="frame" x="93" y="0.0" width="6" height="46"/>
+                                <rect key="frame" x="93" y="0.0" width="6" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="Eqv-kp-ygp"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ScV-wx-EBJ">
-                                <rect key="frame" x="139" y="0.0" width="6" height="46"/>
+                                <rect key="frame" x="139" y="0.0" width="6" height="44"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="HQL-EI-xLT"/>
                                 </constraints>
@@ -115,6 +115,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="NoStar" width="40" height="38"/>
+        <image name="Star" width="50" height="50"/>
     </resources>
 </document>

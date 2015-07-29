@@ -14,14 +14,12 @@ class Board: SKNode {
     // MARK: Members
 
     static let tileCornerRadius = Tile.tileLength / 4
-
     static let tileSpacing = Tile.tileLength / 8
 
     // boardSize x boardSize
     static let boardSize = 6
 
     static let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * tileSpacing) / 2
-
     static let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
         boardHorizontalMargin + Tile.tileLength / 2
 

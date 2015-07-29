@@ -36,7 +36,7 @@ class Tile: SKSpriteNode {
                 childTile?.position = CGPointZero
                 childTile?.zPosition = 1
                 childTile?.userInteractionEnabled = false
-                childTile?.runAction(SKAction.scaleTo(0.5, duration: 0))
+                childTile?.setScale(0.5)
                 self.addChild(tile)
             }
         }
@@ -58,7 +58,7 @@ class Tile: SKSpriteNode {
         if type != TileType.Unknown {
 
             if tileType == TileType.Star {
-                super.init(texture: GameScene.starTexture, color: SKColor.yellowColor(), size: Tile.tileSize)
+                super.init(texture: GameScene.starTexture, color: Constants.starColor, size: Tile.tileSize)
             } else {
                 super.init(texture: GameScene.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
             }

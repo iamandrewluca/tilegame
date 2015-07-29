@@ -36,7 +36,6 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     static let gameSceneSegueIdentifier = "toGameScene"
 
     var levelsInfo = LevelsInfo.sharedInstance
-    var gameVC: GameViewController!
 
     // MARK: Methods
 
@@ -75,11 +74,14 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
 
     private func registerNibsForCollectionView() {
-        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil), forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
+        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil),
+            forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
 
-        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyCell.identifier)
+        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil),
+            forCellWithReuseIdentifier: LobbyCell.identifier)
 
-        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil), forCellWithReuseIdentifier: LobbyLockedCell.identifier)
+        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil),
+            forCellWithReuseIdentifier: LobbyLockedCell.identifier)
     }
 
     private func setupViews() {
@@ -106,7 +108,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         navigationView.backgroundColor = Constants.navigationBackgroundColor
         middleLabel.textColor = Constants.textColor
         collectionView.backgroundColor = Constants.backgroundColor
-        
+
+        leaderboardButton.tintColor = Constants.textColor
+        backButton.tintColor = Constants.textColor
     }
 
     // MARK: UIViewController
@@ -151,7 +155,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: UICollectionViewDelegate
 
-    func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(collectionView: UICollectionView,
+        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
 
         var cell: UICollectionViewCell!
 
@@ -170,7 +175,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         return cell
     }
 
-    func collectionView(collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
 
         var supplementaryView: UICollectionReusableView!
 
@@ -194,9 +200,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         if indexPath.section < levelsInfo.unlockedSections {
 
-            if gameVC == nil {
-                gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
-            }
+            var gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
 
             gameVC.level = (indexPath.section, indexPath.item)
 

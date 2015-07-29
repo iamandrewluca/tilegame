@@ -20,7 +20,7 @@ class Constants {
     // MARK: Fonts
 
     static let primaryFont = "HelveticaNeue-UltraLight"
-    static let secondaryFont = "HelveticaNeue-UltraLight"
+    static let secondaryFont = "HelveticaNeue-CondensedBold"
 
     // MARK: Colors
     
@@ -75,6 +75,7 @@ class Constants {
     static var navigationBackgroundColor: UIColor { return gameColors[gameTheme][2] }
     static var headerBackgroundColor: UIColor { return gameColors[gameTheme][1] }
     static var cellBackgroundColor: UIColor { return UIColor.whiteColor() }
+    static var cellTextColor: UIColor { return darkColor }
     static var tileBackgroundColor: UIColor { return gameColors[gameTheme][1] }
     static var navigationButtonColor: UIColor { return gameColors[gameTheme][1] }
     static var starColor: UIColor { return UIColor.yellowColor() }

@@ -13,17 +13,28 @@ class GameScene: SKScene {
 
     // MARK: Members
 
-    // STATIC TEXTURES
     private static var texturesAreCreated = false
-    static var tileTexture: SKTexture! = SKTexture()
-    static var starTexture: SKTexture! = SKTexture()
-    static var tile2RoundCornersTexture: SKTexture = SKTexture()
-    static var headerTexture: SKTexture = SKTexture()
+
+    static var tileTexture: SKTexture!
+    static var starTexture: SKTexture!
+
+    static var headerBackgroundTexture: SKTexture!
+    static var headerLeftCornerTexture: SKTexture!
+    static var headerRightCornerTexture: SKTexture!
+
+    static var menuBackgroundTexture: SKTexture!
+    static var menuLeftButtonTexture: SKTexture!
+    static var menuMiddleButtonTexture: SKTexture!
+    static var menuRightButtonTexture: SKTexture!
+    static var menuTopButtonTexture: SKTexture!
 
     var controller: GameViewController!
 
     var levelType: LevelType!
-    var levelTypeCounter: Int!
+    var levelTypeValue: Int!
+
+    var counter: Counter!
+    var moves: Int = 0
 
     var levelsInfo = LevelsInfo.sharedInstance
     var level: (section: Int, number: Int)!
@@ -33,12 +44,7 @@ class GameScene: SKScene {
     var board: Board!
     var overlay: SKSpriteNode!
 
-    var gameState: GameState!
-
-    var counter: Counter!
-    var moves: Int!
-    var currentMoves: Int!
-
+    var gameState: GameState = GameState.Stop
 
     // MARK: SKScene
 
@@ -59,7 +65,7 @@ class GameScene: SKScene {
         board = Board()
         board.zPosition = -2
 
-        overlay = SKSpriteNode(color: SKColor.blackColor(), size: size);
+        overlay = SKSpriteNode(color: Constants.darkColor, size: size);
         overlay.anchorPoint = CGPointZero
         overlay.zPosition = -1
         overlay.name = "overlay"
@@ -74,10 +80,22 @@ class GameScene: SKScene {
 
         populateScene()
 
-        backgroundColor = UIColor(red: 255 / 255, green: 237 / 255, blue: 218 / 255, alpha: 0.25)
+        backgroundColor = Constants.backgroundColor
 
         addChild(board)
         addChild(header)
+
+        var endInterval = -1
+
+        if levelType == LevelType.LimitedMoves {
+            endInterval = levelTypeValue
+        } else if levelType == LevelType.LimitedTime {
+
+        } else {
+
+        }
+
+        counter = Counter(loopInterval: 1, endInterval: -1, loopCallback: counterLoop, endCallback: counterEnd)
     }
 
     // MARK: Touches
@@ -124,6 +142,14 @@ class GameScene: SKScene {
     }
     
     // MARK: Methods
+
+    func counterLoop(value: NSTimeInterval) {
+
+    }
+
+    func counterEnd() {
+
+    }
 
     func gameOver() {
 
@@ -178,21 +204,23 @@ class GameScene: SKScene {
 
         let screenRatio = Constants.screenRatio
 
-        let starPath = getStarPath(0, 0, Tile.tileLength / 4 * screenRatio, 5, 2)
+        // tile texture
         let roundRectPath = UIBezierPath(
             roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio , Tile.tileLength * screenRatio),
             cornerRadius: Board.tileCornerRadius * screenRatio).CGPath
+        let tileShape = SKShapeNode()
+        tileShape.fillColor = UIColor.whiteColor()
+        tileShape.path = roundRectPath
+        tileTexture = view.textureFromNode(tileShape)
 
-        let tile2RoundCornersPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.BottomRight,
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
+        // star texture
+        let starPath = getStarPath(0, 0, Tile.tileLength / 2 * screenRatio, 5, 2)
+        let starShape = SKShapeNode()
+        starShape.fillColor = SKColor.whiteColor()
+        starShape.path = starPath
+        starTexture = view.textureFromNode(starShape)
 
-        let tile2RoundCornersShape = SKShapeNode()
-        tile2RoundCornersShape.path = tile2RoundCornersPath.CGPath
-        tile2RoundCornersShape.fillColor = SKColor.whiteColor()
-        tile2RoundCornersTexture = view.textureFromNode(tile2RoundCornersShape)
-
+        // header background texture
         let headerBackgroundPath = UIBezierPath(
             roundedRect: CGRectMake(0, 0, Constants.screenSize.width * screenRatio, Tile.tileLength * screenRatio),
             byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.TopRight,
@@ -201,38 +229,43 @@ class GameScene: SKScene {
         let headerBackgroundShape = SKShapeNode()
         headerBackgroundShape.path = headerBackgroundPath.CGPath
         headerBackgroundShape.fillColor = SKColor.whiteColor()
-        headerTexture = view.textureFromNode(headerBackgroundShape)
+        headerBackgroundTexture = view.textureFromNode(headerBackgroundShape)
 
-        let tileShape = SKShapeNode()
-        tileShape.fillColor = UIColor.whiteColor()
-        tileShape.path = roundRectPath
-        tileTexture = view.textureFromNode(tileShape)
+        // header left corner texture
+        let headerLeftCornerPath = UIBezierPath(
+            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
+            byRoundingCorners: UIRectCorner.TopLeft | UIRectCorner.BottomRight,
+            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
 
-        let starShape = SKShapeNode()
-        starShape.fillColor = SKColor.whiteColor()
-        starShape.path = starPath
-        starTexture = view.textureFromNode(starShape)
+        let headerLeftCornerShape = SKShapeNode()
+        headerLeftCornerShape.path = headerLeftCornerPath.CGPath
+        headerLeftCornerShape.fillColor = SKColor.whiteColor()
+        headerLeftCornerTexture = view.textureFromNode(headerLeftCornerShape)
 
-        starShape.fillColor = SKColor.blackColor()
-        starShape.setScale(0.75)
-        starShape.zRotation = -15 * CGFloat(M_PI) / 180
-        starShape.position = CGPointMake(tileShape.frame.width / 2, tileShape.frame.height / 2)
-        tileShape.addChild(starShape)
+        // header right corner texture
+        let headerRightCornerPath = UIBezierPath(
+            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
+            byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.TopRight,
+            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
+
+        let headerRightCornerShape = SKShapeNode()
+        headerRightCornerShape.path = headerRightCornerPath.CGPath
+        headerRightCornerShape.fillColor = SKColor.whiteColor()
+        headerRightCornerTexture = view.textureFromNode(headerRightCornerShape)
     }
 
-    func populateScene() {
+    private func populateScene() {
 
         if let level = loadJSONFromBundle("section_\(level.section)_level_\(level.number)") {
 
             // get level type
             if let type = level["levelType"] as? Int, counter = level["levelTypeCounter"] as? Int {
                 levelType = LevelType(rawValue: type)
-                levelTypeCounter = counter
-
+                levelTypeValue = counter
             }
 
             // get tiles targets
-            if let targets = level["colorTargets"] as? Array<Int> {
+            if let targets = level["colorTargets"] as? [Int] {
                 for var i = 0; i < targets.count; ++i {
                     header.setColorTarget(targets[i], forColor: TileType(rawValue: i + 1)!)
                 }
@@ -266,7 +299,7 @@ class GameScene: SKScene {
         }
     }
 
-    func loadJSONFromBundle(filename: String) -> Dictionary<String, AnyObject>? {
+    private func loadJSONFromBundle(filename: String) -> Dictionary<String, AnyObject>? {
         if let path = NSBundle.mainBundle().pathForResource(filename, ofType: "json") {
             var error: NSError?
             let data: NSData? = NSData(contentsOfFile: path, options: NSDataReadingOptions(), error: &error)
@@ -289,10 +322,10 @@ class GameScene: SKScene {
     }
 
     enum GameState {
-        case Play, Pause, Stop, Win, Lost
+        case Play, Pause, Stop, Hold, Win, Lost
     }
 
     enum LevelType: Int {
-        case None = -1, FreeTime, LimitedTime, LimitedMoves
+        case FreeTime, LimitedTime, LimitedMoves
     }
 }

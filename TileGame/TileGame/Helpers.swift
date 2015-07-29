@@ -47,6 +47,13 @@ func *(lhs: CGSize, rhs: CGFloat) -> CGSize {
     return multipliedSize
 }
 
+func /(lhs: CGSize, rhs: CGFloat) -> CGSize {
+    var dividedSize = lhs
+    dividedSize.width /= rhs
+    dividedSize.height /= rhs
+    return dividedSize
+}
+
 func degree2radian(a:CGFloat) -> CGFloat {
     let b = CGFloat(M_PI) * a/180
     return b

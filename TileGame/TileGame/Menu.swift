@@ -72,7 +72,7 @@ class Menu: SKNode {
         firstBackgroundShape.fillColor = SKColor.whiteColor()
         firstBackgroundShape.path = UIBezierPath(
             roundedRect: CGRectMake(0, 0, firstBackgroundSize.width * ratio, firstBackgroundSize.height * ratio),
-            cornerRadius: Board.tileCornerRadius * 2).CGPath
+            cornerRadius: Board.tileCornerRadius * ratio).CGPath
 
         firstBackground = SKSpriteNode(
             texture: view.textureFromNode(firstBackgroundShape),

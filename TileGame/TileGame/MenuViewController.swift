@@ -96,21 +96,23 @@ class MenuViewController: UIViewController {
     // MARK: Methods
 
     private func animateMenu() {
+
         UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: {
 
-            self.titleTopConstraint.constant = self.view.bounds.height / 5 / 2
+            self.titleTopConstraint.constant = self.view.frame.height / 4
             self.buttonsHorizontalConstraint.constant = 0
             self.view.layoutIfNeeded()
-            }, completion: nil);
+
+        }, completion: nil);
     }
 
     private func prepareMenu() {
-        let fifthPart = self.view.bounds.height / 5
+        let fifthPart = (self.view.frame.height / 2 - self.buttonsContainer.frame.height) / 2 + self.buttonsContainer.frame.height / 2
 
         buttonsVerticalConstraint.constant = -fifthPart
-        buttonsHorizontalConstraint.constant = self.view.bounds.width / 2 + buttonsContainer.bounds.width / 2
+        buttonsHorizontalConstraint.constant = self.view.frame.width / 2 + buttonsContainer.frame.width / 2
 
-        titleTopConstraint.constant = -titleLabel.bounds.height
+        titleTopConstraint.constant = -titleLabel.frame.height
     }
 
     func setupButtons() {
@@ -172,6 +174,11 @@ class MenuViewController: UIViewController {
     }
 
     func setupColors() {
+
+        self.view.backgroundColor = Constants.backgroundColor
+
+        self.titleLabel.textColor = Constants.textColor
+
         self.playButton.backgroundColor = Constants.Color2
         self.themeButton.backgroundColor = Constants.Color4
         self.soundButton.backgroundColor = Constants.Color1
@@ -180,12 +187,12 @@ class MenuViewController: UIViewController {
         self.shareButton.backgroundColor = Constants.Color5
         self.rateButton.backgroundColor = Constants.Color1
 
-        self.playButton.titleLabel?.textColor = Constants.textColor
-        self.themeButton.titleLabel?.textColor = Constants.textColor
-        self.soundButton.titleLabel?.textColor = Constants.textColor
-        self.musicButton.titleLabel?.textColor = Constants.textColor
-        self.adsButton.titleLabel?.textColor = Constants.textColor
-        self.shareButton.titleLabel?.textColor = Constants.textColor
-        self.rateButton.titleLabel?.textColor = Constants.textColor
+        self.playButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.themeButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.soundButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.musicButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.adsButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.shareButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+        self.rateButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
     }
 }

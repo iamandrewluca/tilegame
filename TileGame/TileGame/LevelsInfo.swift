@@ -14,7 +14,7 @@ class LevelsInfo {
 
     static let sharedInstance: LevelsInfo! = LevelsInfo()
     var levelsInfoPath: String!
-    var levelsInfo: Array<Array<Int>>!
+    var levelsInfo: [[Int]]!
     var unlockedSections: Int = 0
     var totalSections: Int = 0
     let levelsPerSection = 6
@@ -22,7 +22,7 @@ class LevelsInfo {
 
     // MARK: LevelsInfo
     
-    init() {
+    private init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
             NSSearchPathDirectory.DocumentDirectory,
             NSSearchPathDomainMask.UserDomainMask, true) as Array
