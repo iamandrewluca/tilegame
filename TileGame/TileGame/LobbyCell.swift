@@ -26,7 +26,7 @@ class LobbyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        layer.cornerRadius = Board.tileCornerRadius
+        layer.cornerRadius = Tile.tileCornerRadius
         layer.masksToBounds = false
         layer.shadowOpacity = 0.25
         layer.shadowColor = UIColor.grayColor().CGColor

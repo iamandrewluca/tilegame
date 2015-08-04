@@ -46,7 +46,6 @@
 		75D793431B25ECFD00DB19B4 /* LevelsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */; };
 		75F09C001AE08064003C061B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F09BFF1AE08064003C061B /* Helpers.swift */; };
 		75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754E910F1B05519A0030C303 /* LobbyLayout.swift */; };
-		75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F371991B3AD3C1007325A0 /* Board.swift */; };
 		75FFAE2B1ADFCA42009C087F /* levelsinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 75FFAE2A1ADFCA42009C087F /* levelsinfo.json */; };
 /* End PBXBuildFile section */
 
@@ -104,7 +103,6 @@
 		75CF0F8D1B0CC29800A13514 /* section_1_level_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = section_1_level_5.json; sourceTree = "<group>"; };
 		75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelsInfo.swift; sourceTree = "<group>"; };
 		75F09BFF1AE08064003C061B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		75F371991B3AD3C1007325A0 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		75FFAE2A1ADFCA42009C087F /* levelsinfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levelsinfo.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -241,9 +239,8 @@
 			isa = PBXGroup;
 			children = (
 				15A905991AC9D05400B37BEB /* Tile.swift */,
-				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
-				75F371991B3AD3C1007325A0 /* Board.swift */,
 				750320B71B7117820035E58B /* GameScene.swift */,
+				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -408,7 +405,6 @@
 				750320B81B7117820035E58B /* GameScene.swift in Sources */,
 				75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */,
 				15A905901AC9C06C00B37BEB /* MenuViewController.swift in Sources */,
-				75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */,
 				15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */,
 				75801F521B6B77E9007A63E5 /* Enums.swift in Sources */,
 			);

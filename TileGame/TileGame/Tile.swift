@@ -71,7 +71,7 @@ class Tile: SKSpriteNode {
             super.init(texture: nil, color: SKColor.clearColor(), size: Tile.tileSize)
         }
         
-        position = Board.boardPositions[place.row][place.column]
+        position = GameScene.boardPositions[place.row][place.column]
 
     }
 
