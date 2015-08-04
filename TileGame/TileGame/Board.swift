@@ -19,7 +19,7 @@ class Board: SKNode {
     // boardSize x boardSize
     static let boardSize = 6
 
-    static let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * tileSpacing) / 2
+    static let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * Tile.tileSpacing) / 2
     static let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
         boardHorizontalMargin + Tile.tileLength / 2
 
@@ -32,8 +32,8 @@ class Board: SKNode {
         for var i = 0; i < boardSize; ++i {
             for var j = 0; j < boardSize; ++j {
                 board[i][j] = CGPoint(
-                    x: boardHorizontalMargin + Tile.tileLength / 2 + CGFloat(j) * (tileSpacing + Tile.tileLength),
-                    y: boardVerticalMargin + CGFloat(boardSize - 1 - i) * (tileSpacing + Tile.tileLength))
+                    x: boardHorizontalMargin + Tile.tileLength / 2 + CGFloat(j) * (Tile.tileSpacing + Tile.tileLength),
+                    y: boardVerticalMargin + CGFloat(boardSize - 1 - i) * (Tile.tileSpacing + Tile.tileLength))
             }
         }
 
@@ -56,38 +56,11 @@ class Board: SKNode {
     // MARK: SKNode
 
     deinit {
-        println("board deinit")
+        debugPrint("board deinit")
     }
 
     // MARK: Methods
 
-    func addBackTile(row: Int, column: Int) {
-
-        var backTile = SKSpriteNode(texture: GameScene.tileTexture,
-            color: UIColor.whiteColor(), size: Tile.tileSize)
-
-        backTile.position = Board.boardPositions[row][column]
-
-        back[row][column] = backTile
-
-        backTile.zPosition = -1
-
-        addChild(backTile)
-    }
-
-    func addTile(row: Int, column: Int, type: TileType, childType: TileType) {
-
-        var tile = Tile(tileRow: row, tileColumn: column, tileType: type)
-
-        if childType != TileType.Empty {
-            tile.childTile = Tile(tileRow: row, tileColumn: column, tileType: childType)
-        }
-
-        tiles[row][column] = tile
-        tile.zPosition = 0
-
-        addChild(tile)
-    }
 
 
     func moveTile(tile: Tile, to place: (row: Int, column: Int)) {
@@ -112,7 +85,7 @@ class Board: SKNode {
                 childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
             } else {
-                (scene as! GameScene).header.addStar(childTile, forColor: tile.type)
+//                (scene as! GameScene).header.addStar(childTile, forColor: tile.type)
             }
 
             tile.childTile = Tile?.None
@@ -220,7 +193,7 @@ class Board: SKNode {
         startDirection = Direction.None
     }
 
-    func getOrientationFrom(#delta: CGPoint) -> Orientation {
+    func getOrientationFrom(delta: CGPoint) -> Orientation {
 
         var orientation = Orientation.None
 
@@ -251,18 +224,18 @@ class Board: SKNode {
         return orientation
     }
 
-    func getPlacePoition(place: (row: Int, column: Int)) -> CGPoint {
+    func getPlaceFromPosition(place: (row: Int, column: Int)) -> CGPoint {
         return Board.boardPositions[place.row][place.column]
     }
 
     func tileDragMoved(tile: Tile, at position: CGPoint) {
 
         currentPosition = position
-        var delta = currentPosition - lastPosition
-        var deltaFromStart = currentPosition - startPosition
+        let delta = currentPosition - lastPosition
+        let deltaFromStart = currentPosition - startPosition
 
         if currentOrientation == Orientation.None {
-            currentOrientation = getOrientationFrom(delta: deltaFromStart)
+            currentOrientation = getOrientationFrom(deltaFromStart)
         } else {
 
             if currentOrientation == Orientation.Horizontal {
@@ -273,30 +246,30 @@ class Board: SKNode {
                     currentDirection = Direction.Left
                 }
 
-                var minColumn = limits[Direction.Left.rawValue].column
-                var maxColumn = limits[Direction.Right.rawValue].column
-                var minX = getPlacePoition((tile.place.row, minColumn)).x
-                var maxX = getPlacePoition((tile.place.row, maxColumn)).x
+                let minColumn = limits[Direction.Left.rawValue].column
+                let maxColumn = limits[Direction.Right.rawValue].column
+                let minX = getPlaceFromPosition((tile.place.row, minColumn)).x
+                let maxX = getPlaceFromPosition((tile.place.row, maxColumn)).x
 
-                tile.position.x = clamp(minX, maxX, currentPosition.x)
+                tile.position.x = clamp(minX, maxLimit: maxX, value: currentPosition.x)
 
             } else if currentOrientation == Orientation.Vertical {
 
                 if delta.y > 0 {
-                    currentDirection = Direction.Down
-                } else {
                     currentDirection = Direction.Up
+                } else {
+                    currentDirection = Direction.Down
                 }
 
-                var minRow = limits[Direction.Down.rawValue].row
-                var maxRow = limits[Direction.Up.rawValue].row
-                var minY = getPlacePoition((minRow, tile.place.column)).y
-                var maxY = getPlacePoition((maxRow, tile.place.column)).y
+                let minRow = limits[Direction.Down.rawValue].row
+                let maxRow = limits[Direction.Up.rawValue].row
+                let minY = getPlaceFromPosition((minRow, tile.place.column)).y
+                let maxY = getPlaceFromPosition((maxRow, tile.place.column)).y
 
-                tile.position.y = clamp(minY, maxY, currentPosition.y)
+                tile.position.y = clamp(minY, maxLimit: maxY, value: currentPosition.y)
             }
 
-            var startTilePosition = getPlacePoition(tile.place)
+            let startTilePosition = getPlaceFromPosition(tile.place)
 
             if startTilePosition == tile.position {
                 currentOrientation = Orientation.None
@@ -315,49 +288,56 @@ class Board: SKNode {
         if currentOrientation != Orientation.None {
 
             endPosition = position
-            var delta = endPosition - startPosition
+            _ = endPosition - startPosition
 
-            var limitPoint = getPlacePoition(limits[currentDirection.rawValue])
-            var middle = (limitPoint + startPosition) / 2
+            let limitPoint = getPlaceFromPosition(limits[currentDirection.rawValue])
+            let middle = (limitPoint + startPosition) / 2
 
             var moveAction: SKAction!
+
+            let duration = 0.1
 
             switch currentOrientation {
             case Orientation.Horizontal:
                 if endPosition.x > middle.x {
-                    var position = getPlacePoition(limits[Direction.Right.rawValue])
-                    moveAction = SKAction.moveToX(position.x, duration: 0.2)
+                    let position = getPlaceFromPosition(limits[Direction.Right.rawValue])
+                    moveAction = SKAction.moveToX(position.x, duration: duration)
                     moveTile(tile, to: limits[Direction.Right.rawValue])
                 } else {
-                    var position = getPlacePoition(limits[Direction.Left.rawValue])
-                    moveAction = SKAction.moveToX(position.x, duration: 0.2)
+                    let position = getPlaceFromPosition(limits[Direction.Left.rawValue])
+                    moveAction = SKAction.moveToX(position.x, duration: duration)
                     moveTile(tile, to: limits[Direction.Left.rawValue])
                 }
             case Orientation.Vertical:
                 if endPosition.y > middle.y {
-                    var position = getPlacePoition(limits[Direction.Up.rawValue])
-                    moveAction = SKAction.moveToY(position.y, duration: 0.2)
+                    let position = getPlaceFromPosition(limits[Direction.Up.rawValue])
+                    moveAction = SKAction.moveToY(position.y, duration: duration)
                     moveTile(tile, to: limits[Direction.Up.rawValue])
                 } else {
-                    var position = getPlacePoition(limits[Direction.Down.rawValue])
-                    moveAction = SKAction.moveToY(position.y, duration: 0.2)
+                    let position = getPlaceFromPosition(limits[Direction.Down.rawValue])
+                    moveAction = SKAction.moveToY(position.y, duration: duration)
                     moveTile(tile, to: limits[Direction.Down.rawValue])
                 }
             default:
                 moveAction = nil
             }
 
-            tile.runAction(moveAction) {
+            tile.runAction(moveAction) { [unowned self] in
                 var tilesToDestroy = self.getNeighbours(tile)
                 if tilesToDestroy.count >= 3 {
 
-                    (self.scene as! GameScene).header.addColor(tilesToDestroy.count, forColor: tile.type)
+//                    (self.scene as! GameScene).header.addColor(tilesToDestroy.count, forColor: tile.type)
                     for tile in tilesToDestroy {
                         self.destroyTile(tile)
                     }
                 }
+
+                
             }
         }
+
+        currentOrientation = Orientation.None
+        currentDirection = Direction.None
     }
 
 }

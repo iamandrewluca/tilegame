@@ -40,6 +40,7 @@ class Counter {
     }
 
     deinit {
+        debugPrint("counter deinit")
         stopCounter()
     }
 
@@ -65,7 +66,7 @@ class Counter {
     func startCounter() {
 
         timer = NSTimer.scheduledTimerWithTimeInterval(
-            loopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+            loopInterval, target: self, selector: Selector("intervalLoop"), userInfo: nil, repeats: true)
     }
 
     func pauseCounter() {
@@ -81,5 +82,11 @@ class Counter {
             timer.invalidate()
         }
         counter = 0
+    }
+
+    func destroyCounter() {
+        stopCounter()
+        endCallback = nil
+        loopCallback = nil
     }
 }

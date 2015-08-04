@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SpriteKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +16,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        println(NSHomeDirectory())
+
+        debugPrint(NSHomeDirectory())
+
+        // for performance should cache textures
+        let skView = SKView(frame: UIScreen.mainScreen().bounds)
+        GameScene.createTextures(skView)
+
         return true
     }
 

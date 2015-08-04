@@ -8,7 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		151B5A841AC9BA92002BD68C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151B5A831AC9BA92002BD68C /* AppDelegate.swift */; };
-		151B5A881AC9BA92002BD68C /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151B5A871AC9BA92002BD68C /* GameScene.swift */; };
 		151B5A8A1AC9BA92002BD68C /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 151B5A891AC9BA92002BD68C /* GameViewController.swift */; };
 		151B5A8D1AC9BA92002BD68C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 151B5A8B1AC9BA92002BD68C /* Main.storyboard */; };
 		151B5A8F1AC9BA92002BD68C /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 151B5A8E1AC9BA92002BD68C /* Images.xcassets */; };
@@ -26,7 +25,9 @@
 		15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A905991AC9D05400B37BEB /* Tile.swift */; };
 		15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C836791ACFC1F900784FEC /* Constants.swift */; };
 		15C8367C1ACFC20000784FEC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C8367B1ACFC20000784FEC /* Settings.swift */; };
-		75776FF71AEE6BEB00086C37 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75776FF61AEE6BEB00086C37 /* Header.swift */; };
+		750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750268F21B6B7F6400946480 /* LevelInfo.swift */; };
+		750320B81B7117820035E58B /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750320B71B7117820035E58B /* GameScene.swift */; };
+		75801F521B6B77E9007A63E5 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75801F511B6B77E9007A63E5 /* Enums.swift */; };
 		75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */; };
 		75B5E3AA1B288EA7000C5C95 /* LobbyLockedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B5E3A81B288EA7000C5C95 /* LobbyLockedCell.swift */; };
 		75B5E3AB1B288EA7000C5C95 /* LobbyLockedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E3A91B288EA7000C5C95 /* LobbyLockedCell.xib */; };
@@ -45,7 +46,6 @@
 		75D793431B25ECFD00DB19B4 /* LevelsInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */; };
 		75F09C001AE08064003C061B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F09BFF1AE08064003C061B /* Helpers.swift */; };
 		75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754E910F1B05519A0030C303 /* LobbyLayout.swift */; };
-		75F371981B3AD3B6007325A0 /* Menu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F371971B3AD3B6007325A0 /* Menu.swift */; };
 		75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F371991B3AD3C1007325A0 /* Board.swift */; };
 		75FFAE2B1ADFCA42009C087F /* levelsinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 75FFAE2A1ADFCA42009C087F /* levelsinfo.json */; };
 /* End PBXBuildFile section */
@@ -64,7 +64,6 @@
 		151B5A7E1AC9BA92002BD68C /* TileGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TileGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		151B5A821AC9BA92002BD68C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		151B5A831AC9BA92002BD68C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		151B5A871AC9BA92002BD68C /* GameScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		151B5A891AC9BA92002BD68C /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
 		151B5A8C1AC9BA92002BD68C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		151B5A8E1AC9BA92002BD68C /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
@@ -84,8 +83,10 @@
 		15A905991AC9D05400B37BEB /* Tile.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		15C836791ACFC1F900784FEC /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		15C8367B1ACFC20000784FEC /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		750268F21B6B7F6400946480 /* LevelInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelInfo.swift; sourceTree = "<group>"; };
+		750320B71B7117820035E58B /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		754E910F1B05519A0030C303 /* LobbyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyLayout.swift; sourceTree = "<group>"; };
-		75776FF61AEE6BEB00086C37 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
+		75801F511B6B77E9007A63E5 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyHeader.swift; sourceTree = "<group>"; };
 		75B5E3A81B288EA7000C5C95 /* LobbyLockedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyLockedCell.swift; sourceTree = "<group>"; };
 		75B5E3A91B288EA7000C5C95 /* LobbyLockedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LobbyLockedCell.xib; sourceTree = "<group>"; };
@@ -103,7 +104,6 @@
 		75CF0F8D1B0CC29800A13514 /* section_1_level_5.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = section_1_level_5.json; sourceTree = "<group>"; };
 		75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelsInfo.swift; sourceTree = "<group>"; };
 		75F09BFF1AE08064003C061B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
-		75F371971B3AD3B6007325A0 /* Menu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Menu.swift; sourceTree = "<group>"; };
 		75F371991B3AD3C1007325A0 /* Board.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Board.swift; sourceTree = "<group>"; };
 		75FFAE2A1ADFCA42009C087F /* levelsinfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levelsinfo.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -241,11 +241,9 @@
 			isa = PBXGroup;
 			children = (
 				15A905991AC9D05400B37BEB /* Tile.swift */,
-				151B5A871AC9BA92002BD68C /* GameScene.swift */,
 				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
-				75776FF61AEE6BEB00086C37 /* Header.swift */,
-				75F371971B3AD3B6007325A0 /* Menu.swift */,
 				75F371991B3AD3C1007325A0 /* Board.swift */,
+				750320B71B7117820035E58B /* GameScene.swift */,
 			);
 			name = Game;
 			sourceTree = "<group>";
@@ -258,6 +256,8 @@
 				15C836791ACFC1F900784FEC /* Constants.swift */,
 				75F09BFF1AE08064003C061B /* Helpers.swift */,
 				75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */,
+				75801F511B6B77E9007A63E5 /* Enums.swift */,
+				750268F21B6B7F6400946480 /* LevelInfo.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -317,7 +317,8 @@
 		151B5A761AC9BA92002BD68C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0620;
+				LastSwiftUpdateCheck = 0700;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Tile Game";
 				TargetAttributes = {
 					151B5A7D1AC9BA92002BD68C = {
@@ -392,24 +393,24 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				151B5A881AC9BA92002BD68C /* GameScene.swift in Sources */,
 				15A905921AC9C10700B37BEB /* LobbyViewController.swift in Sources */,
 				75D793431B25ECFD00DB19B4 /* LevelsInfo.swift in Sources */,
 				75B5E3AA1B288EA7000C5C95 /* LobbyLockedCell.swift in Sources */,
-				75F371981B3AD3B6007325A0 /* Menu.swift in Sources */,
 				151B5A8A1AC9BA92002BD68C /* GameViewController.swift in Sources */,
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
-				75776FF71AEE6BEB00086C37 /* Header.swift in Sources */,
 				75F09C001AE08064003C061B /* Helpers.swift in Sources */,
 				75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */,
+				750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */,
 				15A905981AC9C22E00B37BEB /* LobbyCell.swift in Sources */,
 				151B5A841AC9BA92002BD68C /* AppDelegate.swift in Sources */,
 				75BC3D861B59149B00D99D73 /* Counter.swift in Sources */,
 				15C8367C1ACFC20000784FEC /* Settings.swift in Sources */,
+				750320B81B7117820035E58B /* GameScene.swift in Sources */,
 				75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */,
 				15A905901AC9C06C00B37BEB /* MenuViewController.swift in Sources */,
 				75F3719A1B3AD3C1007325A0 /* Board.swift in Sources */,
 				15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */,
+				75801F521B6B77E9007A63E5 /* Enums.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -471,6 +472,7 @@
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -538,6 +540,7 @@
 				INFOPLIST_FILE = TileGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tilegame.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -550,6 +553,7 @@
 				INFOPLIST_FILE = TileGame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tilegame.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -568,6 +572,7 @@
 				);
 				INFOPLIST_FILE = TileGameTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tilegame.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TileGame.app/TileGame";
 			};
@@ -583,6 +588,7 @@
 				);
 				INFOPLIST_FILE = TileGameTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.tilegame.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TileGame.app/TileGame";
 			};

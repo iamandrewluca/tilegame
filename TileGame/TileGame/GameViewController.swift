@@ -18,7 +18,7 @@ class GameViewController: UIViewController {
     // MARK: UIViewController
 
     deinit {
-        println("gvc deinit")
+        debugPrint("gvc deinit")
     }
 
     override func viewDidLoad() {
@@ -27,9 +27,10 @@ class GameViewController: UIViewController {
         let skView = self.view as! SKView
         skView.showsFPS = true
         skView.showsNodeCount = true
+        skView.ignoresSiblingOrder = true
 
         let scene = GameScene(size: skView.frame.size)
-        scene.controller = self
+        scene.parentController = self
         scene.scaleMode = SKSceneScaleMode.AspectFill
         scene.level = level
 
@@ -39,7 +40,7 @@ class GameViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
-        println("memory warning")
+        print("memory warning")
     }
 
     override func prefersStatusBarHidden() -> Bool {

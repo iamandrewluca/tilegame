@@ -13,14 +13,14 @@ class Constants {
 
     // MARK: Device
 
-    static let screenSize = UIScreen.mainScreen().bounds.size
-    static let screenRatio = UIScreen.mainScreen().scale + 2
-    static let isIphone = (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone) ? true : false
+    static let screenSize: CGSize = UIScreen.mainScreen().bounds.size
+    static let screenRatio: CGFloat = UIScreen.mainScreen().scale + 2
+    static let isIphone: Bool = (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone) ? true : false
 
     // MARK: Fonts
 
-    static let primaryFont = "HelveticaNeue-UltraLight"
-    static let secondaryFont = "HelveticaNeue-CondensedBold"
+    static let primaryFont: String = "HelveticaNeue-UltraLight"
+    static let secondaryFont: String = "HelveticaNeue-CondensedBold"
 
     // MARK: Colors
     
@@ -76,11 +76,13 @@ class Constants {
     static var headerBackgroundColor: UIColor { return gameColors[gameTheme][1] }
     static var cellBackgroundColor: UIColor { return UIColor.whiteColor() }
     static var cellTextColor: UIColor { return darkColor }
-    static var tileBackgroundColor: UIColor { return gameColors[gameTheme][1] }
+    static var tileBackgroundColor: UIColor { return UIColor.whiteColor() }
     static var navigationButtonColor: UIColor { return gameColors[gameTheme][1] }
     static var starColor: UIColor { return UIColor.yellowColor() }
-    static var noStarColor: UIColor { return UIColor.lightGrayColor() }
+    static var noStarColor: UIColor { return UIColor.blackColor() }
     static var overlayColor: UIColor { return UIColor.brownColor() }
+    static var menuBackgroundColor: UIColor { return navigationButtonColor }
+    static var menuButtonColor: UIColor { return navigationBackgroundColor }
 
     static var lightColor: UIColor { return gameColors[0][0] }
     static var darkColor: UIColor { return gameColors[1][0] }

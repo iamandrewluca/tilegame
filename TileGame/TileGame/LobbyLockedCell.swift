@@ -13,7 +13,7 @@ class LobbyLockedCell: UICollectionViewCell {
     // MARK: Members
 
 
-    static let identifier = "LobbyLockedCell"
+    static let identifier: String = "LobbyLockedCell"
 
 
     // MARK: UICollectionViewCell

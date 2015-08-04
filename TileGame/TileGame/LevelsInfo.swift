@@ -22,11 +22,11 @@ class LevelsInfo {
 
     // MARK: LevelsInfo
     
-    private init() {
+    init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
             NSSearchPathDirectory.DocumentDirectory,
             NSSearchPathDomainMask.UserDomainMask, true) as Array
-        let documentsDirecotry = documentDirectories.first as! String
+        let documentsDirecotry = documentDirectories.first as String!
 
         levelsInfoPath = documentsDirecotry + "/levelsinfo.json"
 
@@ -38,17 +38,59 @@ class LevelsInfo {
 
     // MARK: Methods
 
-    private func getTotalSections() -> Int {
-        if let path = NSBundle.mainBundle().pathForResource("levelsinfo", ofType: "json") {
-            if let data = NSFileManager.defaultManager().contentsAtPath(path) {
-                if let json = NSJSONSerialization.JSONObjectWithData(data,
-                    options: NSJSONReadingOptions.allZeros, error: nil) as? [String:Int] {
-                        return json["total_sections"]!
+    func loadLevel(level: (section: Int, number: Int)) -> LevelInfo {
+
+        let levelInfo = LevelInfo()
+
+        let levelJSON = loadJSONFromBundle("section_\(level.section)_level_\(level.number)")
+
+        guard let type = levelJSON["levelType"] as? Int,
+            let counter = levelJSON["levelTypeCounter"] as? Int,
+            let targets = levelJSON["colorTargets"] as? [Int],
+            let tiles = levelJSON["tiles"] as? [[Int]] else {
+                return levelInfo
+        }
+
+        // get level type
+        levelInfo.type = LevelType(rawValue: type)!
+        levelInfo.typeCounter = counter
+
+        // get tiles targets
+        for var i = 0; i < targets.count && i < levelInfo.colorTargets.count; ++i {
+            levelInfo.colorTargets[TileType(rawValue: i + 1)!] = targets[i]
+        }
+
+        // get main and child tile types
+        for var i = 0; i < tiles.count && i < levelInfo.mainTiles.count; ++i {
+            for var j = 0; j < tiles[i].count && i < levelInfo.mainTiles[i].count; ++j {
+
+                let value = tiles[i][j]
+
+                if value == 0 {
+                    levelInfo.mainTiles[i][j] = TileType.Empty
+                } else if value != -1 {
+                    levelInfo.mainTiles[i][j] = TileType(rawValue: value / 10)!
+                    levelInfo.childTiles[i][j] = TileType(rawValue: value % 10)!
                 }
             }
         }
 
-        return 0
+        return levelInfo
+    }
+
+    private func getTotalSections() -> Int {
+
+        guard let path = NSBundle.mainBundle().pathForResource("levelsinfo", ofType: "json"),
+            let data = NSFileManager.defaultManager().contentsAtPath(path) else {
+                fatalError("Levels Info file is missing")
+        }
+
+        do {
+            let json = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! [String:Int]
+            return json["total_sections"]!
+        } catch {
+            return 0
+        }
     }
 
     private class func createTestJson(levelsInfoPath: String) {
@@ -65,32 +107,60 @@ class LevelsInfo {
         group.append(level)
         testDict["groups"] = group
 
-        println(testDict)
+        debugPrint(testDict, appendNewline: true)
 
-        var data = NSJSONSerialization.dataWithJSONObject(testDict,
-            options: NSJSONWritingOptions.allZeros, error: nil)
+        do {
+            let data = try NSJSONSerialization.dataWithJSONObject(testDict, options: NSJSONWritingOptions.PrettyPrinted)
+            NSFileManager.defaultManager().createFileAtPath(levelsInfoPath, contents: data, attributes: nil)
+        } catch {
+            fatalError("can't write demo json")
+        }
+    }
 
-        NSFileManager.defaultManager().createFileAtPath(levelsInfoPath,
-            contents: data, attributes: nil)
+    private func loadJSONFromBundle(filename: String) -> [String:AnyObject] {
+
+        guard let path = NSBundle.mainBundle().pathForResource(filename, ofType: "json") else {
+            fatalError("Could not find level file: \(filename)")
+        }
+
+        guard let data = NSData(contentsOfFile: path) else {
+            fatalError("Could not load level file: \(filename)")
+        }
+
+        do {
+            let dict = try NSJSONSerialization.JSONObjectWithData(data, options: NSJSONReadingOptions.MutableContainers) as! [String:AnyObject]
+            return dict
+        } catch {
+            fatalError("Level file '\(filename)' is not valid JSON")
+        }
     }
 
     private class func clearJsonFile(levelsInfoPath: String) {
-        NSFileManager.defaultManager().removeItemAtPath(levelsInfoPath, error: nil)
+        do {
+            try NSFileManager.defaultManager().removeItemAtPath(levelsInfoPath)
+        } catch {
+            fatalError("can't clear json file")
+        }
     }
     
     private func loadLevelsInfo(levelsInfoPath: String) -> Array<Array<Int>> {
-        let fileManager = NSFileManager.defaultManager()
-        if fileManager.fileExistsAtPath(levelsInfoPath) {
-            if let data = fileManager.contentsAtPath(levelsInfoPath) {
-                if let json = NSJSONSerialization.JSONObjectWithData(data,
-                    options: NSJSONReadingOptions.allZeros,
-                    error: nil) as? [String:Array<Array<Int>>] {
-                        return json["groups"]!
-                }
-            }
-        }
 
-        return Array(count: 1, repeatedValue: Array(count: 6, repeatedValue: 0))
+        var levelsInfo = Array(count: 1, repeatedValue: Array(count: 6, repeatedValue: 0))
+
+        let fileManager = NSFileManager.defaultManager()
+
+        if fileManager.fileExistsAtPath(levelsInfoPath) {
+
+            let data = fileManager.contentsAtPath(levelsInfoPath)
+
+            do {
+                let json = try NSJSONSerialization.JSONObjectWithData(data!,
+                    options: NSJSONReadingOptions.MutableContainers) as! [String:Array<Array<Int>>]
+
+                levelsInfo = json["groups"]!
+            } catch {}
+        }
+        return levelsInfo
     }
     
     func starsAtIndexPath(indexPath: NSIndexPath) -> Int {

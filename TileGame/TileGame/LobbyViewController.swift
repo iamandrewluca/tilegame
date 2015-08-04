@@ -28,7 +28,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
 
     @IBAction func openLeaderboard(sender: AnyObject) {
-        println("leaderboard")
+        print("leaderboard")
     }
 
     // MARK: Members
@@ -41,14 +41,14 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     private func setupLockedSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
 
-        var starsToPass  = levelsInfo.starsToPassSection - levelsInfo.starsInSection(indexPath.section - 1)
+        let starsToPass  = levelsInfo.starsToPassSection - levelsInfo.starsInSection(indexPath.section - 1)
 
         view.headerLabel.text = "+\(starsToPass) stars in section \(indexPath.section) to unlock"
     }
 
     private func setupSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
 
-        var totalStars = levelsInfo.starsInSection(indexPath.section)
+        let totalStars = levelsInfo.starsInSection(indexPath.section)
         view.headerLabel.text = "\(totalStars) stars in section \(indexPath.section + 1)"
     }
 
@@ -115,6 +115,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: UIViewController
 
+    deinit {
+        debugPrint("lobby deinit")
+    }
+
     override func prefersStatusBarHidden() -> Bool {
         return true
     }
@@ -122,12 +126,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewDidLoad() {
         super.viewDidLoad()
         registerNibsForCollectionView()
-        middleLabel.text = "\(levelsInfo.totalStars()) stars"
-    }
 
-    override func updateViewConstraints() {
-        super.updateViewConstraints()
         setupViews()
+
+        middleLabel.text = "\(levelsInfo.totalStars()) stars"
     }
 
     override func viewWillAppear(animated: Bool) {
@@ -200,8 +202,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         if indexPath.section < levelsInfo.unlockedSections {
 
-            var gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
-
+            let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
             gameVC.level = (indexPath.section, indexPath.item)
 
             navigationController!.presentViewController(gameVC, animated: true, completion: nil)

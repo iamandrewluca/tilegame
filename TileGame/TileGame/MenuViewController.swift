@@ -33,25 +33,29 @@ class MenuViewController: UIViewController {
     // MARK: IBActions
 
     @IBAction func soundButtonPressed(sender: AnyObject) {
-        println("sound")
+        print("sound")
     }
     @IBAction func themeButtonPressed(sender: AnyObject) {
-        println("theme")
+        print("theme")
     }
     @IBAction func musicButtonPressed(sender: AnyObject) {
-        println("music")
+        print("music")
     }
     @IBAction func adsButtonPressed(sender: AnyObject) {
-        println("ads")
+        print("ads")
     }
     @IBAction func shareButtonPressed(sender: AnyObject) {
-        println("share")
+        print("share")
     }
     @IBAction func rateButtonPressed(sender: AnyObject) {
-        println("rate")
+        print("rate")
     }
 
     // MARK: UIViewController
+
+    deinit {
+        debugPrint("menu deinit")
+    }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -97,7 +101,7 @@ class MenuViewController: UIViewController {
 
     private func animateMenu() {
 
-        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: {
+        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: { [unowned self] in
 
             self.titleTopConstraint.constant = self.view.frame.height / 4
             self.buttonsHorizontalConstraint.constant = 0
@@ -133,28 +137,28 @@ class MenuViewController: UIViewController {
         let musicLayer = CAShapeLayer()
         musicLayer.path = UIBezierPath(
             roundedRect: self.musicButton.bounds,
-            byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.BottomRight | UIRectCorner.TopRight,
+            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.BottomRight, UIRectCorner.TopRight],
             cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
         self.musicButton.layer.mask = musicLayer
         
         let soundLayer = CAShapeLayer()
         soundLayer.path = UIBezierPath(
             roundedRect: self.soundButton.bounds,
-            byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.TopLeft | UIRectCorner.BottomRight,
+            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopLeft, UIRectCorner.BottomRight],
             cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
         self.soundButton.layer.mask = soundLayer
         
         let resetLayer = CAShapeLayer()
         resetLayer.path = UIBezierPath(
             roundedRect: self.themeButton.bounds,
-            byRoundingCorners: UIRectCorner.BottomLeft | UIRectCorner.TopLeft | UIRectCorner.BottomRight,
+            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopLeft, UIRectCorner.BottomRight],
             cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.themeButton.layer.mask = resetLayer
         
         let shareLayer = CAShapeLayer()
         shareLayer.path = UIBezierPath(
             roundedRect: self.shareButton.bounds,
-            byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.BottomLeft,
+            byRoundingCorners: [UIRectCorner.BottomRight, UIRectCorner.TopRight, UIRectCorner.BottomLeft],
             cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.shareButton.layer.mask = shareLayer
         
@@ -168,7 +172,7 @@ class MenuViewController: UIViewController {
         let rateLayer = CAShapeLayer()
         rateLayer.path = UIBezierPath(
             roundedRect: self.rateButton.bounds,
-            byRoundingCorners: UIRectCorner.BottomRight | UIRectCorner.TopRight | UIRectCorner.TopLeft,
+            byRoundingCorners: [UIRectCorner.BottomRight, UIRectCorner.TopRight, UIRectCorner.TopLeft],
             cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
         self.rateButton.layer.mask = rateLayer
     }

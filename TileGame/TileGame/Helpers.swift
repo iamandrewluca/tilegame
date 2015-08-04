@@ -77,9 +77,9 @@ private func polygonPointArray(sides: Int, x: CGFloat, y: CGFloat, radius: CGFlo
 func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPathRef {
     let adjustment = 360/sides/2
     let path = CGPathCreateMutable()
-    let points = polygonPointArray(sides, x, y, radius)
-    var cpg = points[0]
-    let points2 = polygonPointArray(sides,x,y,radius*pointyness,adjustment:CGFloat(adjustment))
+    let points = polygonPointArray(sides, x: x, y: y, radius: radius)
+    let cpg = points[0]
+    let points2 = polygonPointArray(sides,x: x,y: y,radius: radius*pointyness,adjustment:CGFloat(adjustment))
     var i = 0
     CGPathMoveToPoint(path, nil, cpg.x, cpg.y)
     for p in points {
@@ -90,5 +90,5 @@ func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness
     CGPathCloseSubpath(path)
 
     var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
-    return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)
+    return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)!
 }
