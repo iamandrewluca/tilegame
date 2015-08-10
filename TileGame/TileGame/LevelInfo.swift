@@ -23,9 +23,9 @@ class LevelInfo {
 
     var mainTiles: [[TileType]] = Array(count: 6,
         repeatedValue: Array(count: 6,
-            repeatedValue: TileType.Hole))
+            repeatedValue: TileType.Empty))
 
     var childTiles: [[TileType]] = Array(count: 6,
         repeatedValue: Array(count: 6,
-            repeatedValue: TileType.Hole))
+            repeatedValue: TileType.Empty))
 }

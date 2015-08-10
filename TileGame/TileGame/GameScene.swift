@@ -11,13 +11,11 @@ import Foundation
 
 class GameScene: SKScene {
 
-    // MARK: Members
-
-    // Parent Controller
+    // MARK: Members - Parent Controller
 
     weak var parentController: GameViewController!
 
-    // Static Textures
+    // MARK: Members - Static Textures
 
     private static var texturesAreCreated: Bool = false
 
@@ -34,22 +32,13 @@ class GameScene: SKScene {
     static var menuRightButtonTexture: SKTexture!
     static var menuTopButtonTexture: SKTexture!
 
-    // Game Info
-
-    var counter: Counter!
-    var moves: Int = 0
+    // MARK: Members - Game Info
 
     var levelsInfo: LevelsInfo = LevelsInfo.sharedInstance
     var levelInfo: LevelInfo!
     var level: (section: Int, number: Int)!
 
-    var currentTargets: [TileType:Int] = [:]
-    var currentStars: [TileType:Bool] = [:]
-
-    var gameState: GameState = GameState.Stop
-    var currentSwipedTile: Tile?
-
-    // Header nodes
+    // MARK: Members - Header
     var headerPositions: [TileType:CGPoint] = [:]
 
     var topTileNodes: [TileType:SKSpriteNode] = [:]
@@ -57,11 +46,11 @@ class GameScene: SKScene {
     var headerTopLabel: SKLabelNode = SKLabelNode()
     var headerBottomLabel: SKLabelNode = SKLabelNode()
 
-    // Overlay
+    // MARK: Members - Overlay
 
     var overlay: SKSpriteNode!
 
-    // Menu
+    // MARK: Members - Menu
 
     var menu: SKSpriteNode!
 
@@ -70,9 +59,9 @@ class GameScene: SKScene {
     var menuRightButton: SKSpriteNode!
     var menuTopButton: SKSpriteNode!
 
-    // Board
+    // MARK: Members - Board
 
-    static let boardSize = 6
+    static let boardSize: Int = 6
 
     static let boardPositions: [[CGPoint]] = { () -> [[CGPoint]] in
 
@@ -97,18 +86,33 @@ class GameScene: SKScene {
 
     var tiles: [[Tile?]] = []
 
-    var startPosition = CGPointZero
-    var currentPosition = CGPointZero
-    var lastPosition = CGPointZero
-    var endPosition = CGPointZero
+    // MARK: Members - Game State
 
-    var limits = Array(count: 4, repeatedValue: (row: 0, column: 0))
-    var currentOrientation = Orientation.None
-    var startDirection = Direction.None
-    var currentDirection = Direction.None
+    var limits: [Direction:(row: Int, column: Int)] = [
+        Direction.Up: (row: 0, column: 0),
+        Direction.Right: (row: 0, column: 0),
+        Direction.Down: (row: 0, column: 0),
+        Direction.Left: (row: 0, column: 0)
+    ]
 
+    var startTouchPosition: CGPoint = CGPointZero
+    var lastTouchPosition: CGPoint = CGPointZero
+    var startTilePoint: CGPoint = CGPointZero
+    var endTilePoint: CGPoint = CGPointZero
 
-    // MARK: SKScene
+    var currentDirection: Direction = Direction.None
+    var fromDirection: Direction = Direction.None
+    var toDirection: Direction = Direction.None
+
+    var counter: Counter!
+    var moves: Int = 0
+    var currentTargets: [TileType:Int] = [:]
+    var currentStars: [TileType:Bool] = [:]
+
+    var gameState: GameState = GameState.Stop
+    var currentSwipedTile: Tile?
+
+    // MARK: Override - SKScene
 
     deinit {
         debugPrint("GameScene deinit")
@@ -133,7 +137,7 @@ class GameScene: SKScene {
         startGame()
     }
 
-    // MARK: Touches
+    // MARK: Override - UIResponder
 
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
@@ -144,14 +148,6 @@ class GameScene: SKScene {
         if node.name == "overlay" {
             toogleMenu()
         }
-    }
-
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
-
-        let touch = touches.first!
-        let point = touch.locationInNode(self)
-        let node = self.nodeAtPoint(point)
 
         if node.name == ButtonType.Pause.rawValue {
             toogleMenu()
@@ -181,44 +177,275 @@ class GameScene: SKScene {
             showAd()
         }
     }
-
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+    }
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesMoved(touches, withEvent: event)
     }
-
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         super.touchesCancelled(touches, withEvent: event)
     }
 
-    // MARK: Drag
+    // MARK: Methods - Tile Drag
 
-    func tileDragBegan(tile: Tile, touch: UITouch) {
+    func tileDragBegan(tile: Tile, at position: CGPoint) {
 
         if currentSwipedTile != nil { return }
         currentSwipedTile = tile
 
-        //        board.tileDragBegan(tile, at: touch.locationInNode(self))
+        calculateLimits(tile)
+
+        startTouchPosition = position
+        lastTouchPosition = startTouchPosition
+
+        fromDirection = Direction.None
+        toDirection = Direction.None
+        currentDirection = Direction.None
     }
 
-    func tileDragMoved(tile: Tile, touch: UITouch) {
+    func tileDragMoved(tile: Tile, at position: CGPoint) {
 
         if currentSwipedTile != tile { return }
-        //        board.tileDragMoved(tile, at: touch.locationInNode(self))
+
+        let currentTouchPosition = position
+
+        if toDirection == Direction.None {
+
+            let deltaFromStart = currentTouchPosition - startTouchPosition
+
+            getDirections(deltaFromStart)
+
+            startTilePoint = getPlacePosition(tile.place)
+            endTilePoint = getPlacePosition(limits[toDirection]!)
+        }
+
+        if tile.place == limits[toDirection]! {
+            currentSwipedTile = nil
+            return
+        }
+
+        tile.position.x = clamp(startTilePoint.x, endTilePoint.x, currentTouchPosition.x)
+        tile.position.y = clamp(startTilePoint.y, endTilePoint.y, currentTouchPosition.y)
+
+        lastTouchPosition = currentTouchPosition
     }
 
-    func tileDragCancelled(tile: Tile, touch: UITouch) {
+    func tileDragEnded(tile: Tile, at position: CGPoint) {
 
         if currentSwipedTile != tile { return }
-        //        board.tileDragCancelled(tile, at: touch.locationInNode(self))
+        if toDirection == Direction.None { return }
+
+        tile.runAction(SKAction.moveTo(endTilePoint, duration: 0.1)) { [unowned self] in
+
+            let startPlace = self.currentSwipedTile!.place
+            let endPlace = self.limits[self.toDirection]!
+
+            self.tiles[endPlace.row][endPlace.column] = self.currentSwipedTile
+            self.tiles[startPlace.row][startPlace.column] = nil
+            self.currentSwipedTile!.place = endPlace
+
+            self.tileWasMoved(tile)
+
+            self.currentSwipedTile = nil
+            self.fromDirection = Direction.None
+            self.toDirection = Direction.None
+            self.currentDirection = Direction.None
+        }
     }
 
-    func tileDragEnded(tile: Tile, touch: UITouch) {
+    // MARK: Methods - Tile Methods
 
-        if currentSwipedTile != tile { return }
-        //        board.tileDragEnded(tile, at: touch.locationInNode(self))
+    func tileWasMoved(tile: Tile) {
+
+        var tilesToCheckForDestroy: [Tile] = [tile]
+
+        while tilesToCheckForDestroy.count != 0 {
+
+            let firstTileToCheck = tilesToCheckForDestroy.removeAtIndex(0)
+
+            let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
+
+            if tilesToDestroy.count >= 3 {
+                tilesToCheckForDestroy += self.destroyTiles(tilesToDestroy)
+            }
+            
+        }
     }
 
-    // MARK: Methods
+    func addStar(tile: Tile, forColor: TileType) {
+
+        let scenePosition = scene!.convertPoint(tile.position, toNode: self)
+        let headerPosition = scene!.convertPoint(scenePosition, toNode: topTileNodes[forColor]!)
+        tile.position = headerPosition
+
+        tile.removeFromParent()
+        tile.zPosition = 3
+        topTileNodes[forColor]!.addChild(tile)
+
+        let finalPosition = CGPointZero
+
+        let moveAction = SKAction.moveTo(finalPosition, duration: 0.2)
+        let scaleAction = SKAction.sequence([SKAction.scaleTo(1, duration: 0.1), SKAction.scaleTo(2/6, duration: 0.1)])
+        let rotateAction = SKAction.rotateByAngle(degree2radian(-15), duration: 0.2)
+
+        let tileMoveAction = SKAction.group([moveAction, scaleAction, rotateAction])
+
+        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
+
+        tile.runAction(tileMoveAction)
+    }
+
+    func destroyTiles(tilesToDestroy: [Tile]) -> [Tile] {
+
+        var newTiles: [Tile] = []
+
+        for tile in tilesToDestroy {
+            tiles[tile.place.row][tile.place.column] = nil
+
+            if let childTile = tile.childTile {
+
+                childTile.removeFromParent()
+                self.addChild(childTile)
+                childTile.position = tile.position
+
+                if childTile.type != TileType.Star {
+
+                    tiles[tile.place.row][tile.place.column] = childTile
+                    childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
+
+                    newTiles.append(childTile)
+                } else {
+                    addStar(childTile, forColor: tile.type)
+                }
+
+                tile.childTile = nil
+            }
+            
+            tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
+                tile.removeFromParent()
+            }
+        }
+
+        return newTiles
+    }
+
+    func getNeighbours(startTile: Tile) -> Array<Tile> {
+
+        var neighbours = Array<Tile>()
+        var lastTiles = Array<Tile>()
+        var visited = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: false))
+
+        lastTiles.append(startTile)
+
+        while lastTiles.count > 0 {
+
+            var nextTiles = Array<Tile>()
+
+            for tile in lastTiles {
+                if !visited[tile.place.row][tile.place.column] && tile.type == startTile.type {
+                    visited[tile.place.row][tile.place.column] = true
+                    neighbours.append(tile)
+
+                    if tile.place.row - 1 >= 0 {
+                        if let neighbour = tiles[tile.place.row - 1][tile.place.column] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+
+                    if tile.place.row + 1 < GameScene.boardSize {
+                        if let neighbour = tiles[tile.place.row + 1][tile.place.column] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+
+                    if tile.place.column - 1 >= 0 {
+                        if let neighbour = tiles[tile.place.row][tile.place.column - 1] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+
+                    if tile.place.column + 1 < GameScene.boardSize {
+                        if let neighbour = tiles[tile.place.row][tile.place.column + 1] {
+                            nextTiles.append(neighbour)
+                        }
+                    }
+                }
+            }
+
+            lastTiles.removeAll(keepCapacity: true)
+            lastTiles += nextTiles
+            nextTiles.removeAll(keepCapacity: true)
+        }
+
+        return neighbours
+    }
+
+    func calculateLimits(tile: Tile) {
+
+        // set all limits to current position
+        for (key, _) in limits {
+            limits[key] = tile.place
+        }
+
+        // right check
+        for var i = tile.place.column + 1; i < GameScene.boardSize; ++i {
+            if tiles[tile.place.row][i] != nil { break }
+            limits[Direction.Right] = (tile.place.row, i)
+        }
+
+        // up check
+        for var i = tile.place.row - 1; i >= 0; --i {
+            if tiles[i][tile.place.column] != nil { break }
+            limits[Direction.Up] = (i, tile.place.column)
+        }
+
+        // left check
+        for var i = tile.place.column - 1; i >= 0; --i {
+            if tiles[tile.place.row][i] != nil { break }
+            limits[Direction.Left] = (tile.place.row, i)
+        }
+
+        // down check
+        for var i = tile.place.row + 1; i < GameScene.boardSize; ++i {
+            if tiles[i][tile.place.column] != nil { break }
+            limits[Direction.Down] = (i, tile.place.column)
+        }
+
+//        for (key, value) in limits {
+//            debugPrint("\(key) \(value)")
+//        }
+    }
+
+    func getDirections(delta: CGPoint) {
+
+        if max(fabs(delta.x), fabs(delta.y)) > 0 {
+            if fabs(delta.x) > fabs(delta.y) {
+                if delta.x > 0.0 {
+                    fromDirection = Direction.Left
+                    toDirection = Direction.Right
+                } else {
+                    fromDirection = Direction.Right
+                    toDirection = Direction.Left
+                }
+            } else {
+                if delta.y > 0.0 {
+                    fromDirection = Direction.Down
+                    toDirection = Direction.Up
+                } else {
+                    fromDirection = Direction.Up
+                    toDirection = Direction.Down
+                }
+            }
+            currentDirection = toDirection
+        }
+    }
+    
+    func getPlacePosition(place: (row: Int, column: Int)) -> CGPoint {
+        return GameScene.boardPositions[place.row][place.column]
+    }
+
+    // MARK: Methods - Game
 
     func startGame() {
         //        var endInterval = -1
@@ -233,6 +460,73 @@ class GameScene: SKScene {
 
         counter = Counter(loopInterval: 1, endInterval: -1, loopCallback: counterLoop, endCallback: counterEnd)
     }
+
+    func gameOver() {
+
+    }
+
+    func nextLevel() {
+
+    }
+
+    // MARK: Methods - Counter closures
+
+    func counterLoop(value: NSTimeInterval) {
+
+    }
+
+    func counterEnd() {
+        
+    }
+
+    // MARK: Methods - Buttons actions
+
+    func showAd() {
+
+    }
+
+    func restartLevel() {
+
+    }
+
+    func share() {
+
+    }
+
+    func goToLobby() {
+        parentController!.dismissViewControllerAnimated(true) { [unowned self] in
+            self.menu = nil
+            self.overlay = nil
+            self.counter.destroyCounter()
+        }
+    }
+
+    func toogleMenu() {
+
+        if gameState != GameState.Pause {
+
+            if overlay.parent == nil && menu.parent == nil {
+                gameState = GameState.Pause
+
+                addChild(overlay)
+                addChild(menu)
+                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+                menu.runAction(SKAction.fadeInWithDuration(0.3))
+            }
+        } else {
+            gameState = GameState.Play
+
+            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
+                self.menu.removeFromParent()
+                })
+
+            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
+                self.overlay.removeFromParent()
+                })
+        }
+    }
+
+    // MARK: Methods - Create Methods
 
     func createBoard() {
 
@@ -266,7 +560,7 @@ class GameScene: SKScene {
                         mainTile.zPosition = -2
                         mainTile.position = GameScene.boardPositions[i][j]
 
-                        if levelInfo.childTiles[i][j] != TileType.Hole {
+                        if levelInfo.childTiles[i][j] != TileType.Empty {
 
                             // create child tile
 
@@ -534,13 +828,13 @@ class GameScene: SKScene {
                 texture: GameScene.starTexture,
                 color: Constants.navigationBackgroundColor,
                 size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
-
+            
             star.colorBlendFactor = 1.0
             star.zRotation = degree2radian(-15)
             star.zPosition = 3
-
+            
             tile.addChild(star)
-
+            
             // add labels
             let label = SKLabelNode()
             label.fontColor = Constants.textColor
@@ -552,386 +846,12 @@ class GameScene: SKScene {
             label.position = value
             label.position.y -= Tile.tileLength / 8 * 2.5
             label.zPosition = 2
-
+            
             colorLabels[key] = label
             headerBackground.addChild(label)
         }
-
-        addChild(headerBackground)
-    }
-
-    func tileMoved(tile: Tile) {
-        if currentSwipedTile != tile { return }
-        currentSwipedTile = nil
-    }
-
-    func moveTile(tile: Tile, to place: (row: Int, column: Int)) {
-        tiles[place.row][place.column] = tile
-        tiles[tile.place.row][tile.place.column] = Tile?.None
-        tile.place = place
-    }
-
-    func destroyTile(tile: Tile) {
-
-        tiles[tile.place.row][tile.place.column] = Tile?.None
-
-        if let childTile = tile.childTile {
-
-            childTile.removeFromParent()
-            self.addChild(childTile)
-            childTile.position = tile.position
-
-            if childTile.type != TileType.Star {
-
-                tiles[tile.place.row][tile.place.column] = childTile
-                childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
-
-            } else {
-                //                (scene as! GameScene).header.addStar(childTile, forColor: tile.type)
-            }
-
-            tile.childTile = Tile?.None
-        }
-
-        tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
-            tile.removeFromParent()
-        }
-    }
-
-    func getNeighbours(startTile: Tile) -> Array<Tile> {
-
-        var neighbours = Array<Tile>()
-        var lastTiles = Array<Tile>()
-        var visited = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: false))
-
-        lastTiles.append(startTile)
-
-        while lastTiles.count > 0 {
-
-            var nextTiles = Array<Tile>()
-
-            for tile in lastTiles {
-                if !visited[tile.place.row][tile.place.column] && tile.type == startTile.type {
-                    visited[tile.place.row][tile.place.column] = true
-                    neighbours.append(tile)
-
-                    if tile.place.row - 1 >= 0 {
-                        if let neighbour = tiles[tile.place.row - 1][tile.place.column] {
-                            nextTiles.append(neighbour)
-                        }
-                    }
-
-                    if tile.place.row + 1 < GameScene.boardSize {
-                        if let neighbour = tiles[tile.place.row + 1][tile.place.column] {
-                            nextTiles.append(neighbour)
-                        }
-                    }
-
-                    if tile.place.column - 1 >= 0 {
-                        if let neighbour = tiles[tile.place.row][tile.place.column - 1] {
-                            nextTiles.append(neighbour)
-                        }
-                    }
-
-                    if tile.place.column + 1 < GameScene.boardSize {
-                        if let neighbour = tiles[tile.place.row][tile.place.column + 1] {
-                            nextTiles.append(neighbour)
-                        }
-                    }
-                }
-            }
-
-            lastTiles.removeAll(keepCapacity: true)
-            lastTiles += nextTiles
-            nextTiles.removeAll(keepCapacity: true)
-        }
-
-        return neighbours
-    }
-
-    func calculateLimits(tile: Tile) {
-
-        // set all limits to current position
-        for var i = 0; i < limits.count; ++i {
-            limits[i] = tile.place
-        }
-
-        // right check
-        for var i = tile.place.column + 1; i < GameScene.boardSize; ++i {
-            if tiles[tile.place.row][i] != nil { break }
-            limits[Direction.Right.rawValue] = (tile.place.row, i)
-        }
-
-        // up check
-        for var i = tile.place.row - 1; i >= 0; --i {
-            if tiles[i][tile.place.column] != nil { break }
-            limits[Direction.Up.rawValue] = (i, tile.place.column)
-        }
-
-        // left check
-        for var i = tile.place.column - 1; i >= 0; --i {
-            if tiles[tile.place.row][i] != nil { break }
-            limits[Direction.Left.rawValue] = (tile.place.row, i)
-        }
-
-        // down check
-        for var i = tile.place.row + 1; i < GameScene.boardSize; ++i {
-            if tiles[i][tile.place.column] != nil { break }
-            limits[Direction.Down.rawValue] = (i, tile.place.column)
-        }
-    }
-
-    func tileDragBegan(tile: Tile, at position: CGPoint) {
-
-        calculateLimits(tile)
-
-        startPosition = position
-        currentPosition = startPosition
-        lastPosition = startPosition
-        endPosition = startPosition
-
-        currentOrientation = Orientation.None
-        currentDirection = Direction.None
-        startDirection = Direction.None
-    }
-
-    func getOrientationFrom(delta: CGPoint) -> Orientation {
-
-        var orientation = Orientation.None
-
-        if max(fabs(delta.x), fabs(delta.y)) > 5 {
-            if fabs(delta.x) > fabs(delta.y) {
-                orientation = Orientation.Horizontal
-
-                if delta.x > 0.0 {
-                    startDirection = Direction.Right
-                    currentDirection = startDirection
-                } else {
-                    startDirection = Direction.Left
-                    currentDirection = startDirection
-                }
-            } else {
-                orientation = Orientation.Vertical
-
-                if delta.y > 0.0 {
-                    startDirection = Direction.Up
-                    currentDirection = startDirection
-                } else {
-                    startDirection = Direction.Down
-                    currentDirection = startDirection
-                }
-            }
-        }
-
-        return orientation
-    }
-
-    func getPlaceFromPosition(place: (row: Int, column: Int)) -> CGPoint {
-        return GameScene.boardPositions[place.row][place.column]
-    }
-
-    func tileDragMoved(tile: Tile, at position: CGPoint) {
-
-        currentPosition = position
-        let delta = currentPosition - lastPosition
-        let deltaFromStart = currentPosition - startPosition
-
-        if currentOrientation == Orientation.None {
-            currentOrientation = getOrientationFrom(deltaFromStart)
-        } else {
-
-            if currentOrientation == Orientation.Horizontal {
-
-                if delta.x > 0 {
-                    currentDirection = Direction.Right
-                } else {
-                    currentDirection = Direction.Left
-                }
-
-                let minColumn = limits[Direction.Left.rawValue].column
-                let maxColumn = limits[Direction.Right.rawValue].column
-                let minX = getPlaceFromPosition((tile.place.row, minColumn)).x
-                let maxX = getPlaceFromPosition((tile.place.row, maxColumn)).x
-
-                tile.position.x = clamp(minX, maxLimit: maxX, value: currentPosition.x)
-
-            } else if currentOrientation == Orientation.Vertical {
-
-                if delta.y > 0 {
-                    currentDirection = Direction.Up
-                } else {
-                    currentDirection = Direction.Down
-                }
-
-                let minRow = limits[Direction.Down.rawValue].row
-                let maxRow = limits[Direction.Up.rawValue].row
-                let minY = getPlaceFromPosition((minRow, tile.place.column)).y
-                let maxY = getPlaceFromPosition((maxRow, tile.place.column)).y
-
-                tile.position.y = clamp(minY, maxLimit: maxY, value: currentPosition.y)
-            }
-
-            let startTilePosition = getPlaceFromPosition(tile.place)
-
-            if startTilePosition == tile.position {
-                currentOrientation = Orientation.None
-            }
-        }
-
-        lastPosition = currentPosition
-    }
-
-    func tileDragCancelled(tile: Tile, at position: CGPoint) {
-        tileDragEnded(tile, at: position)
-    }
-
-    func tileDragEnded(tile: Tile, at position: CGPoint) {
-
-        if currentOrientation != Orientation.None {
-
-            endPosition = position
-            _ = endPosition - startPosition
-
-            let limitPoint = getPlaceFromPosition(limits[currentDirection.rawValue])
-            let middle = (limitPoint + startPosition) / 2
-
-            var moveAction: SKAction!
-
-            let duration = 0.1
-
-            switch currentOrientation {
-            case Orientation.Horizontal:
-                if endPosition.x > middle.x {
-                    let position = getPlaceFromPosition(limits[Direction.Right.rawValue])
-                    moveAction = SKAction.moveToX(position.x, duration: duration)
-                    moveTile(tile, to: limits[Direction.Right.rawValue])
-                } else {
-                    let position = getPlaceFromPosition(limits[Direction.Left.rawValue])
-                    moveAction = SKAction.moveToX(position.x, duration: duration)
-                    moveTile(tile, to: limits[Direction.Left.rawValue])
-                }
-            case Orientation.Vertical:
-                if endPosition.y > middle.y {
-                    let position = getPlaceFromPosition(limits[Direction.Up.rawValue])
-                    moveAction = SKAction.moveToY(position.y, duration: duration)
-                    moveTile(tile, to: limits[Direction.Up.rawValue])
-                } else {
-                    let position = getPlaceFromPosition(limits[Direction.Down.rawValue])
-                    moveAction = SKAction.moveToY(position.y, duration: duration)
-                    moveTile(tile, to: limits[Direction.Down.rawValue])
-                }
-            default:
-                moveAction = nil
-            }
-            
-            tile.runAction(moveAction) { [unowned self] in
-                var tilesToDestroy = self.getNeighbours(tile)
-                if tilesToDestroy.count >= 3 {
-                    
-                    //                    (self.scene as! GameScene).header.addColor(tilesToDestroy.count, forColor: tile.type)
-                    for tile in tilesToDestroy {
-                        self.destroyTile(tile)
-                    }
-                }
-                
-                
-            }
-        }
         
-        currentOrientation = Orientation.None
-        currentDirection = Direction.None
-    }
-
-    func counterLoop(value: NSTimeInterval) {
-
-    }
-
-    func counterEnd() {
-
-    }
-
-    func gameOver() {
-
-    }
-
-    func showAd() {
-
-    }
-
-    func nextLevel() {
-
-    }
-
-    func restartLevel() {
-
-    }
-
-    func share() {
-
-    }
-
-    func goToLobby() {
-        parentController!.dismissViewControllerAnimated(true) { [unowned self] in
-            self.menu = nil
-            self.overlay = nil
-            self.counter.destroyCounter()
-        }
-    }
-
-    func toogleMenu() {
-
-        if gameState != GameState.Pause {
-
-            if overlay.parent == nil && menu.parent == nil {
-                gameState = GameState.Pause
-
-                addChild(overlay)
-                addChild(menu)
-                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
-                menu.runAction(SKAction.fadeInWithDuration(0.3))
-            }
-        } else {
-            gameState = GameState.Play
-
-            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
-                self.menu.removeFromParent()
-                })
-
-            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
-                self.overlay.removeFromParent()
-                })
-        }
-    }
-
-    func addStar(tile: Tile, forColor: TileType) {
-
-        //        let scenePosition = scene!.convertPoint(tile.position, fromNode: board)
-        //        let headerPosition = scene!.convertPoint(scenePosition, toNode: board)
-
-        //        tile.position = headerPosition
-
-        tile.removeFromParent()
-        addChild(tile)
-
-        var finalPosition = headerPositions[forColor]
-        finalPosition!.y += Tile.tileLength / 8
-
-        let moveAction = SKAction.group([
-            SKAction.moveTo(finalPosition!, duration: 0.2),
-            SKAction.scaleTo(2/6, duration: 0.2),
-            SKAction.rotateByAngle(degree2radian(-15), duration: 0.2)])
-
-        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
-
-        tile.runAction(moveAction)
-    }
-
-    func addColor(value: Int, forColor: TileType) {
-
-        //        let pos = forColor.rawValue - 1
-        //
-        //        currentTargets[pos] += value
-        //        colorLabels[forColor]!.text = String("\(currentTargets[pos])/\(colorTargets[pos])")
+        addChild(headerBackground)
     }
 
     static func createTextures(view: SKView) {

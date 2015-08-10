@@ -29,8 +29,20 @@ func !=(lhs: CGPoint, rhs: CGPoint) -> Bool {
     return lhs.x != rhs.x && lhs.y != rhs.y
 }
 
-func clamp(minLimit: CGFloat, maxLimit: CGFloat, value: CGFloat) -> CGFloat {
-    return max(minLimit, min(value, maxLimit))
+func clamp(firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGFloat {
+
+    var minValue: CGFloat
+    var maxValue: CGFloat
+
+    if firstValue > secondValue {
+        maxValue = firstValue
+        minValue = secondValue
+    } else {
+        maxValue = secondValue
+        minValue = firstValue
+    }
+
+    return max(minValue, min(value, maxValue))
 }
 
 extension CGFloat {
@@ -54,6 +66,10 @@ func /(lhs: CGSize, rhs: CGFloat) -> CGSize {
     return dividedSize
 }
 
+func ==(lhs: (row: Int, column: Int), rhs: (row: Int, column: Int)) -> Bool {
+    return lhs.row == rhs.row && lhs.column == rhs.column
+}
+
 func degree2radian(a:CGFloat) -> CGFloat {
     let b = CGFloat(M_PI) * a/180
     return b
@@ -74,6 +90,7 @@ private func polygonPointArray(sides: Int, x: CGFloat, y: CGFloat, radius: CGFlo
     }
     return points
 }
+
 func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPathRef {
     let adjustment = 360/sides/2
     let path = CGPathCreateMutable()

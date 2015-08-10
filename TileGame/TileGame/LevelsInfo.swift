@@ -66,9 +66,9 @@ class LevelsInfo {
 
                 let value = tiles[i][j]
 
-                if value == 0 {
-                    levelInfo.mainTiles[i][j] = TileType.Empty
-                } else if value != -1 {
+                if value == -1 {
+                    levelInfo.mainTiles[i][j] = TileType.Hole
+                } else if value != 0 {
                     levelInfo.mainTiles[i][j] = TileType(rawValue: value / 10)!
                     levelInfo.childTiles[i][j] = TileType(rawValue: value % 10)!
                 }
