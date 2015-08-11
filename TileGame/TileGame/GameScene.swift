@@ -257,19 +257,52 @@ class GameScene: SKScene {
     // MARK: Methods - Tile Methods
 
     func tileWasMoved(tile: Tile) {
+        var tilesToCheck: [Tile] = [tile]
+        checkTilesAndDestroy(&tilesToCheck)
+    }
 
-        var tilesToCheckForDestroy: [Tile] = [tile]
+    func checkTilesAndDestroy(inout tilesToCheck: [Tile]) {
 
-        while tilesToCheckForDestroy.count != 0 {
+        if tilesToCheck.count == 0 { return }
 
-            let firstTileToCheck = tilesToCheckForDestroy.removeAtIndex(0)
+        let firstTileToCheck = tilesToCheck.removeAtIndex(0)
 
-            let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
+        let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
 
-            if tilesToDestroy.count >= 3 {
-                tilesToCheckForDestroy += self.destroyTiles(tilesToDestroy)
+        if tilesToDestroy.count >= 3 {
+
+            for tile in tilesToDestroy {
+                tiles[tile.place.row][tile.place.column] = nil
+
+                if let childTile = tile.childTile {
+
+                    childTile.removeFromParent()
+                    self.addChild(childTile)
+                    childTile.position = tile.position
+
+                    if childTile.type != TileType.Star {
+
+                        tiles[tile.place.row][tile.place.column] = childTile
+                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
+
+                        tilesToCheck.append(childTile)
+                    } else {
+                        addStar(childTile, forColor: tile.type)
+                    }
+
+                    tile.childTile = nil
+                }
+
+                tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
+                    tile.removeFromParent()
+                }
             }
-            
+        }
+
+        if tilesToDestroy.count != 0 {
+            self.runAction(SKAction.waitForDuration(0.1)) { [unowned self] in
+                self.checkTilesAndDestroy(&tilesToCheck)
+            }
         }
     }
 
@@ -294,40 +327,6 @@ class GameScene: SKScene {
         moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
 
         tile.runAction(tileMoveAction)
-    }
-
-    func destroyTiles(tilesToDestroy: [Tile]) -> [Tile] {
-
-        var newTiles: [Tile] = []
-
-        for tile in tilesToDestroy {
-            tiles[tile.place.row][tile.place.column] = nil
-
-            if let childTile = tile.childTile {
-
-                childTile.removeFromParent()
-                self.addChild(childTile)
-                childTile.position = tile.position
-
-                if childTile.type != TileType.Star {
-
-                    tiles[tile.place.row][tile.place.column] = childTile
-                    childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
-
-                    newTiles.append(childTile)
-                } else {
-                    addStar(childTile, forColor: tile.type)
-                }
-
-                tile.childTile = nil
-            }
-            
-            tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
-                tile.removeFromParent()
-            }
-        }
-
-        return newTiles
     }
 
     func getNeighbours(startTile: Tile) -> Array<Tile> {
