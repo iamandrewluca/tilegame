@@ -79,7 +79,7 @@ class Constants {
     static var tileBackgroundColor: UIColor { return UIColor.whiteColor() }
     static var navigationButtonColor: UIColor { return gameColors[gameTheme][1] }
     static var starColor: UIColor { return UIColor.yellowColor() }
-    static var noStarColor: UIColor { return UIColor.blackColor() }
+    static var noStarColor: UIColor { return UIColor.lightGrayColor() }
     static var overlayColor: UIColor { return UIColor.brownColor() }
     static var menuBackgroundColor: UIColor { return navigationButtonColor }
     static var menuButtonColor: UIColor { return navigationBackgroundColor }

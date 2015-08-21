@@ -26,12 +26,12 @@ class Counter {
 
     // method called when counterEnd is reached
     var endCallback: (() -> Void)?
-    var loopCallback: ((NSTimeInterval) -> Void)?
+    var loopCallback: (NSTimeInterval -> Void)?
 
     // MARK: Counter
 
     // if end < 0 infinite counter
-    init(loopInterval: NSTimeInterval, endInterval: NSTimeInterval, loopCallback: ((NSTimeInterval) -> Void)?, endCallback: (() -> Void)?) {
+    init(loopInterval: NSTimeInterval, endInterval: NSTimeInterval, loopCallback: (NSTimeInterval -> Void)?, endCallback: (() -> Void)?) {
 
         self.loopInterval = loopInterval
         self.endInterval = endInterval
@@ -41,42 +41,45 @@ class Counter {
 
     deinit {
         debugPrint("counter deinit")
-        stopCounter()
+        stop()
     }
 
     // MARK: Methods
 
     @objc private func intervalLoop() {
 
-        counter++
+        if counter + loopInterval > endInterval {
+            return
+        }
+
+        counter += loopInterval
 
         if let call = loopCallback {
             call(counter)
         }
 
-        if endInterval > 0 && counter >= endInterval {
-            stopCounter()
-
-            if let call = endCallback {
-                call()
-            }
+        if let call = endCallback where endInterval > 0 && counter >= endInterval {
+            pause()
+            call()
         }
     }
 
-    func startCounter() {
+    func start() {
+
+        if counter != 0 { counter-- }
 
         timer = NSTimer.scheduledTimerWithTimeInterval(
-            loopInterval, target: self, selector: Selector("intervalLoop"), userInfo: nil, repeats: true)
+            loopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
     }
 
-    func pauseCounter() {
+    func pause() {
 
         if timer.valid {
             timer.invalidate()
         }
     }
 
-    func stopCounter() {
+    func stop() {
         
         if timer.valid {
             timer.invalidate()
@@ -84,8 +87,8 @@ class Counter {
         counter = 0
     }
 
-    func destroyCounter() {
-        stopCounter()
+    func destroy() {
+        stop()
         endCallback = nil
         loopCallback = nil
     }

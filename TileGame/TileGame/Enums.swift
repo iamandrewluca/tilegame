@@ -9,10 +9,6 @@
 import Foundation
 import SpriteKit
 
-enum GameState {
-    case Play, Pause, Stop, Hold, Win, Lost
-}
-
 enum LevelType: Int {
     case FreeTime, LimitedTime, LimitedMoves
 }

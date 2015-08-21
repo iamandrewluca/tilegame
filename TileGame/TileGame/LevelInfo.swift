@@ -10,6 +10,15 @@ import Foundation
 
 class LevelInfo {
 
+    init(level: (section: Int, number: Int)) {
+        self.level = level
+        levelNumber = 1 + level.number + level.section * 6
+    }
+
+    var level: (section: Int, number: Int)!
+
+    var levelNumber: Int
+
     var type: LevelType = LevelType.FreeTime
     var typeCounter: Int = 0
 

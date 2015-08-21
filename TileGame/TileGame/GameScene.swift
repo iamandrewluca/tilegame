@@ -109,7 +109,13 @@ class GameScene: SKScene {
     var currentTargets: [TileType:Int] = [:]
     var currentStars: [TileType:Bool] = [:]
 
-    var gameState: GameState = GameState.Stop
+    var menuIsClosed: Bool = true
+    var gameIsStarted: Bool = false
+    var gameIsOver: Bool = false
+    var gameIsWon: Bool = false
+    var gameIsPaused: Bool = false
+    var canSwipe: Bool = true
+
     var currentSwipedTile: Tile?
 
     // MARK: Override - SKScene
@@ -134,7 +140,7 @@ class GameScene: SKScene {
 
         createBoard()
 
-        startGame()
+        prepareGame()
     }
 
     // MARK: Override - UIResponder
@@ -190,6 +196,11 @@ class GameScene: SKScene {
     // MARK: Methods - Tile Drag
 
     func tileDragBegan(tile: Tile, at position: CGPoint) {
+
+        if !gameIsStarted {
+            startGame()
+            gameIsStarted = true
+        }
 
         if currentSwipedTile != nil { return }
         currentSwipedTile = tile
@@ -257,6 +268,17 @@ class GameScene: SKScene {
     // MARK: Methods - Tile Methods
 
     func tileWasMoved(tile: Tile) {
+
+        moves++
+
+        if levelInfo.type == LevelType.LimitedMoves {
+            headerTopLabel.text = "\(levelInfo.typeCounter - moves)"
+
+            if moves >= levelInfo.typeCounter {
+                gameOver()
+            }
+        }
+
         var tilesToCheck: [Tile] = [tile]
         checkTilesAndDestroy(&tilesToCheck)
     }
@@ -271,6 +293,19 @@ class GameScene: SKScene {
 
         if tilesToDestroy.count >= 3 {
 
+            let tileType: TileType = firstTileToCheck.type
+
+            currentTargets[tileType]! += tilesToDestroy.count
+
+            if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! {
+                colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
+            } else if currentTargets[tileType]! > levelInfo.colorTargets[tileType]! {
+                colorLabels[tileType]!.text = "FAIL"
+                gameOver()
+            } else {
+                colorLabels[tileType]!.text = "DONE"
+            }
+
             for tile in tilesToDestroy {
                 tiles[tile.place.row][tile.place.column] = nil
 
@@ -283,10 +318,13 @@ class GameScene: SKScene {
                     if childTile.type != TileType.Star {
 
                         tiles[tile.place.row][tile.place.column] = childTile
+                        childTile.zPosition = -2
                         childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
                         tilesToCheck.append(childTile)
                     } else {
+
+                        currentStars[tile.type] = true
                         addStar(childTile, forColor: tile.type)
                     }
 
@@ -299,7 +337,7 @@ class GameScene: SKScene {
             }
         }
 
-        if tilesToDestroy.count != 0 {
+        if tilesToCheck.count != 0 {
             self.runAction(SKAction.waitForDuration(0.1)) { [unowned self] in
                 self.checkTilesAndDestroy(&tilesToCheck)
             }
@@ -446,22 +484,40 @@ class GameScene: SKScene {
 
     // MARK: Methods - Game
 
-    func startGame() {
-        //        var endInterval = -1
-        //
-        //        if levelInfo.type == LevelType.LimitedMoves {
-        //            endInterval = levelInfo.typeCounter
-        //        } else if levelInfo.type == LevelType.LimitedTime {
-        //
-        //        } else {
-        //
-        //        }
+    func prepareGame() {
 
-        counter = Counter(loopInterval: 1, endInterval: -1, loopCallback: counterLoop, endCallback: counterEnd)
+        for (key, value) in currentTargets {
+            colorLabels[key]!.text = "\(value)/\(levelInfo.colorTargets[key]!)"
+        }
+
+        var endInterval: NSTimeInterval = -1
+
+        if levelInfo.type == LevelType.LimitedMoves {
+            headerBottomLabel.text = "MOVES"
+            headerTopLabel.text = "\(levelInfo.typeCounter)"
+        }
+
+        if levelInfo.type == LevelType.LimitedTime {
+            headerBottomLabel.text = "SECONDS"
+            headerTopLabel.text = "\(levelInfo.typeCounter)"
+            endInterval = NSTimeInterval(levelInfo.typeCounter)
+        }
+
+        if levelInfo.type == LevelType.FreeTime {
+            headerBottomLabel.text = "LEVEL"
+            headerTopLabel.text = "\(levelInfo.levelNumber)"
+        }
+
+        counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
+    }
+
+    func startGame() {
+        counter.start()
+        moves = 0
     }
 
     func gameOver() {
-
+        toogleMenu()
     }
 
     func nextLevel() {
@@ -472,10 +528,16 @@ class GameScene: SKScene {
 
     func counterLoop(value: NSTimeInterval) {
 
+        if levelInfo.type == LevelType.LimitedTime {
+            headerTopLabel.text = "\(levelInfo.typeCounter - Int(value))"
+        }
+
     }
 
     func counterEnd() {
-        
+        if levelInfo.type == LevelType.LimitedTime {
+            gameOver()
+        }
     }
 
     // MARK: Methods - Buttons actions
@@ -496,16 +558,16 @@ class GameScene: SKScene {
         parentController!.dismissViewControllerAnimated(true) { [unowned self] in
             self.menu = nil
             self.overlay = nil
-            self.counter.destroyCounter()
+            self.counter.destroy()
         }
     }
 
     func toogleMenu() {
 
-        if gameState != GameState.Pause {
+        if menuIsClosed {
 
             if overlay.parent == nil && menu.parent == nil {
-                gameState = GameState.Pause
+                menuIsClosed = false
 
                 addChild(overlay)
                 addChild(menu)
@@ -513,7 +575,7 @@ class GameScene: SKScene {
                 menu.runAction(SKAction.fadeInWithDuration(0.3))
             }
         } else {
-            gameState = GameState.Play
+            menuIsClosed = true
 
             menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
                 self.menu.removeFromParent()
@@ -564,7 +626,6 @@ class GameScene: SKScene {
                             // create child tile
 
                             let childTile: Tile = Tile(row: i, column: j, tileType: levelInfo.childTiles[i][j])
-                            childTile.zPosition = 0
                             mainTile.childTile = childTile
 
                         }
@@ -741,28 +802,31 @@ class GameScene: SKScene {
 
         headerBottomLabel.fontColor = Constants.textColor
         headerBottomLabel.fontName = Constants.secondaryFont
-        headerBottomLabel.text = "SECONDS"
         headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
         headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        headerBottomLabel.fontSize *= tileTwoThirds / headerBottomLabel.frame.width
         headerBottomLabel.zPosition = 3
+        headerBottomLabel.text = "SECONDS"
+        headerBottomLabel.fontSize *= tileTwoThirds / headerBottomLabel.frame.width
 
         headerTopLabel.fontColor = Constants.textColor
         headerTopLabel.fontName = Constants.primaryFont
-        headerTopLabel.text = "999"
         headerTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Baseline
         headerTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerTopLabel.zPosition = 3
+        headerTopLabel.text = "999"
 
         let heightWithoutBottom = tileTwoThirds - headerBottomLabel.frame.height
         let aspectRatio = min(tileTwoThirds / headerTopLabel.frame.width , heightWithoutBottom / headerTopLabel.frame.height)
-
         headerTopLabel.fontSize *= aspectRatio
 
-        let downMove = Tile.tileLength / 2 - headerBottomLabel.frame.height - Tile.tileLength / 3 / 2
+        let labelsHeight: CGFloat = headerTopLabel.frame.height + headerBottomLabel.frame.height
+        let labelsMargin: CGFloat = (Tile.tileLength - labelsHeight) / 2
 
-        headerTopLabel.position.y -= downMove
-        headerBottomLabel.position.y -= downMove
+        let currentBottomMargin: CGFloat = Tile.tileLength / 2 - headerBottomLabel.frame.height
+        let marginsDiff = currentBottomMargin - labelsMargin
+
+        headerBottomLabel.position.y -= marginsDiff
+        headerTopLabel.position.y -= marginsDiff
 
         leftIcon.addChild(headerTopLabel)
         leftIcon.addChild(headerBottomLabel)
@@ -802,6 +866,8 @@ class GameScene: SKScene {
         for (key, value) in levelInfo.colorTargets where value != 0 {
             let x = startX + CGFloat(i) * (space + smallTileWidth)
             headerPositions[key] = CGPointMake(x, yMiddle)
+            currentTargets[key] = 0
+            currentStars[key] = false
             ++i
         }
 

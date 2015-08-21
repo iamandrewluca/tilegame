@@ -40,7 +40,7 @@ class LevelsInfo {
 
     func loadLevel(level: (section: Int, number: Int)) -> LevelInfo {
 
-        let levelInfo = LevelInfo()
+        let levelInfo = LevelInfo(level: level)
 
         let levelJSON = loadJSONFromBundle("section_\(level.section)_level_\(level.number)")
 

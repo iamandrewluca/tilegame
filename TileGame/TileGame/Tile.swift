@@ -86,11 +86,15 @@ class Tile: SKSpriteNode {
     // MARK: Touches
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        (self.scene as! GameScene).tileDragBegan(self, at: touches.first!.locationInNode(scene!))
+        if let scene = self.scene as? GameScene {
+            scene.tileDragBegan(self, at: touches.first!.locationInNode(scene))
+        }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        (self.scene as! GameScene).tileDragMoved(self, at: touches.first!.locationInNode(scene!))
+        if let scene = self.scene as? GameScene {
+            scene.tileDragMoved(self, at: touches.first!.locationInNode(scene))
+        }
     }
     
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
@@ -98,6 +102,8 @@ class Tile: SKSpriteNode {
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        (self.scene as! GameScene).tileDragEnded(self, at: touches.first!.locationInNode(scene!))
+        if let scene = self.scene as? GameScene {
+            scene.tileDragEnded(self, at: touches.first!.locationInNode(scene))
+        }
     }
 }
