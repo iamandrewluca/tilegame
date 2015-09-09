@@ -19,7 +19,7 @@ class LobbyLayout : UICollectionViewLayout {
     
     var cellSize = CGSizeMake(145, 145)
     var headerSize = CGSizeMake(Constants.screenSize.width, Tile.tileLength)
-    var sectionSize = CGSize.zeroSize
+    var sectionSize = CGSize.zero
     
     var columnsPerSection: CGFloat = 2.0
     var rowsPerSection: CGFloat = 3.0
@@ -189,7 +189,7 @@ class LobbyLayout : UICollectionViewLayout {
         let rowInSection = CGFloat(indexPath.item / Int(columnsPerSection))
         let columnInSection = CGFloat(indexPath.item % Int(columnsPerSection))
         
-        var cellFrame = CGRect(origin: CGPoint.zeroPoint, size: cellSize)
+        var cellFrame = CGRect(origin: CGPoint.zero, size: cellSize)
         
         cellFrame.origin.x = spacingBetweenCells + columnInSection * (cellSize.width + spacingBetweenCells)
 

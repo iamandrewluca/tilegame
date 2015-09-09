@@ -29,6 +29,8 @@ enum ButtonType: String {
     case Next = "next"
     case Ad = "ad"
     case Pause = "pause"
+    case Overlay = "overlay"
+    case Empty = ""
 }
 
 enum TileType: Int {

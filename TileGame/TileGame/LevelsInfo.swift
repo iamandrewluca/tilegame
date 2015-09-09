@@ -107,7 +107,7 @@ class LevelsInfo {
         group.append(level)
         testDict["groups"] = group
 
-        debugPrint(testDict, appendNewline: true)
+        debugPrint(testDict)
 
         do {
             let data = try NSJSONSerialization.dataWithJSONObject(testDict, options: NSJSONWritingOptions.PrettyPrinted)

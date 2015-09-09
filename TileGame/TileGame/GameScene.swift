@@ -46,6 +46,9 @@ class GameScene: SKScene {
     var headerTopLabel: SKLabelNode = SKLabelNode()
     var headerBottomLabel: SKLabelNode = SKLabelNode()
 
+    var pauseIcon: SKSpriteNode!
+    var pauseButton: SKSpriteNode!
+
     // MARK: Members - Overlay
 
     var overlay: SKSpriteNode!
@@ -71,7 +74,7 @@ class GameScene: SKScene {
 
         var board = Array(count: boardSize,
             repeatedValue: Array(count: boardSize,
-                repeatedValue: CGPoint.zeroPoint))
+                repeatedValue: CGPoint.zero))
 
         for i in 0 ..< boardSize {
             for j in 0 ..< boardSize {
@@ -84,7 +87,7 @@ class GameScene: SKScene {
         return board
         }()
 
-    var tiles: [[Tile?]] = []
+    var tiles: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
 
     // MARK: Members - Game State
 
@@ -112,7 +115,6 @@ class GameScene: SKScene {
     var menuIsClosed: Bool = true
     var gameIsStarted: Bool = false
     var gameIsOver: Bool = false
-    var gameIsWon: Bool = false
     var gameIsPaused: Bool = false
     var canSwipe: Bool = true
 
@@ -138,9 +140,11 @@ class GameScene: SKScene {
 
         createHeader()
 
-        createBoard()
+        addBoardBackgroundAndHoles()
 
         prepareGame()
+
+        addBoardTiles()
     }
 
     // MARK: Override - UIResponder
@@ -448,10 +452,6 @@ class GameScene: SKScene {
             if tiles[i][tile.place.column] != nil { break }
             limits[Direction.Down] = (i, tile.place.column)
         }
-
-//        for (key, value) in limits {
-//            debugPrint("\(key) \(value)")
-//        }
     }
 
     func getDirections(delta: CGPoint) {
@@ -486,6 +486,8 @@ class GameScene: SKScene {
 
     func prepareGame() {
 
+        resetCurrentTargets()
+
         for (key, value) in currentTargets {
             colorLabels[key]!.text = "\(value)/\(levelInfo.colorTargets[key]!)"
         }
@@ -508,7 +510,13 @@ class GameScene: SKScene {
             headerTopLabel.text = "\(levelInfo.levelNumber)"
         }
 
-        counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
+        if let counter = self.counter {
+            counter.stop()
+        } else {
+            counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
+        }
+
+        prepareButtonsForPause()
     }
 
     func startGame() {
@@ -517,11 +525,37 @@ class GameScene: SKScene {
     }
 
     func gameOver() {
+        prepareButtonsForLose()
         toogleMenu()
     }
 
     func nextLevel() {
 
+//        changeLevelWith(nextLevel)
+
+    }
+
+    func changeLevelWith(level: LevelInfo) {
+
+        for i in 0 ..< 6 {
+            for j in 0 ..< 6 {
+
+                if let tile = tiles[i][j] {
+                    tile.runAction(SKAction.scaleTo(0, duration: 0.1)) {
+                        tile.removeFromParent()
+                    }
+                }
+            }
+        }
+
+        prepareGame()
+    }
+
+    func resetCurrentTargets() {
+        for (key, value) in levelInfo.colorTargets where value != 0 {
+            currentTargets[key] = 0
+            currentStars[key] = false
+        }
     }
 
     // MARK: Methods - Counter closures
@@ -547,7 +581,9 @@ class GameScene: SKScene {
     }
 
     func restartLevel() {
-
+        prepareButtonsForPause()
+        toogleMenu()
+        changeLevelWith(levelInfo)
     }
 
     func share() {
@@ -577,82 +613,95 @@ class GameScene: SKScene {
         } else {
             menuIsClosed = true
 
-            menu.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
+            menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
                 self.menu.removeFromParent()
-                })
+            }
 
-            overlay.runAction(SKAction.fadeOutWithDuration(0.3), completion: { [unowned self] in
+            overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
                 self.overlay.removeFromParent()
-                })
+            }
         }
+    }
+
+    // MARK: Methods - Buttons game states changing
+
+    func prepareButtonsForLose() {
+
+        menuLeftButton.name = ButtonType.Lobby.rawValue
+        menuMiddleButton.name = ButtonType.Restart.rawValue
+        menuRightButton.name = ButtonType.Empty.rawValue
+        pauseButton.name = ButtonType.Empty.rawValue
+        pauseIcon.name = ButtonType.Empty.rawValue
+        overlay.name = ButtonType.Empty.rawValue
+
+    }
+
+    func prepareButtonsForPause() {
+
+        menuLeftButton.name = ButtonType.Lobby.rawValue
+        menuMiddleButton.name = ButtonType.Continue.rawValue
+        menuRightButton.name = ButtonType.Restart.rawValue
+        pauseButton.name = ButtonType.Pause.rawValue
+        pauseIcon.name = ButtonType.Pause.rawValue
+        overlay.name = ButtonType.Overlay.rawValue
+
     }
 
     // MARK: Methods - Create Methods
 
-    func createBoard() {
+    func addBoardTiles() {
 
         for i in 0 ... 5 {
-
-            var tilesLine: [Tile?] = []
-
             for j in 0 ... 5 {
-
-                var tile: Tile? = nil
-
-                if levelInfo.mainTiles[i][j] == TileType.Hole {
-
-                    let holeTile = Tile(row: i, column: j, tileType: TileType.Hole)
-
-                    holeTile.position = GameScene.boardPositions[i][j]
-                    holeTile.zPosition = -2
-
-                    tile = holeTile
-
-                    addChild(holeTile)
-
-                } else {
-
-                    if levelInfo.mainTiles[i][j] != TileType.Empty {
-
-                        // create tile
-
-                        let mainTile: Tile = Tile(row: i, column: j, tileType: levelInfo.mainTiles[i][j])
-
-                        mainTile.zPosition = -2
-                        mainTile.position = GameScene.boardPositions[i][j]
-
-                        if levelInfo.childTiles[i][j] != TileType.Empty {
-
-                            // create child tile
-
-                            let childTile: Tile = Tile(row: i, column: j, tileType: levelInfo.childTiles[i][j])
-                            mainTile.childTile = childTile
-
-                        }
-
-                        tile = mainTile
-
-                        addChild(mainTile)
-
-                    }
-
-                    let backTile = SKSpriteNode(
-                        texture: GameScene.tileTexture,
-                        color: Constants.tileBackgroundColor,
-                        size: Tile.tileSize)
-
-                    backTile.position = GameScene.boardPositions[i][j]
-                    backTile.colorBlendFactor = 1
-                    backTile.zPosition = -3
-                    addChild(backTile)
-
+                if levelInfo.mainTiles[i][j] != TileType.Hole &&
+                    levelInfo.mainTiles[i][j] != TileType.Empty {
+                        addTile(i, column: j)
                 }
-
-                tilesLine.append(tile)
             }
-
-            tiles.append(tilesLine)
         }
+    }
+
+    func addTile(row: Int, column: Int) {
+        let mainTile: Tile = Tile(row: row, column: column, tileType: levelInfo.mainTiles[row][column])
+        mainTile.zPosition = -2
+        mainTile.position = GameScene.boardPositions[row][column]
+
+        if levelInfo.childTiles[row][column] != TileType.Empty {
+            let childTile: Tile = Tile(row: row, column: column, tileType: levelInfo.childTiles[row][column])
+            mainTile.childTile = childTile
+        }
+
+        tiles[row][column] = mainTile
+
+        addChild(mainTile)
+    }
+
+    func addBoardBackgroundAndHoles() {
+        for i in 0 ... 5 {
+            for j in 0 ... 5 {
+                if levelInfo.mainTiles[i][j] == TileType.Hole {
+                    tiles[i][j] = addBoardHole(i, column: j)
+                } else {
+                    addBoardBackgroundTile(i, column: j)
+                }
+            }
+        }
+    }
+
+    func addBoardHole(row: Int, column: Int) -> Tile {
+        let holeTile = Tile(row: row, column: column, tileType: TileType.Hole)
+        holeTile.position = GameScene.boardPositions[row][column]
+        holeTile.zPosition = -2
+        addChild(holeTile)
+        return holeTile
+    }
+
+    func addBoardBackgroundTile(row: Int, column: Int) {
+        let backTile = SKSpriteNode(texture: GameScene.tileTexture, color: Constants.tileBackgroundColor, size: Tile.tileSize)
+        backTile.position = GameScene.boardPositions[row][column]
+        backTile.colorBlendFactor = 1
+        backTile.zPosition = -3
+        addChild(backTile)
     }
 
     func createOverlay() {
@@ -832,23 +881,23 @@ class GameScene: SKScene {
         leftIcon.addChild(headerBottomLabel)
 
         // add right icon
-        let rightIcon = SKSpriteNode(
+        pauseButton = SKSpriteNode(
             texture: GameScene.headerRightCornerTexture,
             color: Constants.navigationButtonColor,
             size: Tile.tileSize)
 
-        rightIcon.colorBlendFactor = 1.0
-        rightIcon.zPosition = 2
+        pauseButton.colorBlendFactor = 1.0
+        pauseButton.zPosition = 2
 
-        let pause = SKSpriteNode(texture: SKTexture(imageNamed: "Pause"), color: Constants.textColor, size: Tile.tileSize / 2)
-        pause.colorBlendFactor = 1.0
-        pause.name = ButtonType.Pause.rawValue
-        pause.zPosition = 3
+        pauseIcon = SKSpriteNode(texture: SKTexture(imageNamed: "Pause"), color: Constants.textColor, size: Tile.tileSize / 2)
+        pauseIcon.colorBlendFactor = 1.0
+        pauseIcon.name = ButtonType.Pause.rawValue
+        pauseIcon.zPosition = 3
 
-        rightIcon.addChild(pause)
-        rightIcon.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
-        rightIcon.name = ButtonType.Pause.rawValue
-        headerBackground.addChild(rightIcon)
+        pauseButton.addChild(pauseIcon)
+        pauseButton.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
+        pauseButton.name = ButtonType.Pause.rawValue
+        headerBackground.addChild(pauseButton)
 
         var colorsCount = 0
         for (_, value) in levelInfo.colorTargets where value != 0 { ++colorsCount }
