@@ -41,7 +41,8 @@ class GameScene: SKScene {
     // MARK: Members - Header
     var headerPositions: [TileType:CGPoint] = [:]
 
-    var topTileNodes: [TileType:SKSpriteNode] = [:]
+    var topSmallTiles: [TileType:SKSpriteNode] = [:]
+    var topSmallStars: [TileType:SKSpriteNode] = [:]
     var colorLabels: [TileType:SKLabelNode] = [:]
     var headerTopLabel: SKLabelNode = SKLabelNode()
     var headerBottomLabel: SKLabelNode = SKLabelNode()
@@ -351,12 +352,12 @@ class GameScene: SKScene {
     func addStar(tile: Tile, forColor: TileType) {
 
         let scenePosition = scene!.convertPoint(tile.position, toNode: self)
-        let headerPosition = scene!.convertPoint(scenePosition, toNode: topTileNodes[forColor]!)
+        let headerPosition = scene!.convertPoint(scenePosition, toNode: topSmallTiles[forColor]!)
         tile.position = headerPosition
 
         tile.removeFromParent()
         tile.zPosition = 3
-        topTileNodes[forColor]!.addChild(tile)
+        topSmallTiles[forColor]!.addChild(tile)
 
         let finalPosition = CGPointZero
 
@@ -549,6 +550,10 @@ class GameScene: SKScene {
         }
 
         prepareGame()
+
+        self.runAction(SKAction.waitForDuration(0.2)) { [unowned self] in
+            self.addBoardTiles()
+        }
     }
 
     func resetCurrentTargets() {
@@ -673,7 +678,11 @@ class GameScene: SKScene {
 
         tiles[row][column] = mainTile
 
+        mainTile.setScale(0)
+
         addChild(mainTile)
+
+        mainTile.runAction(SKAction.scaleTo(1, duration: 0.15))
     }
 
     func addBoardBackgroundAndHoles() {
@@ -705,7 +714,6 @@ class GameScene: SKScene {
     }
 
     func createOverlay() {
-
         overlay = SKSpriteNode(color: Constants.darkColor, size: size);
         overlay.anchorPoint = CGPointZero
         overlay.zPosition = 0
@@ -935,7 +943,7 @@ class GameScene: SKScene {
             tile.position.y += Tile.tileLength / 8
             tile.zPosition = 2
 
-            topTileNodes[key] = tile
+            topSmallTiles[key] = tile
             headerBackground.addChild(tile)
 
             let star = SKSpriteNode(
