@@ -14,6 +14,7 @@ class GameViewController: UIViewController {
     // MARK: Members
 
     var level = (section: 0, number: 0)
+    var gameScene: GameScene!
 
     // MARK: UIViewController
 
@@ -29,12 +30,17 @@ class GameViewController: UIViewController {
         skView.showsNodeCount = true
         skView.ignoresSiblingOrder = true
 
-        let scene = GameScene(size: skView.frame.size)
-        scene.parentController = self
-        scene.scaleMode = SKSceneScaleMode.AspectFill
-        scene.level = level
+        gameScene = GameScene(size: skView.frame.size)
+        gameScene.parentController = self
+        gameScene.scaleMode = SKSceneScaleMode.AspectFill
+        gameScene.level = level
 
-        skView.presentScene(scene)
+        skView.presentScene(gameScene)
+    }
+
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        gameScene.viewDidAppear()
     }
 
     override func didReceiveMemoryWarning() {

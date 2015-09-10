@@ -42,7 +42,7 @@ class GameScene: SKScene {
     var headerPositions: [TileType:CGPoint] = [:]
 
     var topSmallTiles: [TileType:SKSpriteNode] = [:]
-    var topSmallStars: [TileType:SKSpriteNode] = [:]
+    var topSmallStars: [TileType:SKSpriteNode!] = [:]
     var colorLabels: [TileType:SKLabelNode] = [:]
     var headerTopLabel: SKLabelNode = SKLabelNode()
     var headerBottomLabel: SKLabelNode = SKLabelNode()
@@ -61,7 +61,15 @@ class GameScene: SKScene {
     var menuLeftButton: SKSpriteNode!
     var menuMiddleButton: SKSpriteNode!
     var menuRightButton: SKSpriteNode!
+
+    var menuRestartIcon: SKSpriteNode!
+    var menuShareIcon: SKSpriteNode!
+    var menuPauseIcon: SKSpriteNode!
+    var menuNextIcon: SKSpriteNode!
+
     var menuTopButton: SKSpriteNode!
+    var menuTopButtonLabel: SKLabelNode!
+    var menuMiddleLabel: SKLabelNode!
 
     // MARK: Members - Board
 
@@ -144,8 +152,6 @@ class GameScene: SKScene {
         addBoardBackgroundAndHoles()
 
         prepareGame()
-
-        addBoardTiles()
     }
 
     // MARK: Override - UIResponder
@@ -156,8 +162,8 @@ class GameScene: SKScene {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        if node.name == "overlay" {
-            toogleMenu()
+        if node.name == ButtonType.Overlay.rawValue {
+            toogleMenuOff()
         }
 
         if node.name == ButtonType.Pause.rawValue {
@@ -169,11 +175,11 @@ class GameScene: SKScene {
         }
 
         if node.name == ButtonType.Continue.rawValue {
-            toogleMenu()
+            toogleMenuOff()
         }
 
         if node.name == ButtonType.Restart.rawValue {
-            restartLevel()
+            restartGame()
         }
 
         if node.name == ButtonType.Share.rawValue {
@@ -196,6 +202,12 @@ class GameScene: SKScene {
     }
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         super.touchesCancelled(touches, withEvent: event)
+    }
+
+    // MARK: Methods - View actions
+
+    func viewDidAppear() {
+        addBoardTiles()
     }
 
     // MARK: Methods - Tile Drag
@@ -274,18 +286,40 @@ class GameScene: SKScene {
 
     func tileWasMoved(tile: Tile) {
 
+        var isGameOver: Bool = false
+
         moves++
 
         if levelInfo.type == LevelType.LimitedMoves {
-            headerTopLabel.text = "\(levelInfo.typeCounter - moves)"
+
+            let leftMoves = levelInfo.typeCounter - moves
+            headerTopLabel.text = "\(leftMoves)"
+
+            if leftMoves == 1 {
+                headerBottomLabel.text = "MOVE"
+            } else {
+                headerBottomLabel.text = "MOVES"
+            }
 
             if moves >= levelInfo.typeCounter {
-                gameOver()
+                isGameOver = true
             }
         }
 
         var tilesToCheck: [Tile] = [tile]
         checkTilesAndDestroy(&tilesToCheck)
+
+        if isLevelDone() {
+            gameWon()
+        } else {
+            if isGameOver {
+                gameOver()
+            }
+        }
+    }
+
+    func isLevelDone() -> Bool {
+        return false
     }
 
     func checkTilesAndDestroy(inout tilesToCheck: [Tile]) {
@@ -358,6 +392,7 @@ class GameScene: SKScene {
         tile.removeFromParent()
         tile.zPosition = 3
         topSmallTiles[forColor]!.addChild(tile)
+        topSmallStars[forColor] = tile
 
         let finalPosition = CGPointZero
 
@@ -530,6 +565,10 @@ class GameScene: SKScene {
         toogleMenu()
     }
 
+    func gameWon() {
+
+    }
+
     func nextLevel() {
 
 //        changeLevelWith(nextLevel)
@@ -557,10 +596,31 @@ class GameScene: SKScene {
     }
 
     func resetCurrentTargets() {
-        for (key, value) in levelInfo.colorTargets where value != 0 {
+        for (key, _) in currentTargets {
             currentTargets[key] = 0
             currentStars[key] = false
         }
+
+        for (key, value) in topSmallStars where value != nil {
+            value!.removeFromParent()
+            topSmallStars[key] = nil
+        }
+    }
+
+    func pauseGame() {
+        counter.pause()
+        toogleMenu()
+    }
+
+    func resumeGame() {
+        counter.start()
+        toogleMenu()
+    }
+
+    func restartGame() {
+        prepareButtonsForPause()
+        toogleMenu()
+        changeLevelWith(levelInfo)
     }
 
     // MARK: Methods - Counter closures
@@ -604,18 +664,27 @@ class GameScene: SKScene {
     }
 
     func toogleMenu() {
-
         if menuIsClosed {
-
-            if overlay.parent == nil && menu.parent == nil {
-                menuIsClosed = false
-
-                addChild(overlay)
-                addChild(menu)
-                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
-                menu.runAction(SKAction.fadeInWithDuration(0.3))
-            }
+            toogleMenuOn()
         } else {
+            toogleMenuOff()
+        }
+    }
+
+    func toogleMenuOn() {
+        if overlay.parent == nil && menu.parent == nil {
+
+            menuIsClosed = false
+            addChild(overlay)
+            addChild(menu)
+            overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+            menu.runAction(SKAction.fadeInWithDuration(0.3))
+        }
+    }
+
+    func toogleMenuOff() {
+        if overlay.parent != nil && menu.parent != nil {
+
             menuIsClosed = true
 
             menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
@@ -630,25 +699,60 @@ class GameScene: SKScene {
 
     // MARK: Methods - Buttons game states changing
 
-    func prepareButtonsForLose() {
+    func prepareButtonsForWin() {
 
-        menuLeftButton.name = ButtonType.Lobby.rawValue
-        menuMiddleButton.name = ButtonType.Restart.rawValue
-        menuRightButton.name = ButtonType.Empty.rawValue
+        menuMiddleButton.name = ButtonType.Next.rawValue
+        menuRightButton.name = ButtonType.Restart.rawValue
+
         pauseButton.name = ButtonType.Empty.rawValue
         pauseIcon.name = ButtonType.Empty.rawValue
         overlay.name = ButtonType.Empty.rawValue
+
+        menuNextIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuNextIcon)
+
+        menuRestartIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuRestartIcon)
+
+    }
+
+    func prepareButtonsForLose() {
+
+        menuMiddleButton.name = ButtonType.Restart.rawValue
+        menuRightButton.name = ButtonType.Share.rawValue
+
+        pauseButton.name = ButtonType.Empty.rawValue
+        pauseIcon.name = ButtonType.Empty.rawValue
+        overlay.name = ButtonType.Empty.rawValue
+
+        menuRestartIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuRestartIcon)
+
+        menuShareIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuShareIcon)
 
     }
 
     func prepareButtonsForPause() {
 
-        menuLeftButton.name = ButtonType.Lobby.rawValue
         menuMiddleButton.name = ButtonType.Continue.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
+
         pauseButton.name = ButtonType.Pause.rawValue
         pauseIcon.name = ButtonType.Pause.rawValue
         overlay.name = ButtonType.Overlay.rawValue
+
+        menuPauseIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuPauseIcon)
+
+        menuRestartIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuRestartIcon)
 
     }
 
@@ -717,7 +821,7 @@ class GameScene: SKScene {
         overlay = SKSpriteNode(color: Constants.darkColor, size: size);
         overlay.anchorPoint = CGPointZero
         overlay.zPosition = 0
-        overlay.name = "overlay"
+        overlay.name = ButtonType.Overlay.rawValue
         overlay.alpha = 0
     }
 
@@ -725,14 +829,12 @@ class GameScene: SKScene {
 
         // menu background
 
-        let menuBackgroundSize = CGSizeMake(
-            GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x,
-            GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y)
+        let menuBackgroundWidth: CGFloat = GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x
+        let menuBackgroundHeight: CGFloat = GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y
+        let menuBackgroundSize: CGSize = CGSizeMake(menuBackgroundWidth, menuBackgroundHeight)
 
-        let menuBackground = SKSpriteNode(
-            texture: GameScene.menuBackgroundTexture,
-            color: Constants.menuBackgroundColor,
-            size: menuBackgroundSize)
+        let menuBackground: SKSpriteNode = SKSpriteNode(texture: GameScene.menuBackgroundTexture,
+            color: Constants.menuBackgroundColor, size: menuBackgroundSize)
 
         menuBackground.colorBlendFactor = 1.0
         menuBackground.anchorPoint = CGPointZero
@@ -741,86 +843,127 @@ class GameScene: SKScene {
 
         // add buttons
 
-        let buttonMargin = Tile.tileSize.width / 4
-        let buttonHeight = (menuBackgroundSize.height - buttonMargin * 4) / 3
-        let buttonWidth = (menuBackgroundSize.width - buttonMargin * 4) / 3
+        let buttonMargin: CGFloat = Tile.tileSize.width / 4
+        let buttonHeight: CGFloat = (menuBackgroundHeight - buttonMargin * 4) / 3
+        let buttonWidth: CGFloat = (menuBackgroundWidth - buttonMargin * 4) / 3
+        let topButtonWidth: CGFloat = menuBackgroundWidth - buttonMargin * 2
 
-        let buttonSize: CGSize = CGSize(width: buttonWidth, height: buttonHeight)
+        let menuButtonsSize: CGSize = CGSize(width: buttonWidth, height: buttonHeight)
+        let menuTopButtonsSize: CGSize = CGSize(width: topButtonWidth, height: buttonHeight)
 
-        menuLeftButton = SKSpriteNode(texture: GameScene.menuLeftButtonTexture, color: Constants.menuButtonColor, size: buttonSize)
-        menuMiddleButton = SKSpriteNode(texture: GameScene.menuMiddleButtonTexture, color: Constants.menuButtonColor, size: buttonSize)
-        menuRightButton = SKSpriteNode(texture: GameScene.menuRightButtonTexture, color: Constants.menuButtonColor, size: buttonSize)
+        menuLeftButton = SKSpriteNode(texture: GameScene.menuLeftButtonTexture,
+            color: Constants.menuButtonColor, size: menuButtonsSize)
+
+        menuMiddleButton = SKSpriteNode(texture: GameScene.menuMiddleButtonTexture,
+            color: Constants.menuButtonColor, size: menuButtonsSize)
+
+        menuRightButton = SKSpriteNode(texture: GameScene.menuRightButtonTexture,
+            color: Constants.menuButtonColor, size: menuButtonsSize)
+
+        menuTopButton = SKSpriteNode(texture: GameScene.menuTopButtonTexture,
+            color: Constants.menuButtonColor, size: menuTopButtonsSize)
 
         menuLeftButton.zPosition = 2
         menuMiddleButton.zPosition = 2
         menuRightButton.zPosition = 2
+        menuTopButton.zPosition = 2
 
         menuLeftButton.colorBlendFactor = 1.0
         menuMiddleButton.colorBlendFactor = 1.0
         menuRightButton.colorBlendFactor = 1.0
+        menuTopButton.colorBlendFactor = 1.0
 
         menuLeftButton.name = ButtonType.Lobby.rawValue
         menuMiddleButton.name = ButtonType.Continue.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
+        menuTopButton.name = ButtonType.Ad.rawValue
 
         menuLeftButton.anchorPoint = CGPointZero
         menuMiddleButton.anchorPoint = CGPointZero
         menuRightButton.anchorPoint = CGPointZero
+        menuTopButton.anchorPoint = CGPointZero
 
         menuLeftButton.position.y += buttonMargin
         menuMiddleButton.position.y += buttonMargin
         menuRightButton.position.y += buttonMargin
+        menuTopButton.position.y = buttonHeight * 2 + buttonMargin * 3
 
         menuLeftButton.position.x += buttonMargin
         menuMiddleButton.position.x += buttonMargin * 2 + buttonWidth
         menuRightButton.position.x += buttonMargin * 3 + buttonWidth * 2
-
-        // add top button
-
-        let topButtonSize: CGSize = CGSize(width: menuBackgroundSize.width - buttonMargin * 2, height: buttonHeight)
-
-        menuTopButton = SKSpriteNode(texture: GameScene.menuTopButtonTexture, color: Constants.menuButtonColor, size: topButtonSize)
-
-        menuTopButton.colorBlendFactor = 1.0
-        menuTopButton.zPosition = 2
-        menuTopButton.anchorPoint = CGPointZero
         menuTopButton.position.x += buttonMargin
-        menuTopButton.position.y = buttonHeight * 2 + buttonMargin * 3
-        menuTopButton.name = ButtonType.Ad.rawValue
+
+        // add menu buttons icons
+
+        let lobbyIcon: SKSpriteNode = SKSpriteNode(imageNamed: "Lobby")
+        menuLeftButton.addChild(lobbyIcon)
+        lobbyIcon.position = CGPoint(x: buttonWidth / 2, y: buttonHeight / 2)
+        lobbyIcon.name = ButtonType.Lobby.rawValue
+        lobbyIcon.colorBlendFactor = 1.0
+        lobbyIcon.color = Constants.menuBackgroundColor
+
+        menuPauseIcon = SKSpriteNode(imageNamed: "Pause")
+        menuMiddleButton.addChild(menuPauseIcon)
+        menuPauseIcon.position = lobbyIcon.position
+        menuPauseIcon.name = ButtonType.Pause.rawValue
+        menuPauseIcon.colorBlendFactor = 1.0
+        menuPauseIcon.color = Constants.menuBackgroundColor
+
+        menuRestartIcon = SKSpriteNode(imageNamed: "Restart")
+        menuRightButton.addChild(menuRestartIcon)
+        menuRestartIcon.position = lobbyIcon.position
+        menuRestartIcon.name = ButtonType.Restart.rawValue
+        menuRestartIcon.colorBlendFactor = 1.0
+        menuRestartIcon.color = Constants.menuBackgroundColor
+
+        menuShareIcon = SKSpriteNode(imageNamed: "Share")
+        menuShareIcon.position = lobbyIcon.position
+        menuShareIcon.name = ButtonType.Share.rawValue
+        menuShareIcon.colorBlendFactor = 1.0
+        menuShareIcon.color = Constants.menuBackgroundColor
+
+        menuNextIcon = SKSpriteNode(imageNamed: "Next")
+        menuNextIcon.position = lobbyIcon.position
+        menuNextIcon.name = ButtonType.Next.rawValue
+        menuNextIcon.colorBlendFactor = 1.0
+        menuNextIcon.color = Constants.menuBackgroundColor
 
         // add top label
 
-        let topLabel = SKLabelNode()
-        topLabel.fontName = Constants.primaryFont
-        topLabel.fontColor = Constants.textColor
-        topLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        topLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        topLabel.position.x = menuTopButton.size.width / 2
-        topLabel.position.y = menuTopButton.size.height / 2
-        topLabel.name = ButtonType.Ad.rawValue
-        topLabel.zPosition = 3
+        menuTopButtonLabel = SKLabelNode()
+        menuTopButtonLabel.fontName = Constants.primaryFont
+        menuTopButtonLabel.fontColor = Constants.textColor
+        menuTopButtonLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        menuTopButtonLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        menuTopButtonLabel.position.x = menuTopButton.size.width / 2
+        menuTopButtonLabel.position.y = menuTopButton.size.height / 2
+        menuTopButtonLabel.name = ButtonType.Ad.rawValue
+        menuTopButtonLabel.zPosition = 3
+        menuTopButtonLabel.text = "SAME TEXT HERE AND THERE"
 
-        topLabel.text = "Winer!!!"
-        topLabel.fontSize *= min(menuTopButton.frame.height / 2 / topLabel.frame.height, menuTopButton.frame.width / topLabel.frame.width)
+        let menuTopButtonLabelHeightRatio: CGFloat = menuTopButton.frame.height / 2 / menuTopButtonLabel.frame.height
+        let menuTopButtonLabelWidthRatio: CGFloat = menuTopButton.frame.width / menuTopButtonLabel.frame.width
+        menuTopButtonLabel.fontSize *= min(menuTopButtonLabelHeightRatio, menuTopButtonLabelWidthRatio)
 
-        menuTopButton.addChild(topLabel)
+        menuTopButton.addChild(menuTopButtonLabel)
 
         // add middle label
 
-        let middleLabel = SKLabelNode()
-        middleLabel.fontName = Constants.primaryFont
-        middleLabel.fontColor = Constants.textColor
-        middleLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        middleLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-        middleLabel.position.x = menuBackgroundSize.width / 2
-        middleLabel.position.y = menuBackgroundSize.height / 2
-        middleLabel.zPosition = 3
+        menuMiddleLabel = SKLabelNode()
+        menuMiddleLabel.fontName = Constants.primaryFont
+        menuMiddleLabel.fontColor = Constants.textColor
+        menuMiddleLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+        menuMiddleLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        menuMiddleLabel.position.x = menuBackgroundSize.width / 2
+        menuMiddleLabel.position.y = menuBackgroundSize.height / 2
+        menuMiddleLabel.zPosition = 3
+        menuMiddleLabel.text = "SAME TEXT HERE AND THERE"
 
-        middleLabel.text = "LEVEL 42"
-        middleLabel.fontSize *= min(topButtonSize.height / 2 / middleLabel.frame.height, topButtonSize.width / middleLabel.frame.width)
+        let menuMiddleLabelHeightRatio: CGFloat = menuTopButtonsSize.height / 2 / menuMiddleLabel.frame.height
+        let menuMiddleLabelWidthRatio: CGFloat = menuTopButtonsSize.width / menuMiddleLabel.frame.width
+        menuMiddleLabel.fontSize *= min(menuMiddleLabelHeightRatio, menuMiddleLabelWidthRatio)
 
-        menuBackground.addChild(middleLabel)
-
+        menuBackground.addChild(menuMiddleLabel)
         menuBackground.addChild(menuLeftButton)
         menuBackground.addChild(menuMiddleButton)
         menuBackground.addChild(menuRightButton)
@@ -833,20 +976,16 @@ class GameScene: SKScene {
 
     func createHeader() {
 
-        let headerBackground = SKSpriteNode(
-            texture: GameScene.headerBackgroundTexture,
-            color: Constants.navigationBackgroundColor,
-            size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
+        let headerBackground = SKSpriteNode(texture: GameScene.headerBackgroundTexture,
+            color: Constants.navigationBackgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
 
         headerBackground.colorBlendFactor = 1.0
         headerBackground.anchorPoint = CGPointZero
         headerBackground.position = CGPoint(x: 0, y: Constants.screenSize.height - Tile.tileLength)
         headerBackground.zPosition = 1
 
-        let leftIcon = SKSpriteNode(
-            texture: GameScene.headerLeftCornerTexture,
-            color: Constants.navigationButtonColor,
-            size: Tile.tileSize)
+        let leftIcon = SKSpriteNode(texture: GameScene.headerLeftCornerTexture,
+            color: Constants.navigationButtonColor, size: Tile.tileSize)
 
         leftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
         leftIcon.colorBlendFactor = 1.0
@@ -866,21 +1005,21 @@ class GameScene: SKScene {
         headerBottomLabel.fontSize *= tileTwoThirds / headerBottomLabel.frame.width
 
         headerTopLabel.fontColor = Constants.textColor
-        headerTopLabel.fontName = Constants.primaryFont
+        headerTopLabel.fontName = Constants.secondaryFont
         headerTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Baseline
         headerTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerTopLabel.zPosition = 3
-        headerTopLabel.text = "999"
+        headerTopLabel.text = "9999"
 
-        let heightWithoutBottom = tileTwoThirds - headerBottomLabel.frame.height
-        let aspectRatio = min(tileTwoThirds / headerTopLabel.frame.width , heightWithoutBottom / headerTopLabel.frame.height)
-        headerTopLabel.fontSize *= aspectRatio
+        let heightWithoutBottomLabel: CGFloat = tileTwoThirds - headerBottomLabel.frame.height
+        let headerTopLabelHeightRatio: CGFloat = tileTwoThirds / headerTopLabel.frame.width
+        let headerTopLabelWidthRatio: CGFloat = heightWithoutBottomLabel / headerTopLabel.frame.height
+        headerTopLabel.fontSize *= min(headerTopLabelHeightRatio, headerTopLabelWidthRatio)
 
         let labelsHeight: CGFloat = headerTopLabel.frame.height + headerBottomLabel.frame.height
         let labelsMargin: CGFloat = (Tile.tileLength - labelsHeight) / 2
-
         let currentBottomMargin: CGFloat = Tile.tileLength / 2 - headerBottomLabel.frame.height
-        let marginsDiff = currentBottomMargin - labelsMargin
+        let marginsDiff: CGFloat = currentBottomMargin - labelsMargin
 
         headerBottomLabel.position.y -= marginsDiff
         headerTopLabel.position.y -= marginsDiff
@@ -888,43 +1027,46 @@ class GameScene: SKScene {
         leftIcon.addChild(headerTopLabel)
         leftIcon.addChild(headerBottomLabel)
 
-        // add right icon
-        pauseButton = SKSpriteNode(
-            texture: GameScene.headerRightCornerTexture,
-            color: Constants.navigationButtonColor,
-            size: Tile.tileSize)
+        // add right button
 
+        pauseButton = SKSpriteNode(texture: GameScene.headerRightCornerTexture,
+            color: Constants.navigationButtonColor, size: Tile.tileSize)
         pauseButton.colorBlendFactor = 1.0
         pauseButton.zPosition = 2
-
-        pauseIcon = SKSpriteNode(texture: SKTexture(imageNamed: "Pause"), color: Constants.textColor, size: Tile.tileSize / 2)
-        pauseIcon.colorBlendFactor = 1.0
-        pauseIcon.name = ButtonType.Pause.rawValue
-        pauseIcon.zPosition = 3
-
-        pauseButton.addChild(pauseIcon)
         pauseButton.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
         pauseButton.name = ButtonType.Pause.rawValue
+
+        // add pause image to button
+
+        pauseIcon = SKSpriteNode(texture: SKTexture(imageNamed: "Pause"),
+            color: Constants.textColor, size: Tile.tileSize / 2)
+        pauseIcon.colorBlendFactor = 1.0
+        pauseIcon.name = ButtonType.Pause.rawValue
+
+        pauseButton.addChild(pauseIcon)
         headerBackground.addChild(pauseButton)
 
         var colorsCount = 0
-        for (_, value) in levelInfo.colorTargets where value != 0 { ++colorsCount }
+        for (key, value) in levelInfo.colorTargets where value != 0 {
+            ++colorsCount
+
+            currentTargets[key] = 0
+            currentStars[key] = false
+        }
 
         let smallTileWidth = Tile.tileLength / 2
-        let widthWithoutLR = Constants.screenSize.width - Tile.tileLength * 2
+        let widthWithoutLeftRightButtons = Constants.screenSize.width - Tile.tileLength * 2
         let yMiddle = Tile.tileLength / 2
-        let space = (widthWithoutLR - 5 * smallTileWidth) / 6
+        let space = (widthWithoutLeftRightButtons - 5 * smallTileWidth) / 6
         let actualTilesWidth = CGFloat(colorsCount) * smallTileWidth + CGFloat(colorsCount - 1) * space
         let diffWidth = Constants.screenSize.width - actualTilesWidth
 
         let startX = diffWidth / 2 + smallTileWidth / 2
 
         var i = 0
-        for (key, value) in levelInfo.colorTargets where value != 0 {
+        for (key, _) in currentTargets {
             let x = startX + CGFloat(i) * (space + smallTileWidth)
             headerPositions[key] = CGPointMake(x, yMiddle)
-            currentTargets[key] = 0
-            currentStars[key] = false
             ++i
         }
 
@@ -932,8 +1074,7 @@ class GameScene: SKScene {
 
             // add top tiles
 
-            let tile = SKSpriteNode(
-                texture: GameScene.tileTexture,
+            let tile = SKSpriteNode(texture: GameScene.tileTexture,
                 color: key.tileColor,
                 size: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2))
 
@@ -946,8 +1087,7 @@ class GameScene: SKScene {
             topSmallTiles[key] = tile
             headerBackground.addChild(tile)
 
-            let star = SKSpriteNode(
-                texture: GameScene.starTexture,
+            let star = SKSpriteNode(texture: GameScene.starTexture,
                 color: Constants.navigationBackgroundColor,
                 size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
             
@@ -964,7 +1104,9 @@ class GameScene: SKScene {
             label.text = "99/99"
             label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
             label.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-            label.fontSize *= Tile.tileLength / 8 * 1.5 / label.frame.height
+
+            let labelSizeRatio: CGFloat = Tile.tileLength / 8 * 1.5 / label.frame.height
+            label.fontSize *= labelSizeRatio
             label.position = value
             label.position.y -= Tile.tileLength / 8 * 2.5
             label.zPosition = 2
