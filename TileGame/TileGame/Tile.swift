@@ -60,9 +60,9 @@ class Tile: SKSpriteNode {
         if type != TileType.Hole {
 
             if tileType == TileType.Star {
-                super.init(texture: GameScene.starTexture, color: Constants.starColor, size: Tile.tileSize)
+                super.init(texture: Textures.starTexture, color: Constants.starColor, size: Tile.tileSize)
             } else {
-                super.init(texture: GameScene.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
+                super.init(texture: Textures.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
             }
 
             colorBlendFactor = 1.0

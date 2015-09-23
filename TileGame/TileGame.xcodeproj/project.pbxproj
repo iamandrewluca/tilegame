@@ -28,6 +28,7 @@
 		750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750268F21B6B7F6400946480 /* LevelInfo.swift */; };
 		750320B81B7117820035E58B /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750320B71B7117820035E58B /* GameScene.swift */; };
 		75801F521B6B77E9007A63E5 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75801F511B6B77E9007A63E5 /* Enums.swift */; };
+		75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ACDB3D1BB2CF630013F1C4 /* Textures.swift */; settings = {ASSET_TAGS = (); }; };
 		75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */; };
 		75B5E3AA1B288EA7000C5C95 /* LobbyLockedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B5E3A81B288EA7000C5C95 /* LobbyLockedCell.swift */; };
 		75B5E3AB1B288EA7000C5C95 /* LobbyLockedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E3A91B288EA7000C5C95 /* LobbyLockedCell.xib */; };
@@ -86,6 +87,7 @@
 		750320B71B7117820035E58B /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		754E910F1B05519A0030C303 /* LobbyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyLayout.swift; sourceTree = "<group>"; };
 		75801F511B6B77E9007A63E5 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
+		75ACDB3D1BB2CF630013F1C4 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
 		75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyHeader.swift; sourceTree = "<group>"; };
 		75B5E3A81B288EA7000C5C95 /* LobbyLockedCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyLockedCell.swift; sourceTree = "<group>"; };
 		75B5E3A91B288EA7000C5C95 /* LobbyLockedCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LobbyLockedCell.xib; sourceTree = "<group>"; };
@@ -255,6 +257,7 @@
 				75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */,
 				75801F511B6B77E9007A63E5 /* Enums.swift */,
 				750268F21B6B7F6400946480 /* LevelInfo.swift */,
+				75ACDB3D1BB2CF630013F1C4 /* Textures.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -395,6 +398,7 @@
 				75B5E3AA1B288EA7000C5C95 /* LobbyLockedCell.swift in Sources */,
 				151B5A8A1AC9BA92002BD68C /* GameViewController.swift in Sources */,
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
+				75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */,
 				75F09C001AE08064003C061B /* Helpers.swift in Sources */,
 				75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */,
 				750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */,

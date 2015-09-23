@@ -21,8 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         debugPrint(NSHomeDirectory())
 
         // for performance should cache textures
-        let skView = SKView(frame: UIScreen.mainScreen().bounds)
-        GameScene.createTextures(skView)
+        Textures.createTextures()
 
         return true
     }

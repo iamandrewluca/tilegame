@@ -15,23 +15,6 @@ class GameScene: SKScene {
 
     weak var parentController: GameViewController!
 
-    // MARK: Members - Static Textures
-
-    private static var texturesAreCreated: Bool = false
-
-    static var tileTexture: SKTexture!
-    static var starTexture: SKTexture!
-
-    static var headerBackgroundTexture: SKTexture!
-    static var headerLeftCornerTexture: SKTexture!
-    static var headerRightCornerTexture: SKTexture!
-
-    static var menuBackgroundTexture: SKTexture!
-    static var menuLeftButtonTexture: SKTexture!
-    static var menuMiddleButtonTexture: SKTexture!
-    static var menuRightButtonTexture: SKTexture!
-    static var menuTopButtonTexture: SKTexture!
-
     // MARK: Members - Game Info
 
     var levelsInfo: LevelsInfo = LevelsInfo.sharedInstance
@@ -39,11 +22,13 @@ class GameScene: SKScene {
     var level: (section: Int, number: Int)!
 
     // MARK: Members - Header
+
     var headerPositions: [TileType:CGPoint] = [:]
 
     var topSmallTiles: [TileType:SKSpriteNode] = [:]
     var topSmallStars: [TileType:SKSpriteNode!] = [:]
     var colorLabels: [TileType:SKLabelNode] = [:]
+
     var headerTopLabel: SKLabelNode = SKLabelNode()
     var headerBottomLabel: SKLabelNode = SKLabelNode()
 
@@ -74,7 +59,6 @@ class GameScene: SKScene {
     // MARK: Members - Board
 
     static let boardSize: Int = 6
-
     static let boardPositions: [[CGPoint]] = { () -> [[CGPoint]] in
 
         let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * Tile.tileSpacing) / 2
@@ -125,7 +109,7 @@ class GameScene: SKScene {
     var gameIsStarted: Bool = false
     var gameIsOver: Bool = false
     var gameIsPaused: Bool = false
-    var canSwipe: Bool = true
+    var canSwipe: Bool = false
 
     var currentSwipedTile: Tile?
 
@@ -152,6 +136,8 @@ class GameScene: SKScene {
         addBoardBackgroundAndHoles()
 
         prepareGame()
+
+        // tiles are added in viewDidAppear
     }
 
     // MARK: Override - UIResponder
@@ -195,12 +181,22 @@ class GameScene: SKScene {
         }
     }
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+
+        print("began")
+
         super.touchesBegan(touches, withEvent: event)
+        touchesCancelled(touches, withEvent: event)
     }
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+
+        print("moved")
+
         super.touchesMoved(touches, withEvent: event)
     }
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
+
+        print("cancelled")
+
         super.touchesCancelled(touches, withEvent: event)
     }
 
@@ -208,11 +204,17 @@ class GameScene: SKScene {
 
     func viewDidAppear() {
         addBoardTiles()
+
+        // show tutorial here for some levels
+
+        canSwipe = true
     }
 
     // MARK: Methods - Tile Drag
 
     func tileDragBegan(tile: Tile, at position: CGPoint) {
+
+        if !canSwipe { return }
 
         if !gameIsStarted {
             startGame()
@@ -233,6 +235,8 @@ class GameScene: SKScene {
     }
 
     func tileDragMoved(tile: Tile, at position: CGPoint) {
+
+        if !canSwipe { return }
 
         if currentSwipedTile != tile { return }
 
@@ -645,12 +649,6 @@ class GameScene: SKScene {
 
     }
 
-    func restartLevel() {
-        prepareButtonsForPause()
-        toogleMenu()
-        changeLevelWith(levelInfo)
-    }
-
     func share() {
 
     }
@@ -759,7 +757,6 @@ class GameScene: SKScene {
     // MARK: Methods - Create Methods
 
     func addBoardTiles() {
-
         for i in 0 ... 5 {
             for j in 0 ... 5 {
                 if levelInfo.mainTiles[i][j] != TileType.Hole &&
@@ -810,7 +807,7 @@ class GameScene: SKScene {
     }
 
     func addBoardBackgroundTile(row: Int, column: Int) {
-        let backTile = SKSpriteNode(texture: GameScene.tileTexture, color: Constants.tileBackgroundColor, size: Tile.tileSize)
+        let backTile = SKSpriteNode(texture: Textures.tileTexture, color: Constants.tileBackgroundColor, size: Tile.tileSize)
         backTile.position = GameScene.boardPositions[row][column]
         backTile.colorBlendFactor = 1
         backTile.zPosition = -3
@@ -833,7 +830,7 @@ class GameScene: SKScene {
         let menuBackgroundHeight: CGFloat = GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y
         let menuBackgroundSize: CGSize = CGSizeMake(menuBackgroundWidth, menuBackgroundHeight)
 
-        let menuBackground: SKSpriteNode = SKSpriteNode(texture: GameScene.menuBackgroundTexture,
+        let menuBackground: SKSpriteNode = SKSpriteNode(texture: Textures.menuBackgroundTexture,
             color: Constants.menuBackgroundColor, size: menuBackgroundSize)
 
         menuBackground.colorBlendFactor = 1.0
@@ -851,16 +848,16 @@ class GameScene: SKScene {
         let menuButtonsSize: CGSize = CGSize(width: buttonWidth, height: buttonHeight)
         let menuTopButtonsSize: CGSize = CGSize(width: topButtonWidth, height: buttonHeight)
 
-        menuLeftButton = SKSpriteNode(texture: GameScene.menuLeftButtonTexture,
+        menuLeftButton = SKSpriteNode(texture: Textures.menuLeftButtonTexture,
             color: Constants.menuButtonColor, size: menuButtonsSize)
 
-        menuMiddleButton = SKSpriteNode(texture: GameScene.menuMiddleButtonTexture,
+        menuMiddleButton = SKSpriteNode(texture: Textures.menuMiddleButtonTexture,
             color: Constants.menuButtonColor, size: menuButtonsSize)
 
-        menuRightButton = SKSpriteNode(texture: GameScene.menuRightButtonTexture,
+        menuRightButton = SKSpriteNode(texture: Textures.menuRightButtonTexture,
             color: Constants.menuButtonColor, size: menuButtonsSize)
 
-        menuTopButton = SKSpriteNode(texture: GameScene.menuTopButtonTexture,
+        menuTopButton = SKSpriteNode(texture: Textures.menuTopButtonTexture,
             color: Constants.menuButtonColor, size: menuTopButtonsSize)
 
         menuLeftButton.zPosition = 2
@@ -976,7 +973,7 @@ class GameScene: SKScene {
 
     func createHeader() {
 
-        let headerBackground = SKSpriteNode(texture: GameScene.headerBackgroundTexture,
+        let headerBackground = SKSpriteNode(texture: Textures.headerBackgroundTexture,
             color: Constants.navigationBackgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
 
         headerBackground.colorBlendFactor = 1.0
@@ -984,7 +981,7 @@ class GameScene: SKScene {
         headerBackground.position = CGPoint(x: 0, y: Constants.screenSize.height - Tile.tileLength)
         headerBackground.zPosition = 1
 
-        let leftIcon = SKSpriteNode(texture: GameScene.headerLeftCornerTexture,
+        let leftIcon = SKSpriteNode(texture: Textures.headerLeftCornerTexture,
             color: Constants.navigationButtonColor, size: Tile.tileSize)
 
         leftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
@@ -1029,7 +1026,7 @@ class GameScene: SKScene {
 
         // add right button
 
-        pauseButton = SKSpriteNode(texture: GameScene.headerRightCornerTexture,
+        pauseButton = SKSpriteNode(texture: Textures.headerRightCornerTexture,
             color: Constants.navigationButtonColor, size: Tile.tileSize)
         pauseButton.colorBlendFactor = 1.0
         pauseButton.zPosition = 2
@@ -1074,7 +1071,7 @@ class GameScene: SKScene {
 
             // add top tiles
 
-            let tile = SKSpriteNode(texture: GameScene.tileTexture,
+            let tile = SKSpriteNode(texture: Textures.tileTexture,
                 color: key.tileColor,
                 size: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2))
 
@@ -1087,7 +1084,7 @@ class GameScene: SKScene {
             topSmallTiles[key] = tile
             headerBackground.addChild(tile)
 
-            let star = SKSpriteNode(texture: GameScene.starTexture,
+            let star = SKSpriteNode(texture: Textures.starTexture,
                 color: Constants.navigationBackgroundColor,
                 size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
             
@@ -1116,140 +1113,5 @@ class GameScene: SKScene {
         }
         
         addChild(headerBackground)
-    }
-
-    static func createTextures(view: SKView) {
-
-        if GameScene.texturesAreCreated { return }
-
-        debugPrint("generating textures")
-
-        let screenRatio = Constants.screenRatio
-
-        // tile texture
-        let roundRectPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio , Tile.tileLength * screenRatio),
-            cornerRadius: Tile.tileCornerRadius * screenRatio).CGPath
-        let tileShape = SKShapeNode()
-        tileShape.fillColor = UIColor.whiteColor()
-        tileShape.path = roundRectPath
-        tileTexture = view.textureFromNode(tileShape)
-
-        // star texture
-        let starPath = getStarPath(0, y: 0, radius: Tile.tileLength / 2 * screenRatio, sides: 5, pointyness: 2)
-        let starShape = SKShapeNode()
-        starShape.fillColor = SKColor.whiteColor()
-        starShape.path = starPath
-        starTexture = view.textureFromNode(starShape)
-
-        // header background texture
-        let headerBackgroundPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Constants.screenSize.width * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.TopRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerBackgroundShape = SKShapeNode()
-        headerBackgroundShape.path = headerBackgroundPath.CGPath
-        headerBackgroundShape.fillColor = SKColor.whiteColor()
-        headerBackgroundTexture = view.textureFromNode(headerBackgroundShape)
-
-        // header left corner texture
-        let headerLeftCornerPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.BottomRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerLeftCornerShape = SKShapeNode()
-        headerLeftCornerShape.path = headerLeftCornerPath.CGPath
-        headerLeftCornerShape.fillColor = SKColor.whiteColor()
-        headerLeftCornerTexture = view.textureFromNode(headerLeftCornerShape)
-
-        // header right corner texture
-        let headerRightCornerPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerRightCornerShape = SKShapeNode()
-        headerRightCornerShape.path = headerRightCornerPath.CGPath
-        headerRightCornerShape.fillColor = SKColor.whiteColor()
-        headerRightCornerTexture = view.textureFromNode(headerRightCornerShape)
-
-        // menu background texture
-
-        let menuBackgroundSize = CGSizeMake(
-            GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x,
-            GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y)
-
-        let menuCornerRadius = Tile.tileLength / 4 * 3
-
-        let menuBackgroundPath: UIBezierPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: menuBackgroundSize * screenRatio),
-            cornerRadius: menuCornerRadius * screenRatio)
-
-        let menuBackgroundShape = SKShapeNode()
-        menuBackgroundShape.fillColor = SKColor.whiteColor()
-        menuBackgroundShape.path = menuBackgroundPath.CGPath
-        menuBackgroundTexture = view.textureFromNode(menuBackgroundShape)
-
-        // buttons textures
-
-        let buttonMargin = Tile.tileSize.width / 4
-        let buttonHeight = (menuBackgroundSize.height - buttonMargin * 4) / 3
-        let buttonWidth = (menuBackgroundSize.width - buttonMargin * 4) / 3
-        let buttonSize: CGSize = CGSize(width: buttonWidth, height: buttonHeight)
-        let buttonCornerRadius = menuCornerRadius - Tile.tileLength / 4
-
-        // left button texture
-
-        let leftButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.BottomRight],
-            cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
-
-        let leftButtonShape = SKShapeNode()
-        leftButtonShape.fillColor = UIColor.whiteColor()
-        leftButtonShape.path = leftButtonPath.CGPath
-        menuLeftButtonTexture = view.textureFromNode(leftButtonShape)
-
-        // middle button texture
-
-        let middleButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
-
-        let middleButtonShape = SKShapeNode()
-        middleButtonShape.fillColor = UIColor.whiteColor()
-        middleButtonShape.path = middleButtonPath.CGPath
-        menuMiddleButtonTexture = view.textureFromNode(middleButtonShape)
-        
-        // right button texture
-        
-        let rightButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopRight],
-            cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
-        
-        let rightButtonShape = SKShapeNode()
-        rightButtonShape.fillColor = UIColor.whiteColor()
-        rightButtonShape.path = rightButtonPath.CGPath
-        menuRightButtonTexture = view.textureFromNode(rightButtonShape)
-        
-        // top button texture
-        
-        let topButtonSize: CGSize = CGSize(width: menuBackgroundSize.width - buttonMargin * 2, height: buttonHeight)
-        
-        let topButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: topButtonSize * screenRatio),
-            byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
-        
-        let topButtonShape = SKShapeNode()
-        topButtonShape.fillColor = UIColor.whiteColor()
-        topButtonShape.path = topButtonPath.CGPath
-        menuTopButtonTexture = view.textureFromNode(topButtonShape)
-        
-        GameScene.texturesAreCreated = true
     }
 }
