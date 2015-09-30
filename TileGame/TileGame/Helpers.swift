@@ -109,3 +109,15 @@ func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness
     var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
     return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)!
 }
+
+extension SKLabelNode {
+    func setTextWithinSize(text: String, size: CGFloat, vertically: Bool) {
+        self.text = text
+
+        if vertically {
+            self.fontSize *= size / self.frame.height
+        } else {
+            self.fontSize *= size / self.frame.width
+        }
+    }
+}

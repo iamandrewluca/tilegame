@@ -22,7 +22,7 @@ class LevelsInfo {
 
     // MARK: LevelsInfo
     
-    init() {
+    private init() {
         let documentDirectories = NSSearchPathForDirectoriesInDomains(
             NSSearchPathDirectory.DocumentDirectory,
             NSSearchPathDomainMask.UserDomainMask, true) as Array
@@ -40,9 +40,9 @@ class LevelsInfo {
 
     func loadLevel(level: (section: Int, number: Int)) -> LevelInfo {
 
-        let levelInfo = LevelInfo(level: level)
-
         let levelJSON = loadJSONFromBundle("section_\(level.section)_level_\(level.number)")
+
+        let levelInfo = LevelInfo(level: level)
 
         guard let type = levelJSON["levelType"] as? Int,
             let counter = levelJSON["levelTypeCounter"] as? Int,
@@ -71,6 +71,11 @@ class LevelsInfo {
                 } else if value != 0 {
                     levelInfo.mainTiles[i][j] = TileType(rawValue: value / 10)!
                     levelInfo.childTiles[i][j] = TileType(rawValue: value % 10)!
+
+                    // check for star
+                    if levelInfo.childTiles[i][j] == TileType.Star {
+                        levelInfo.starTargets[levelInfo.mainTiles[i][j]] = true
+                    }
                 }
             }
         }

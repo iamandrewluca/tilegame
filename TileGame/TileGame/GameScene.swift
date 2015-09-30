@@ -9,7 +9,7 @@
 import SpriteKit
 import Foundation
 
-class GameScene: SKScene {
+class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Members - Parent Controller
 
@@ -29,8 +29,10 @@ class GameScene: SKScene {
     var topSmallStars: [TileType:SKSpriteNode!] = [:]
     var colorLabels: [TileType:SKLabelNode] = [:]
 
-    var headerTopLabel: SKLabelNode = SKLabelNode()
-    var headerBottomLabel: SKLabelNode = SKLabelNode()
+    var headerBackground: SKSpriteNode!
+    var headerTopLabel: SKLabelNode!
+    var headerBottomLabel: SKLabelNode!
+    var headerLeftIcon: SKSpriteNode!
 
     var pauseIcon: SKSpriteNode!
     var pauseButton: SKSpriteNode!
@@ -110,8 +112,10 @@ class GameScene: SKScene {
     var gameIsOver: Bool = false
     var gameIsPaused: Bool = false
     var canSwipe: Bool = false
+    var canTouch: Bool = false
 
     var currentSwipedTile: Tile?
+    var currentTouchedButtonName: String = ""
 
     // MARK: Override - SKScene
 
@@ -135,18 +139,52 @@ class GameScene: SKScene {
 
         addBoardBackgroundAndHoles()
 
-        prepareGame()
-
         // tiles are added in viewDidAppear
+    }
+
+    // MARK: Methods - View actions
+
+    func viewDidAppear() {
+        addBoardTiles()
+
+        // show tutorial here for some levels
+
+        gameIsStarted = true
+        canTouch = true
+        canSwipe = true
     }
 
     // MARK: Override - UIResponder
 
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesEnded(touches, withEvent: event)
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesBegan(touches, withEvent: event)
+
+        if !canTouch { return }
 
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
+
+        print("began on \(node.name)")
+    }
+    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesMoved(touches, withEvent: event)
+
+        if !canTouch { return }
+
+        let location = touches.first!.locationInNode(self)
+        let node = nodeAtPoint(location)
+
+        print("move on \(node.name)")
+    }
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+        super.touchesEnded(touches, withEvent: event)
+
+        if !canTouch { return }
+
+        let location = touches.first!.locationInNode(self)
+        let node = nodeAtPoint(location)
+
+        print("ended on \(node.name)")
 
         if node.name == ButtonType.Overlay.rawValue {
             toogleMenuOff()
@@ -180,39 +218,15 @@ class GameScene: SKScene {
             showAd()
         }
     }
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-
-        print("began")
-
-        super.touchesBegan(touches, withEvent: event)
-        touchesCancelled(touches, withEvent: event)
-    }
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-
-        print("moved")
-
-        super.touchesMoved(touches, withEvent: event)
-    }
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-
-        print("cancelled")
-
         super.touchesCancelled(touches, withEvent: event)
+
+        print("canceled")
     }
 
-    // MARK: Methods - View actions
+    // MARK: Methods - Tile Drag Protocol
 
-    func viewDidAppear() {
-        addBoardTiles()
-
-        // show tutorial here for some levels
-
-        canSwipe = true
-    }
-
-    // MARK: Methods - Tile Drag
-
-    func tileDragBegan(tile: Tile, at position: CGPoint) {
+    func tileDragBegan(tile: Tile, position: CGPoint) {
 
         if !canSwipe { return }
 
@@ -233,8 +247,7 @@ class GameScene: SKScene {
         toDirection = Direction.None
         currentDirection = Direction.None
     }
-
-    func tileDragMoved(tile: Tile, at position: CGPoint) {
+    func tileDragMoved(tile: Tile, position: CGPoint) {
 
         if !canSwipe { return }
 
@@ -262,8 +275,9 @@ class GameScene: SKScene {
 
         lastTouchPosition = currentTouchPosition
     }
+    func tileDragEnded(tile: Tile, position: CGPoint) {
 
-    func tileDragEnded(tile: Tile, at position: CGPoint) {
+        if !canSwipe { return }
 
         if currentSwipedTile != tile { return }
         if toDirection == Direction.None { return }
@@ -284,6 +298,9 @@ class GameScene: SKScene {
             self.toDirection = Direction.None
             self.currentDirection = Direction.None
         }
+    }
+    func tileDragCancelled(tile: Tile, position: CGPoint) {
+        tileDragEnded(tile, position: position)
     }
 
     // MARK: Methods - Tile Methods
@@ -524,41 +541,6 @@ class GameScene: SKScene {
 
     // MARK: Methods - Game
 
-    func prepareGame() {
-
-        resetCurrentTargets()
-
-        for (key, value) in currentTargets {
-            colorLabels[key]!.text = "\(value)/\(levelInfo.colorTargets[key]!)"
-        }
-
-        var endInterval: NSTimeInterval = -1
-
-        if levelInfo.type == LevelType.LimitedMoves {
-            headerBottomLabel.text = "MOVES"
-            headerTopLabel.text = "\(levelInfo.typeCounter)"
-        }
-
-        if levelInfo.type == LevelType.LimitedTime {
-            headerBottomLabel.text = "SECONDS"
-            headerTopLabel.text = "\(levelInfo.typeCounter)"
-            endInterval = NSTimeInterval(levelInfo.typeCounter)
-        }
-
-        if levelInfo.type == LevelType.FreeTime {
-            headerBottomLabel.text = "LEVEL"
-            headerTopLabel.text = "\(levelInfo.levelNumber)"
-        }
-
-        if let counter = self.counter {
-            counter.stop()
-        } else {
-            counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
-        }
-
-        prepareButtonsForPause()
-    }
-
     func startGame() {
         counter.start()
         moves = 0
@@ -592,22 +574,129 @@ class GameScene: SKScene {
             }
         }
 
-        prepareGame()
-
         self.runAction(SKAction.waitForDuration(0.2)) { [unowned self] in
             self.addBoardTiles()
         }
     }
 
-    func resetCurrentTargets() {
-        for (key, _) in currentTargets {
-            currentTargets[key] = 0
-            currentStars[key] = false
+    func resetTargetsTo(levelInfo: LevelInfo) {
+
+        for (key, _) in headerPositions {
+            topSmallTiles[key]!.removeFromParent()
+            colorLabels[key]!.removeFromParent()
         }
 
-        for (key, value) in topSmallStars where value != nil {
-            value!.removeFromParent()
-            topSmallStars[key] = nil
+        topSmallTiles.removeAll(keepCapacity: false)
+        colorLabels.removeAll(keepCapacity: false)
+        headerPositions.removeAll(keepCapacity: false)
+        currentTargets.removeAll(keepCapacity: false)
+        currentStars.removeAll(keepCapacity: false)
+
+        for (_, value) in topSmallStars {
+            value.removeFromParent()
+        }
+
+        topSmallStars.removeAll(keepCapacity: false)
+
+        moves = 0
+
+        var endInterval: NSTimeInterval = -1
+
+        if levelInfo.type == LevelType.LimitedMoves {
+            headerBottomLabel.text = "MOVES"
+            headerTopLabel.text = "\(levelInfo.typeCounter)"
+        }
+
+        if levelInfo.type == LevelType.LimitedTime {
+            headerBottomLabel.text = "SECONDS"
+            headerTopLabel.text = "\(levelInfo.typeCounter)"
+            endInterval = NSTimeInterval(levelInfo.typeCounter)
+        }
+
+        if levelInfo.type == LevelType.FreeTime {
+            headerBottomLabel.text = "LEVEL"
+            headerTopLabel.text = "\(levelInfo.levelNumber)"
+        }
+
+        if let counter = self.counter {
+            counter.stop()
+        } else {
+            counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
+        }
+
+        var colorsCount: Int = 0
+        for (key, value) in levelInfo.colorTargets where value != 0 {
+            colorsCount++
+            currentTargets[key] = 0
+        }
+
+        let smallTileWidth = Tile.tileLength / 2
+        let widthWithoutLeftRightButtons = Constants.screenSize.width - Tile.tileLength * 2
+        let yMiddle = Tile.tileLength / 2
+        let space = (widthWithoutLeftRightButtons - 5 * smallTileWidth) / 6
+        let actualTilesWidth = CGFloat(colorsCount) * smallTileWidth + CGFloat(colorsCount - 1) * space
+        let diffWidth = Constants.screenSize.width - actualTilesWidth
+
+        let startX = diffWidth / 2 + smallTileWidth / 2
+
+        var i = 0
+        for (key, _) in currentTargets {
+            let x = startX + CGFloat(i) * (space + smallTileWidth)
+            headerPositions[key] = CGPointMake(x, yMiddle)
+            ++i
+        }
+
+        for (key, value) in headerPositions {
+
+            // add top tiles
+
+            let tile = SKSpriteNode(texture: Textures.tileTexture,
+                color: key.tileColor,
+                size: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2))
+
+            tile.zPosition = 1
+            tile.colorBlendFactor = 1.0
+            tile.position = value
+            tile.position.y += Tile.tileLength / 8
+            tile.zPosition = 2
+
+            topSmallTiles[key] = tile
+            headerBackground.addChild(tile)
+
+            if levelInfo.starTargets[key] != false {
+                let star = SKSpriteNode(texture: Textures.starTexture,
+                    color: Constants.navigationBackgroundColor,
+                    size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
+
+                star.colorBlendFactor = 1.0
+                star.zRotation = degree2radian(-15)
+                star.zPosition = 3
+
+                topSmallStars[key] = star
+                tile.addChild(star)
+
+
+                currentStars[key] = false
+            }
+
+            // add labels
+            let label = SKLabelNode()
+            label.fontColor = Constants.textColor
+            label.fontName = Constants.secondaryFont
+            label.text = "00/00"
+            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
+            label.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+
+            let labelSizeRatio: CGFloat = Tile.tileLength / 8 * 1.5 / label.frame.height
+            label.fontSize *= labelSizeRatio
+            label.position = value
+            label.position.y -= Tile.tileLength / 8 * 2.5
+            label.zPosition = 2
+            
+            colorLabels[key] = label
+            colorLabels[key]!.text = "\(0)/\(levelInfo.colorTargets[key]!)"
+
+            headerBackground.addChild(label)
         }
     }
 
@@ -768,12 +857,12 @@ class GameScene: SKScene {
     }
 
     func addTile(row: Int, column: Int) {
-        let mainTile: Tile = Tile(row: row, column: column, tileType: levelInfo.mainTiles[row][column])
+        let mainTile: Tile = Tile(row: row, column: column, tileType: levelInfo.mainTiles[row][column], delegate: self)
         mainTile.zPosition = -2
         mainTile.position = GameScene.boardPositions[row][column]
 
         if levelInfo.childTiles[row][column] != TileType.Empty {
-            let childTile: Tile = Tile(row: row, column: column, tileType: levelInfo.childTiles[row][column])
+            let childTile: Tile = Tile(row: row, column: column, tileType: levelInfo.childTiles[row][column], delegate: self)
             mainTile.childTile = childTile
         }
 
@@ -799,7 +888,7 @@ class GameScene: SKScene {
     }
 
     func addBoardHole(row: Int, column: Int) -> Tile {
-        let holeTile = Tile(row: row, column: column, tileType: TileType.Hole)
+        let holeTile = Tile(row: row, column: column, tileType: TileType.Hole, delegate: self)
         holeTile.position = GameScene.boardPositions[row][column]
         holeTile.zPosition = -2
         addChild(holeTile)
@@ -971,36 +1060,21 @@ class GameScene: SKScene {
         menu.alpha = 0
     }
 
-    func createHeader() {
+    func setupHeaderLeftLabels() {
 
-        let headerBackground = SKSpriteNode(texture: Textures.headerBackgroundTexture,
-            color: Constants.navigationBackgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
-
-        headerBackground.colorBlendFactor = 1.0
-        headerBackground.anchorPoint = CGPointZero
-        headerBackground.position = CGPoint(x: 0, y: Constants.screenSize.height - Tile.tileLength)
-        headerBackground.zPosition = 1
-
-        let leftIcon = SKSpriteNode(texture: Textures.headerLeftCornerTexture,
-            color: Constants.navigationButtonColor, size: Tile.tileSize)
-
-        leftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
-        leftIcon.colorBlendFactor = 1.0
-        leftIcon.zPosition = 2
-        headerBackground.addChild(leftIcon)
-
-        // add labels to left icon
+        headerLeftIcon.removeAllChildren()
 
         let tileTwoThirds = Tile.tileLength / 3 * 2
 
+        headerBottomLabel = SKLabelNode()
         headerBottomLabel.fontColor = Constants.textColor
         headerBottomLabel.fontName = Constants.secondaryFont
         headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
         headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerBottomLabel.zPosition = 3
-        headerBottomLabel.text = "SECONDS"
-        headerBottomLabel.fontSize *= tileTwoThirds / headerBottomLabel.frame.width
+        headerBottomLabel.setTextWithinSize("SECONDS", size: tileTwoThirds, vertically: false)
 
+        headerTopLabel = SKLabelNode()
         headerTopLabel.fontColor = Constants.textColor
         headerTopLabel.fontName = Constants.secondaryFont
         headerTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Baseline
@@ -1021,8 +1095,29 @@ class GameScene: SKScene {
         headerBottomLabel.position.y -= marginsDiff
         headerTopLabel.position.y -= marginsDiff
 
-        leftIcon.addChild(headerTopLabel)
-        leftIcon.addChild(headerBottomLabel)
+        headerLeftIcon.addChild(headerTopLabel)
+        headerLeftIcon.addChild(headerBottomLabel)
+    }
+
+    func createHeader() {
+
+        headerBackground = SKSpriteNode(texture: Textures.headerBackgroundTexture,
+            color: Constants.navigationBackgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
+
+        headerBackground.colorBlendFactor = 1.0
+        headerBackground.anchorPoint = CGPointZero
+        headerBackground.position = CGPoint(x: 0, y: Constants.screenSize.height - Tile.tileLength)
+        headerBackground.zPosition = 1
+
+        headerLeftIcon = SKSpriteNode(texture: Textures.headerLeftCornerTexture,
+            color: Constants.navigationButtonColor, size: Tile.tileSize)
+
+        headerLeftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
+        headerLeftIcon.colorBlendFactor = 1.0
+        headerLeftIcon.zPosition = 2
+        headerBackground.addChild(headerLeftIcon)
+
+        setupHeaderLeftLabels()
 
         // add right button
 
@@ -1043,74 +1138,7 @@ class GameScene: SKScene {
         pauseButton.addChild(pauseIcon)
         headerBackground.addChild(pauseButton)
 
-        var colorsCount = 0
-        for (key, value) in levelInfo.colorTargets where value != 0 {
-            ++colorsCount
-
-            currentTargets[key] = 0
-            currentStars[key] = false
-        }
-
-        let smallTileWidth = Tile.tileLength / 2
-        let widthWithoutLeftRightButtons = Constants.screenSize.width - Tile.tileLength * 2
-        let yMiddle = Tile.tileLength / 2
-        let space = (widthWithoutLeftRightButtons - 5 * smallTileWidth) / 6
-        let actualTilesWidth = CGFloat(colorsCount) * smallTileWidth + CGFloat(colorsCount - 1) * space
-        let diffWidth = Constants.screenSize.width - actualTilesWidth
-
-        let startX = diffWidth / 2 + smallTileWidth / 2
-
-        var i = 0
-        for (key, _) in currentTargets {
-            let x = startX + CGFloat(i) * (space + smallTileWidth)
-            headerPositions[key] = CGPointMake(x, yMiddle)
-            ++i
-        }
-
-        for (key, value) in headerPositions {
-
-            // add top tiles
-
-            let tile = SKSpriteNode(texture: Textures.tileTexture,
-                color: key.tileColor,
-                size: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2))
-
-            tile.zPosition = 1
-            tile.colorBlendFactor = 1.0
-            tile.position = value
-            tile.position.y += Tile.tileLength / 8
-            tile.zPosition = 2
-
-            topSmallTiles[key] = tile
-            headerBackground.addChild(tile)
-
-            let star = SKSpriteNode(texture: Textures.starTexture,
-                color: Constants.navigationBackgroundColor,
-                size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
-            
-            star.colorBlendFactor = 1.0
-            star.zRotation = degree2radian(-15)
-            star.zPosition = 3
-            
-            tile.addChild(star)
-            
-            // add labels
-            let label = SKLabelNode()
-            label.fontColor = Constants.textColor
-            label.fontName = Constants.secondaryFont
-            label.text = "99/99"
-            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-            label.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
-
-            let labelSizeRatio: CGFloat = Tile.tileLength / 8 * 1.5 / label.frame.height
-            label.fontSize *= labelSizeRatio
-            label.position = value
-            label.position.y -= Tile.tileLength / 8 * 2.5
-            label.zPosition = 2
-            
-            colorLabels[key] = label
-            headerBackground.addChild(label)
-        }
+        resetTargetsTo(levelInfo)
         
         addChild(headerBackground)
     }

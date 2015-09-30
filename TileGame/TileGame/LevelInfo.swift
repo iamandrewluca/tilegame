@@ -30,6 +30,14 @@ class LevelInfo {
         TileType.Color5:0
     ]
 
+    var starTargets: [TileType:Bool] = [
+        TileType.Color1:false,
+        TileType.Color2:false,
+        TileType.Color3:false,
+        TileType.Color4:false,
+        TileType.Color5:false
+    ]
+
     var mainTiles: [[TileType]] = Array(count: 6,
         repeatedValue: Array(count: 6,
             repeatedValue: TileType.Empty))
