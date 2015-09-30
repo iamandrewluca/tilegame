@@ -572,7 +572,7 @@ class GameScene: SKScene, TileDragDelegate {
         for i in 0 ..< 6 {
             for j in 0 ..< 6 {
 
-                if let tile = tiles[i][j] {
+                if let tile = tiles[i][j] where tile.type != TileType.Hole {
                     tiles[i][j] = nil
                     tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
                         tile.removeFromParent()
@@ -918,8 +918,7 @@ class GameScene: SKScene, TileDragDelegate {
     func addBoardHole(row: Int, column: Int) -> Tile {
         let holeTile = Tile(row: row, column: column, tileType: TileType.Hole, delegate: self)
         holeTile.position = GameScene.boardPositions[row][column]
-//        once caused collision avoid
-//        holeTile.hidden = true
+        holeTile.hidden = true
         addChild(holeTile)
         return holeTile
     }
