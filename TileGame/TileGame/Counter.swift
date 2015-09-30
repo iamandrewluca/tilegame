@@ -66,7 +66,7 @@ class Counter {
 
     func start() {
 
-        if counter != 0 { counter-- }
+//        if counter != 0 { counter-- }
 
         timer = NSTimer.scheduledTimerWithTimeInterval(
             loopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)

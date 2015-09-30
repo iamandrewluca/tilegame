@@ -43,8 +43,9 @@ class Tile: SKSpriteNode {
         didSet {
             if let tile = childTile {
                 tile.position = CGPointZero
-                tile.userInteractionEnabled = false
                 tile.setScale(0.5)
+                tile.userInteractionEnabled = false
+                tile.removeFromParent()
                 self.removeAllChildren()
                 self.addChild(tile)
             }
@@ -74,42 +75,41 @@ class Tile: SKSpriteNode {
                 super.init(texture: Textures.starTexture, color: Constants.starColor, size: Tile.tileSize)
             } else {
                 super.init(texture: Textures.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
+                userInteractionEnabled = true
             }
 
             colorBlendFactor = 1.0
-            userInteractionEnabled = true
         } else {
             super.init(texture: nil, color: SKColor.clearColor(), size: Tile.tileSize)
-            userInteractionEnabled = false
         }
         
         position = GameScene.boardPositions[place.row][place.column]
 
     }
 
-    override func removeFromParent() {
-        super.removeFromParent()
-
-        if type != TileType.Star {
-            userInteractionEnabled = true
-        }
-    }
-
     // MARK: Touches
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
+        if let delegate = tileDragDelegate {
+            delegate.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
+        }
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragMoved(self, position: touches.first!.locationInNode(scene!))
+        if let delegate = tileDragDelegate {
+            delegate.tileDragMoved(self, position: touches.first!.locationInNode(scene!))
+        }
     }
     
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragCancelled(self, position: touches!.first!.locationInNode(scene!))
+        if let delegate = tileDragDelegate {
+            delegate.tileDragCancelled(self, position: touches!.first!.locationInNode(scene!))
+        }
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragEnded(self, position: touches.first!.locationInNode(scene!))
+        if let delegate = tileDragDelegate {
+            delegate.tileDragEnded(self, position: touches.first!.locationInNode(scene!))
+        }
     }
 }
