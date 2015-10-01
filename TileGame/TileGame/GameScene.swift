@@ -337,7 +337,6 @@ class GameScene: SKScene, TileDragDelegate {
     func tileWasMoved(tile: Tile) {
 
         var isGameOver: Bool = false
-
         moves++
 
         if levelInfo.type == LevelType.LimitedMoves {
@@ -357,10 +356,14 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         var tilesToCheck: [Tile] = [tile]
-        checkTilesAndDestroy(&tilesToCheck)
+        checkTilesAndDestroy(&tilesToCheck) { [unowned self] in
+            debugPrint("now can touch")
+            self.canTouch = true
+            self.canSwipe = true
+        }
 
 
-        // should be moved in checkTilesAndDestroy at the end
+        // TODO: should be moved in checkTilesAndDestroy at the end
         // because this is called before checkTilesAndDestroy is ended
         if isLevelDone() {
             gameWon()
@@ -375,7 +378,14 @@ class GameScene: SKScene, TileDragDelegate {
         return false
     }
 
-    func checkTilesAndDestroy(inout tilesToCheck: [Tile]) {
+    /**
+    Checks tiles for chains and destroy them.
+    This method can delay a little depnding on numbers of chains
+
+    - parameter tilesToCheck: tiles to check for neighbours
+    - parameter completion:   callback called when all chains are destroyed
+    */
+    func checkTilesAndDestroy(inout tilesToCheck: [Tile], completion: () -> Void) {
 
         if tilesToCheck.count == 0 { return }
 
@@ -417,15 +427,13 @@ class GameScene: SKScene, TileDragDelegate {
                     if childTile.type != TileType.Star {
 
                         tiles[tile.place.row][tile.place.column] = childTile
-                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
                         childTile.userInteractionEnabled = true
+                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
                         tilesToCheck.append(childTile)
                     } else {
                         addStar(childTile, forColor: tile.type)
                     }
-
-                    debugPrint(childTile.scene)
                 }
 
                 tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
@@ -436,13 +444,11 @@ class GameScene: SKScene, TileDragDelegate {
 
         if tilesToCheck.count != 0 {
             debugPrint("cycle check tyles to destroy")
-            self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 0.1)) { [unowned self] in
-                self.checkTilesAndDestroy(&tilesToCheck)
+            self.runAction(SKAction.waitForDuration(tilesDissappearInterval)) { [unowned self] in
+                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
             }
         } else {
-            debugPrint("now can touch")
-            canTouch = true
-            canSwipe = true
+            completion()
         }
     }
 
@@ -687,8 +693,16 @@ class GameScene: SKScene, TileDragDelegate {
 
         let startX = diffWidth / 2 + smallTileWidth / 2
 
+        let orderedKeys: [TileType] = [
+            TileType.Color1,
+            TileType.Color2,
+            TileType.Color3,
+            TileType.Color4,
+            TileType.Color5,
+        ]
+
         var i = 0
-        for (key, _) in currentTargets {
+        for key in orderedKeys where currentTargets.indexForKey(key) != nil {
             let x = startX + CGFloat(i) * (space + smallTileWidth)
             headerPositions[key] = CGPointMake(x, yMiddle)
             ++i
