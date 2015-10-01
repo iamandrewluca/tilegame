@@ -33,22 +33,22 @@ class MenuViewController: UIViewController {
     // MARK: IBActions
 
     @IBAction func soundButtonPressed(sender: AnyObject) {
-        print("sound")
+        debugPrint("sound")
     }
     @IBAction func themeButtonPressed(sender: AnyObject) {
-        print("theme")
+        debugPrint("theme")
     }
     @IBAction func musicButtonPressed(sender: AnyObject) {
-        print("music")
+        debugPrint("music")
     }
     @IBAction func adsButtonPressed(sender: AnyObject) {
-        print("ads")
+        debugPrint("ads")
     }
     @IBAction func shareButtonPressed(sender: AnyObject) {
-        print("share")
+        debugPrint("share")
     }
     @IBAction func rateButtonPressed(sender: AnyObject) {
-        print("rate")
+        debugPrint("rate")
     }
 
     // MARK: UIViewController

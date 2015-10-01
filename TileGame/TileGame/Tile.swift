@@ -54,9 +54,7 @@ class Tile: SKSpriteNode {
 
     weak var tileDragDelegate: TileDragDelegate?
 
-    // MARK: Methods
-
-    // MARK: SKSpriteNode
+    // MARK: Methods - SKSpriteNode
 
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -90,26 +88,18 @@ class Tile: SKSpriteNode {
     // MARK: Touches
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let delegate = tileDragDelegate {
-            delegate.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
-        }
+        tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let delegate = tileDragDelegate {
-            delegate.tileDragMoved(self, position: touches.first!.locationInNode(scene!))
-        }
+        tileDragDelegate!.tileDragMoved(self, position: touches.first!.locationInNode(scene!))
     }
     
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        if let delegate = tileDragDelegate {
-            delegate.tileDragCancelled(self, position: touches!.first!.locationInNode(scene!))
-        }
+        tileDragDelegate!.tileDragCancelled(self, position: touches!.first!.locationInNode(scene!))
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        if let delegate = tileDragDelegate {
-            delegate.tileDragEnded(self, position: touches.first!.locationInNode(scene!))
-        }
+        tileDragDelegate!.tileDragEnded(self, position: touches.first!.locationInNode(scene!))
     }
 }

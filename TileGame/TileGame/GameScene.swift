@@ -167,7 +167,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        print("began on \(node.name)")
+        debugPrint("began on \(node.name)")
     }
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesMoved(touches, withEvent: event)
@@ -177,7 +177,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        print("move on \(node.name)")
+        debugPrint("move on \(node.name)")
     }
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         super.touchesEnded(touches, withEvent: event)
@@ -187,7 +187,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        print("ended on \(node.name)")
+        debugPrint("ended on \(node.name)")
 
         if node.name == ButtonType.Overlay.rawValue {
             toogleMenu()
@@ -224,21 +224,29 @@ class GameScene: SKScene, TileDragDelegate {
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
         super.touchesCancelled(touches, withEvent: event)
 
-        print("canceled")
+        debugPrint("canceled")
     }
 
     // MARK: Methods - Tile Drag Protocol
 
     func tileDragBegan(tile: Tile, position: CGPoint) {
 
+        debugPrint("tile drag began")
+
         if !canSwipe { return }
 
+        debugPrint("can swipe")
+
         if !gameIsStarted {
+            debugPrint("game is started")
             startGame()
             gameIsStarted = true
         }
 
         if currentSwipedTile != nil { return }
+
+        debugPrint("swipped tile is nil")
+
         currentSwipedTile = tile
 
         calculateLimits(tile)
@@ -280,12 +288,23 @@ class GameScene: SKScene, TileDragDelegate {
     }
     func tileDragEnded(tile: Tile, position: CGPoint) {
 
+        debugPrint("tile drag ended")
+
         if !canSwipe { return }
+
+        debugPrint("can swipe")
 
         if currentSwipedTile != tile { return }
         if toDirection == Direction.None { return }
 
+        debugPrint("tile direction ok")
+
+        canTouch = false
+        canSwipe = false
+
         tile.runAction(SKAction.moveTo(endTilePoint, duration: 0.1)) { [unowned self] in
+
+            debugPrint("tile ended motion")
 
             let startPlace = self.currentSwipedTile!.place
             let endPlace = self.limits[self.toDirection]!
@@ -294,7 +313,11 @@ class GameScene: SKScene, TileDragDelegate {
             self.tiles[startPlace.row][startPlace.column] = nil
             self.currentSwipedTile!.place = endPlace
 
+            debugPrint("tile was moved")
+
             self.tileWasMoved(tile)
+
+            debugPrint("tile was moved ended")
 
             self.currentSwipedTile = nil
             self.fromDirection = Direction.None
@@ -303,6 +326,9 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
     func tileDragCancelled(tile: Tile, position: CGPoint) {
+
+        debugPrint("tile drag canceled")
+
         tileDragEnded(tile, position: position)
     }
 
@@ -333,6 +359,9 @@ class GameScene: SKScene, TileDragDelegate {
         var tilesToCheck: [Tile] = [tile]
         checkTilesAndDestroy(&tilesToCheck)
 
+
+        // should be moved in checkTilesAndDestroy at the end
+        // because this is called before checkTilesAndDestroy is ended
         if isLevelDone() {
             gameWon()
         } else {
@@ -350,11 +379,15 @@ class GameScene: SKScene, TileDragDelegate {
 
         if tilesToCheck.count == 0 { return }
 
+        debugPrint("checking tiles to destroy")
+
         let firstTileToCheck = tilesToCheck.removeAtIndex(0)
 
         let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
 
         if tilesToDestroy.count >= 3 {
+
+            debugPrint("\(tilesToDestroy.count) is >= 3")
 
             let tileType: TileType = firstTileToCheck.type
 
@@ -391,6 +424,8 @@ class GameScene: SKScene, TileDragDelegate {
                     } else {
                         addStar(childTile, forColor: tile.type)
                     }
+
+                    debugPrint(childTile.scene)
                 }
 
                 tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
@@ -400,9 +435,14 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if tilesToCheck.count != 0 {
-            self.runAction(SKAction.waitForDuration(0.1)) { [unowned self] in
+            debugPrint("cycle check tyles to destroy")
+            self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 0.1)) { [unowned self] in
                 self.checkTilesAndDestroy(&tilesToCheck)
             }
+        } else {
+            debugPrint("now can touch")
+            canTouch = true
+            canSwipe = true
         }
     }
 
@@ -555,7 +595,8 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func gameWon() {
-
+        prepareButtonsForWin()
+        toogleMenu()
     }
 
     func nextLevel() {

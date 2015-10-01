@@ -28,7 +28,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
 
     @IBAction func openLeaderboard(sender: AnyObject) {
-        print("leaderboard")
+        debugPrint("leaderboard")
     }
 
     // MARK: Members
