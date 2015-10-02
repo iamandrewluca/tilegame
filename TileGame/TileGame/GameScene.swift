@@ -11,6 +11,8 @@ import Foundation
 
 class GameScene: SKScene, TileDragDelegate {
 
+    var myFuckingTile: Tile?
+
     // MARK: Members - Parent Controller
 
     weak var parentController: GameViewController!
@@ -231,11 +233,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     func tileDragBegan(tile: Tile, position: CGPoint) {
 
-        debugPrint("tile drag began")
-
         if !canSwipe { return }
-
-        debugPrint("can swipe")
 
         if !gameIsStarted {
             debugPrint("game is started")
@@ -244,8 +242,6 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if currentSwipedTile != nil { return }
-
-        debugPrint("swipped tile is nil")
 
         currentSwipedTile = tile
 
@@ -288,23 +284,15 @@ class GameScene: SKScene, TileDragDelegate {
     }
     func tileDragEnded(tile: Tile, position: CGPoint) {
 
-        debugPrint("tile drag ended")
-
         if !canSwipe { return }
-
-        debugPrint("can swipe")
 
         if currentSwipedTile != tile { return }
         if toDirection == Direction.None { return }
-
-        debugPrint("tile direction ok")
 
         canTouch = false
         canSwipe = false
 
         tile.runAction(SKAction.moveTo(endTilePoint, duration: 0.1)) { [unowned self] in
-
-            debugPrint("tile ended motion")
 
             let startPlace = self.currentSwipedTile!.place
             let endPlace = self.limits[self.toDirection]!
@@ -313,16 +301,16 @@ class GameScene: SKScene, TileDragDelegate {
             self.tiles[startPlace.row][startPlace.column] = nil
             self.currentSwipedTile!.place = endPlace
 
-            debugPrint("tile was moved")
-
             self.tileWasMoved(tile)
-
-            debugPrint("tile was moved ended")
 
             self.currentSwipedTile = nil
             self.fromDirection = Direction.None
             self.toDirection = Direction.None
             self.currentDirection = Direction.None
+
+            // from here all is going to hell
+            // check in debugger
+            // po myFuckingTile!.scene
         }
     }
     func tileDragCancelled(tile: Tile, position: CGPoint) {
@@ -355,12 +343,16 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        var tilesToCheck: [Tile] = [tile]
+        var tilesToCheck: [Tile?] = [tile]
         checkTilesAndDestroy(&tilesToCheck) { [unowned self] in
             debugPrint("now can touch")
             self.canTouch = true
             self.canSwipe = true
         }
+
+        self.canTouch = true
+        self.canSwipe = true
+        debugPrint("done destroy")
 
 
         // TODO: should be moved in checkTilesAndDestroy at the end
@@ -385,21 +377,18 @@ class GameScene: SKScene, TileDragDelegate {
     - parameter tilesToCheck: tiles to check for neighbours
     - parameter completion:   callback called when all chains are destroyed
     */
-    func checkTilesAndDestroy(inout tilesToCheck: [Tile], completion: () -> Void) {
+    func checkTilesAndDestroy(inout tilesToCheck: [Tile?], completion: () -> Void) {
 
         if tilesToCheck.count == 0 { return }
 
-        debugPrint("checking tiles to destroy")
-
-        let firstTileToCheck = tilesToCheck.removeAtIndex(0)
+        let firstTileToCheck: Tile! = tilesToCheck.removeAtIndex(0)
+        let tileType: TileType = firstTileToCheck.type
 
         let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
 
         if tilesToDestroy.count >= 3 {
 
             debugPrint("\(tilesToDestroy.count) is >= 3")
-
-            let tileType: TileType = firstTileToCheck.type
 
             currentTargets[tileType]! += tilesToDestroy.count
 
@@ -419,16 +408,18 @@ class GameScene: SKScene, TileDragDelegate {
 
                     tile.childTile = nil
 
-                    childTile.removeFromParent()
                     childTile.position = tile.position
                     childTile.zPosition = 2
-                    addChild(childTile)
 
                     if childTile.type != TileType.Star {
 
+                        childTile.removeFromParent()
+                        self.addChild(childTile)
+
                         tiles[tile.place.row][tile.place.column] = childTile
                         childTile.userInteractionEnabled = true
-                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
+                        childTile.setScale(1)
+//                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
                         tilesToCheck.append(childTile)
                     } else {
@@ -436,19 +427,23 @@ class GameScene: SKScene, TileDragDelegate {
                     }
                 }
 
-                tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
-                    tile.removeFromParent()
-                }
+                tile.removeFromParent()
+//                tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
+//                    tile.removeFromParent()
+//                }
             }
         }
 
         if tilesToCheck.count != 0 {
             debugPrint("cycle check tyles to destroy")
-            self.runAction(SKAction.waitForDuration(tilesDissappearInterval)) { [unowned self] in
-                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
-            }
+            myFuckingTile = tilesToCheck[0]
+            checkTilesAndDestroy(&tilesToCheck, completion: completion)
+//            self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 3)) { [unowned self] in
+//                print(tilesToCheck[0].scene)
+//                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
+//            }
         } else {
-            completion()
+//            completion()
         }
     }
 
