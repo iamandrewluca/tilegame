@@ -531,23 +531,23 @@ class GameScene: SKScene, TileDragDelegate {
 
     func checkAndChangeGameState() {
 
-        // should we pause counter here?
+        counter.pause()
 
-        var gameWon: Bool = true
-        var gameOver: Bool = false
+        var gameIsWon: Bool = true
+        var gameIsOver: Bool = false
 
         // first check for game won
 
         for (key, value) in currentTargets {
             if value != levelInfo.colorTargets[key] {
-                gameWon = false
+                gameIsWon = false
                 break
             }
         }
 
-        debugPrint("game won \(gameWon)")
-        if gameWon {
-            self.gameWon()
+        debugPrint("game won \(gameIsWon)")
+        if gameIsWon {
+            gameWon()
             return
         }
 
@@ -555,15 +555,24 @@ class GameScene: SKScene, TileDragDelegate {
 
         for (key, value) in currentTargets {
             if value > levelInfo.colorTargets[key] {
-                gameOver = true
+                gameIsOver = true
                 break
             }
         }
 
-        debugPrint("game over \(gameOver)")
-        if gameOver {
-            self.gameOver()
+        if levelInfo.type == LevelType.LimitedMoves {
+            if moves >= levelInfo.typeCounter {
+                gameIsOver = true
+            }
         }
+
+        debugPrint("game over \(gameIsOver)")
+        if gameIsOver {
+            gameOver()
+            return
+        }
+
+        counter.start()
 
     }
 

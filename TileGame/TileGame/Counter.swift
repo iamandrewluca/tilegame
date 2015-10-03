@@ -8,6 +8,8 @@
 
 import Foundation
 
+// TODO: Counter should have time more granular
+// because of 1 sec interval you can pause/resume fast and keep time on hold
 class Counter {
 
     // MARK: Members
