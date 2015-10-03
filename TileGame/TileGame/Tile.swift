@@ -88,7 +88,6 @@ class Tile: SKSpriteNode {
     // MARK: Touches
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        debugPrint("dragBegan")
         tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
     }
     

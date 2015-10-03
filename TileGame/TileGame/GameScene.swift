@@ -11,7 +11,6 @@ import Foundation
 
 class GameScene: SKScene, TileDragDelegate {
 
-    var myFuckingTile: Tile?
 
     // MARK: Members - Parent Controller
 
@@ -62,31 +61,13 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Members - Board
 
-    let tilesAppearInterval: NSTimeInterval = 0.5
+    let tilesAppearInterval: NSTimeInterval = 0.4
     let tilesDissappearInterval: NSTimeInterval = 0.2
     let menuToogleInterval: NSTimeInterval = 0.1
+    let tileMovingInterval: NSTimeInterval = 0.1
 
     static let boardSize: Int = 6
-    static let boardPositions: [[CGPoint]] = { () -> [[CGPoint]] in
-
-        let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * Tile.tileSpacing) / 2
-        let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
-            boardHorizontalMargin + Tile.tileLength / 2
-
-        var board = Array(count: boardSize,
-            repeatedValue: Array(count: boardSize,
-                repeatedValue: CGPoint.zero))
-
-        for i in 0 ..< boardSize {
-            for j in 0 ..< boardSize {
-                board[i][j] = CGPoint(
-                    x: boardHorizontalMargin + Tile.tileLength / 2 + CGFloat(j) * (Tile.tileSpacing + Tile.tileLength),
-                    y: boardVerticalMargin + CGFloat(boardSize - 1 - i) * (Tile.tileSpacing + Tile.tileLength))
-            }
-        }
-
-        return board
-        }()
+    static let boardPositions: [[CGPoint]] = GameScene.createBoardPositions()
 
     var tiles: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
 
@@ -113,11 +94,8 @@ class GameScene: SKScene, TileDragDelegate {
     var currentTargets: [TileType:Int] = [:]
     var currentStars: [TileType:Bool] = [:]
 
-    var menuIsClosed: Bool = true
     var gameIsStarted: Bool = false
-    var gameIsOver: Bool = false
     var gameIsPaused: Bool = false
-    var canSwipe: Bool = false
     var canTouch: Bool = false
 
     var currentSwipedTile: Tile?
@@ -162,7 +140,6 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Override - UIResponder
 
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesBegan(touches, withEvent: event)
 
         if !canTouch { return }
 
@@ -172,7 +149,6 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("began on \(node.name)")
     }
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesMoved(touches, withEvent: event)
 
         if !canTouch { return }
 
@@ -182,7 +158,6 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("move on \(node.name)")
     }
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        super.touchesEnded(touches, withEvent: event)
 
         if !canTouch { return }
 
@@ -192,7 +167,7 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("ended on \(node.name)")
 
         if node.name == ButtonType.Overlay.rawValue {
-            toogleMenu()
+            toogleMenuOff()
         }
 
         if node.name == ButtonType.Pause.rawValue {
@@ -204,7 +179,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if node.name == ButtonType.Continue.rawValue {
-            toogleMenu()
+            toogleMenuOff()
         }
 
         if node.name == ButtonType.Restart.rawValue {
@@ -224,8 +199,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        super.touchesCancelled(touches, withEvent: event)
-
+        touchesEnded(touches!, withEvent: event)
         debugPrint("canceled")
     }
 
@@ -233,13 +207,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     func tileDragBegan(tile: Tile, position: CGPoint) {
 
-        if !canSwipe { return }
-
-        if !gameIsStarted {
-            debugPrint("game is started")
-            startGame()
-            gameIsStarted = true
-        }
+        if !canTouch { return }
 
         if currentSwipedTile != nil { return }
 
@@ -256,7 +224,7 @@ class GameScene: SKScene, TileDragDelegate {
     }
     func tileDragMoved(tile: Tile, position: CGPoint) {
 
-        if !canSwipe { return }
+        if !canTouch { return }
 
         if currentSwipedTile != tile { return }
 
@@ -275,6 +243,12 @@ class GameScene: SKScene, TileDragDelegate {
         if tile.place == limits[toDirection]! {
             currentSwipedTile = nil
             return
+        } else {
+            if !gameIsStarted {
+                debugPrint("game is started")
+                startGame()
+                gameIsStarted = true
+            }
         }
 
         tile.position.x = clamp(startTilePoint.x, endTilePoint.x, currentTouchPosition.x)
@@ -284,15 +258,14 @@ class GameScene: SKScene, TileDragDelegate {
     }
     func tileDragEnded(tile: Tile, position: CGPoint) {
 
-        if !canSwipe { return }
+        if !canTouch { return }
 
         if currentSwipedTile != tile { return }
         if toDirection == Direction.None { return }
 
         canTouch = false
-        canSwipe = false
 
-        tile.runAction(SKAction.moveTo(endTilePoint, duration: 0.1)) { [unowned self] in
+        tile.runAction(SKAction.moveTo(endTilePoint, duration: tileMovingInterval)) { [unowned self] in
 
             let startPlace = self.currentSwipedTile!.place
             let endPlace = self.limits[self.toDirection]!
@@ -301,30 +274,36 @@ class GameScene: SKScene, TileDragDelegate {
             self.tiles[startPlace.row][startPlace.column] = nil
             self.currentSwipedTile!.place = endPlace
 
-            self.tileWasMoved(tile)
+            self.tileWasMoved(tile) { [unowned self] in
+                self.checkAndChangeGameState()
+                debugPrint("now can touch")
+                self.canTouch = true
+            }
 
             self.currentSwipedTile = nil
             self.fromDirection = Direction.None
             self.toDirection = Direction.None
             self.currentDirection = Direction.None
 
-            // from here all is going to hell
+            // TODO: from here all is going to hell for SpriteKit
             // check in debugger
             // po myFuckingTile!.scene
         }
     }
     func tileDragCancelled(tile: Tile, position: CGPoint) {
-
         debugPrint("tile drag canceled")
-
         tileDragEnded(tile, position: position)
     }
 
     // MARK: Methods - Tile Methods
 
-    func tileWasMoved(tile: Tile) {
+    func tileWasMoved(tile: Tile, completion: () -> Void) {
 
-        var isGameOver: Bool = false
+        var tilesToCheck: [Tile] = [tile]
+        checkTilesAndDestroy(&tilesToCheck) {
+            completion()
+        }
+
         moves++
 
         if levelInfo.type == LevelType.LimitedMoves {
@@ -337,37 +316,7 @@ class GameScene: SKScene, TileDragDelegate {
             } else {
                 headerBottomLabel.text = "MOVES"
             }
-
-            if moves >= levelInfo.typeCounter {
-                isGameOver = true
-            }
         }
-
-        var tilesToCheck: [Tile?] = [tile]
-        checkTilesAndDestroy(&tilesToCheck) { [unowned self] in
-            debugPrint("now can touch")
-            self.canTouch = true
-            self.canSwipe = true
-        }
-
-        self.canTouch = true
-        self.canSwipe = true
-        debugPrint("done destroy")
-
-
-        // TODO: should be moved in checkTilesAndDestroy at the end
-        // because this is called before checkTilesAndDestroy is ended
-        if isLevelDone() {
-            gameWon()
-        } else {
-            if isGameOver {
-                gameOver()
-            }
-        }
-    }
-
-    func isLevelDone() -> Bool {
-        return false
     }
 
     /**
@@ -377,11 +326,11 @@ class GameScene: SKScene, TileDragDelegate {
     - parameter tilesToCheck: tiles to check for neighbours
     - parameter completion:   callback called when all chains are destroyed
     */
-    func checkTilesAndDestroy(inout tilesToCheck: [Tile?], completion: () -> Void) {
+    func checkTilesAndDestroy(inout tilesToCheck: [Tile], completion: () -> Void) {
 
         if tilesToCheck.count == 0 { return }
 
-        let firstTileToCheck: Tile! = tilesToCheck.removeAtIndex(0)
+        let firstTileToCheck: Tile = tilesToCheck.removeAtIndex(0)
         let tileType: TileType = firstTileToCheck.type
 
         let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
@@ -396,7 +345,6 @@ class GameScene: SKScene, TileDragDelegate {
                 colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
             } else if currentTargets[tileType]! > levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "FAIL"
-                gameOver()
             } else {
                 colorLabels[tileType]!.text = "DONE"
             }
@@ -418,8 +366,7 @@ class GameScene: SKScene, TileDragDelegate {
 
                         tiles[tile.place.row][tile.place.column] = childTile
                         childTile.userInteractionEnabled = true
-                        childTile.setScale(1)
-//                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
+                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
 
                         tilesToCheck.append(childTile)
                     } else {
@@ -427,23 +374,19 @@ class GameScene: SKScene, TileDragDelegate {
                     }
                 }
 
-                tile.removeFromParent()
-//                tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
-//                    tile.removeFromParent()
-//                }
+                tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
+                    tile.removeFromParent()
+                }
             }
         }
 
         if tilesToCheck.count != 0 {
             debugPrint("cycle check tyles to destroy")
-            myFuckingTile = tilesToCheck[0]
-            checkTilesAndDestroy(&tilesToCheck, completion: completion)
-//            self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 3)) { [unowned self] in
-//                print(tilesToCheck[0].scene)
-//                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
-//            }
+            self.runAction(SKAction.waitForDuration(tilesDissappearInterval - 0.1)) { [unowned self] in
+                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
+            }
         } else {
-//            completion()
+            completion()
         }
     }
 
@@ -586,6 +529,44 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Methods - Game
 
+    func checkAndChangeGameState() {
+
+        // should we pause counter here?
+
+        var gameWon: Bool = true
+        var gameOver: Bool = false
+
+        // first check for game won
+
+        for (key, value) in currentTargets {
+            if value != levelInfo.colorTargets[key] {
+                gameWon = false
+                break
+            }
+        }
+
+        debugPrint("game won \(gameWon)")
+        if gameWon {
+            self.gameWon()
+            return
+        }
+
+        // then check for game over
+
+        for (key, value) in currentTargets {
+            if value > levelInfo.colorTargets[key] {
+                gameOver = true
+                break
+            }
+        }
+
+        debugPrint("game over \(gameOver)")
+        if gameOver {
+            self.gameOver()
+        }
+
+    }
+
     func startGame() {
         counter.start()
     }
@@ -609,7 +590,6 @@ class GameScene: SKScene, TileDragDelegate {
     func changeLevelWith(level: LevelInfo) {
 
         self.canTouch = false
-        self.canSwipe = false
 
         for i in 0 ..< 6 {
             for j in 0 ..< 6 {
@@ -630,6 +610,14 @@ class GameScene: SKScene, TileDragDelegate {
 
     func resetTargetsTo(levelInfo: LevelInfo) {
 
+        // Removing current state
+
+        for (_, value) in topSmallStars {
+            value.removeFromParent()
+        }
+
+        topSmallStars.removeAll(keepCapacity: false)
+
         for (key, _) in headerPositions {
             topSmallTiles[key]!.removeFromParent()
             colorLabels[key]!.removeFromParent()
@@ -641,11 +629,7 @@ class GameScene: SKScene, TileDragDelegate {
         currentTargets.removeAll(keepCapacity: false)
         currentStars.removeAll(keepCapacity: false)
 
-        for (_, value) in topSmallStars {
-            value.removeFromParent()
-        }
-
-        topSmallStars.removeAll(keepCapacity: false)
+        // Add new state
 
         moves = 0
 
@@ -673,11 +657,7 @@ class GameScene: SKScene, TileDragDelegate {
             counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
         }
 
-        var colorsCount: Int = 0
-        for (key, value) in levelInfo.colorTargets where value != 0 {
-            colorsCount++
-            currentTargets[key] = 0
-        }
+        let colorsCount: Int = levelInfo.colorTargets.filter({ $1 != 0 }).count
 
         let smallTileWidth = Tile.tileLength / 2
         let widthWithoutLeftRightButtons = Constants.screenSize.width - Tile.tileLength * 2
@@ -685,7 +665,6 @@ class GameScene: SKScene, TileDragDelegate {
         let space = (widthWithoutLeftRightButtons - 5 * smallTileWidth) / 6
         let actualTilesWidth = CGFloat(colorsCount) * smallTileWidth + CGFloat(colorsCount - 1) * space
         let diffWidth = Constants.screenSize.width - actualTilesWidth
-
         let startX = diffWidth / 2 + smallTileWidth / 2
 
         let orderedKeys: [TileType] = [
@@ -696,31 +675,30 @@ class GameScene: SKScene, TileDragDelegate {
             TileType.Color5,
         ]
 
-        var i = 0
-        for key in orderedKeys where currentTargets.indexForKey(key) != nil {
-            let x = startX + CGFloat(i) * (space + smallTileWidth)
-            headerPositions[key] = CGPointMake(x, yMiddle)
-            ++i
-        }
+        for (index, value) in orderedKeys.enumerate() where levelInfo.colorTargets[value] != 0 {
 
-        for (key, value) in headerPositions {
+            // Create header tiles positions in order
+            let x = startX + CGFloat(index) * (space + smallTileWidth)
+            headerPositions[value] = CGPointMake(x, yMiddle)
 
             // add top tiles
 
             let tile = SKSpriteNode(texture: Textures.tileTexture,
-                color: key.tileColor,
+                color: value.tileColor,
                 size: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2))
 
             tile.zPosition = 1
             tile.colorBlendFactor = 1.0
-            tile.position = value
+            tile.position = headerPositions[value]!
             tile.position.y += Tile.tileLength / 8
             tile.zPosition = 1
 
-            topSmallTiles[key] = tile
+            topSmallTiles[value] = tile
             headerBackground.addChild(tile)
 
-            if levelInfo.starTargets[key] != false {
+            currentTargets[value] = 0
+
+            if levelInfo.starTargets[value] != false {
                 let star = SKSpriteNode(texture: Textures.starTexture,
                     color: Constants.navigationBackgroundColor,
                     size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
@@ -729,9 +707,9 @@ class GameScene: SKScene, TileDragDelegate {
                 star.zRotation = degree2radian(-15)
                 star.zPosition = 1
 
-                topSmallStars[key] = star
+                topSmallStars[value] = star
                 tile.addChild(star)
-                currentStars[key] = false
+                currentStars[value] = false
             }
 
             // add labels
@@ -744,12 +722,12 @@ class GameScene: SKScene, TileDragDelegate {
 
             let labelSizeRatio: CGFloat = Tile.tileLength / 8 * 1.5 / label.frame.height
             label.fontSize *= labelSizeRatio
-            label.position = value
+            label.position = headerPositions[value]!
             label.position.y -= Tile.tileLength / 8 * 2.5
             label.zPosition = 1
             
-            colorLabels[key] = label
-            colorLabels[key]!.text = "\(0)/\(levelInfo.colorTargets[key]!)"
+            colorLabels[value] = label
+            colorLabels[value]!.text = "\(0)/\(levelInfo.colorTargets[value]!)"
 
             headerBackground.addChild(label)
         }
@@ -806,19 +784,19 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func toogleMenu() {
-        if menuIsClosed {
-            toogleMenuOn(true)
-            pauseGame()
-        } else {
+        if gameIsPaused {
             toogleMenuOff()
             resumeGame()
+        } else {
+            toogleMenuOn(true)
+            pauseGame()
         }
     }
 
     func toogleMenuOn(animated: Bool) {
-        if overlay.parent == nil && menu.parent == nil {
+        if overlay.parent == nil && menu.parent == nil  && !gameIsPaused{
 
-            menuIsClosed = false
+            gameIsPaused = true
             addChild(overlay)
             addChild(menu)
 
@@ -833,9 +811,9 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func toogleMenuOff() {
-        if overlay.parent != nil && menu.parent != nil {
+        if overlay.parent != nil && menu.parent != nil && gameIsPaused {
 
-            menuIsClosed = true
+            gameIsPaused = false
 
             menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
                 self.menu.removeFromParent()
@@ -915,7 +893,6 @@ class GameScene: SKScene, TileDragDelegate {
 
     func addBoardTiles() {
 
-        canSwipe = false
         canTouch = false
 
         for i in 0 ... 5 {
@@ -927,9 +904,8 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        self.runAction(SKAction.waitForDuration(tilesAppearInterval + 0.2)) { [unowned self] in
+        self.runAction(SKAction.waitForDuration(tilesAppearInterval + 0.1)) { [unowned self] in
             self.canTouch = true
-            self.canSwipe = true
         }
     }
 
@@ -957,7 +933,7 @@ class GameScene: SKScene, TileDragDelegate {
         for i in 0 ... 5 {
             for j in 0 ... 5 {
                 if levelInfo.mainTiles[i][j] == TileType.Hole {
-                    tiles[i][j] = addBoardHole(i, column: j)
+                    addBoardHole(i, column: j)
                 } else {
                     addBoardBackgroundTile(i, column: j)
                 }
@@ -965,12 +941,12 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func addBoardHole(row: Int, column: Int) -> Tile {
+    func addBoardHole(row: Int, column: Int) {
         let holeTile = Tile(row: row, column: column, tileType: TileType.Hole, delegate: self)
         holeTile.position = GameScene.boardPositions[row][column]
         holeTile.hidden = true
+        tiles[row][column] = holeTile
         addChild(holeTile)
-        return holeTile
     }
 
     func addBoardBackgroundTile(row: Int, column: Int) {
@@ -1225,5 +1201,26 @@ class GameScene: SKScene, TileDragDelegate {
         resetTargetsTo(levelInfo)
         
         addChild(headerBackground)
+    }
+
+    static func createBoardPositions() -> [[CGPoint]] {
+
+        let boardHorizontalMargin = (Constants.screenSize.width - 6 * Tile.tileLength - 5 * Tile.tileSpacing) / 2
+        let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
+            boardHorizontalMargin + Tile.tileLength / 2
+
+        var board = Array(count: boardSize,
+            repeatedValue: Array(count: boardSize,
+                repeatedValue: CGPoint.zero))
+
+        for i in 0 ..< boardSize {
+            for j in 0 ..< boardSize {
+                board[i][j] = CGPoint(
+                    x: boardHorizontalMargin + Tile.tileLength / 2 + CGFloat(j) * (Tile.tileSpacing + Tile.tileLength),
+                    y: boardVerticalMargin + CGFloat(boardSize - 1 - i) * (Tile.tileSpacing + Tile.tileLength))
+            }
+        }
+
+        return board
     }
 }
