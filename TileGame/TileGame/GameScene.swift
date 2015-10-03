@@ -761,9 +761,6 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Methods - Counter closures
 
     func counterLoop(value: NSTimeInterval) {
-
-        debugPrint("full loop \(value)")
-
         if levelInfo.type == LevelType.LimitedTime {
             headerTopLabel.text = "\(levelInfo.typeCounter - Int(value))"
         }

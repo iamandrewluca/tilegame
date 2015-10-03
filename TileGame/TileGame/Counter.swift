@@ -8,14 +8,14 @@
 
 import Foundation
 
-// TODO: Counter should have time more granular
-// because of 1 sec interval you can pause/resume fast and keep time on hold
 class Counter {
 
     // MARK: Members
 
+    private var timerThread: NSThread!
+
     // timer for counter
-    private var timer: dispatch_source_t!
+    private var timer: NSTimer = NSTimer()
 
     // you can't change current elapsed time
     var counter: NSTimeInterval = 0
@@ -28,7 +28,6 @@ class Counter {
 
     // Internal loop for granular time
     var internalLoopInterval: NSTimeInterval = 0.0001
-
     // method called when counterEnd is reached
     var endCallback: (() -> Void)?
     var loopCallback: (NSTimeInterval -> Void)?
@@ -51,6 +50,14 @@ class Counter {
 
     // MARK: Methods
 
+    @objc private func run() {
+        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+
+        let timerRunLoop = NSRunLoop.currentRunLoop()
+        timerRunLoop.addTimer(timer, forMode: NSRunLoopCommonModes)
+        timerRunLoop.run()
+    }
+
     @objc private func intervalLoop() {
 
         if counter + internalLoopInterval > endInterval {
@@ -66,24 +73,26 @@ class Counter {
         }
 
         if let call = endCallback where endInterval > 0 && counter >= endInterval {
+
             pause()
             call()
         }
     }
 
     func start() {
-        timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue())
-        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64((1.0 / 5.0) * Double(NSEC_PER_SEC)), UInt64(0.25 * Double(NSEC_PER_SEC)))
-        dispatch_source_set_event_handler(timer) {
-            debugPrint("repeat")
-            self.intervalLoop()
-        }
-
-        dispatch_resume(timer)
+        timerThread = NSThread(target: self, selector: "run", object: nil)
+        timerThread.start()
     }
 
+    /**
+    when timer is invalidated, the runLoop of thread where timer was initialized,
+    has no more input sources and is terminated which causes also
+    thread where timer was initialized to terminate
+    */
     func pause() {
-        dispatch_source_cancel(timer)
+        if timer.valid {
+            timer.invalidate()
+        }
     }
 
     func stop() {
