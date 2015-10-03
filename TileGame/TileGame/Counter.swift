@@ -15,7 +15,7 @@ class Counter {
     // MARK: Members
 
     // timer for counter
-    private var timer: NSTimer = NSTimer()
+    private var timer: dispatch_source_t!
 
     // you can't change current elapsed time
     var counter: NSTimeInterval = 0
@@ -25,6 +25,9 @@ class Counter {
 
     // interval between timer loops
     var loopInterval: NSTimeInterval = 0
+
+    // Internal loop for granular time
+    var internalLoopInterval: NSTimeInterval = 0.0001
 
     // method called when counterEnd is reached
     var endCallback: (() -> Void)?
@@ -50,13 +53,15 @@ class Counter {
 
     @objc private func intervalLoop() {
 
-        if counter + loopInterval > endInterval {
+        if counter + internalLoopInterval > endInterval {
             return
         }
 
-        counter += loopInterval
+        let shouldCallLoopCallback: Bool = (counter + internalLoopInterval >= floor(counter) + loopInterval)
 
-        if let call = loopCallback {
+        counter += internalLoopInterval
+
+        if let call = loopCallback where shouldCallLoopCallback {
             call(counter)
         }
 
@@ -67,25 +72,22 @@ class Counter {
     }
 
     func start() {
+        timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue())
+        dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, UInt64((1.0 / 5.0) * Double(NSEC_PER_SEC)), UInt64(0.25 * Double(NSEC_PER_SEC)))
+        dispatch_source_set_event_handler(timer) {
+            debugPrint("repeat")
+            self.intervalLoop()
+        }
 
-//        if counter != 0 { counter-- }
-
-        timer = NSTimer.scheduledTimerWithTimeInterval(
-            loopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+        dispatch_resume(timer)
     }
 
     func pause() {
-
-        if timer.valid {
-            timer.invalidate()
-        }
+        dispatch_source_cancel(timer)
     }
 
     func stop() {
-        
-        if timer.valid {
-            timer.invalidate()
-        }
+        pause()
         counter = 0
     }
 
