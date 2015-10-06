@@ -12,7 +12,7 @@ class Counter {
 
     // MARK: Members
 
-    private var timerThread: NSThread!
+    private var timerThread: MyThread!
 
     // timer for counter
     private var timer: NSTimer = NSTimer()
@@ -60,27 +60,24 @@ class Counter {
 
     @objc private func intervalLoop() {
 
-        if counter + internalLoopInterval > endInterval {
-            return
-        }
-
         let shouldCallLoopCallback: Bool = (counter + internalLoopInterval >= floor(counter) + loopInterval)
 
         counter += internalLoopInterval
 
         if let call = loopCallback where shouldCallLoopCallback {
+            debugPrint("loop")
             call(counter)
         }
 
         if let call = endCallback where endInterval > 0 && counter >= endInterval {
-
+            debugPrint("end")
             pause()
             call()
         }
     }
 
     func start() {
-        timerThread = NSThread(target: self, selector: "run", object: nil)
+        timerThread = MyThread(target: self, selector: "run", object: nil)
         timerThread.start()
     }
 
@@ -91,18 +88,14 @@ class Counter {
     */
     func pause() {
         if timer.valid {
-            timer.invalidate()
+            timer.performSelector("invalidate", onThread: timerThread, withObject: nil, waitUntilDone: false)
+            timerThread.cancel()
+            timerThread = nil
         }
     }
 
     func stop() {
         pause()
         counter = 0
-    }
-
-    func destroy() {
-        stop()
-        endCallback = nil
-        loopCallback = nil
     }
 }

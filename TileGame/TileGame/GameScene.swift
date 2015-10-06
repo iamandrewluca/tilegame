@@ -167,7 +167,7 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("ended on \(node.name)")
 
         if node.name == ButtonType.Overlay.rawValue {
-            toogleMenuOff()
+            toogleMenuOff(true)
         }
 
         if node.name == ButtonType.Pause.rawValue {
@@ -179,7 +179,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if node.name == ButtonType.Continue.rawValue {
-            toogleMenuOff()
+            toogleMenuOff(true)
         }
 
         if node.name == ButtonType.Restart.rawValue {
@@ -531,7 +531,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     func checkAndChangeGameState() {
 
-        counter.pause()
+//        counter.pause()
 
         var gameIsWon: Bool = true
         var gameIsOver: Bool = false
@@ -572,7 +572,7 @@ class GameScene: SKScene, TileDragDelegate {
             return
         }
 
-        counter.start()
+//        counter.start()
 
     }
 
@@ -642,17 +642,14 @@ class GameScene: SKScene, TileDragDelegate {
 
         moves = 0
 
-        var endInterval: NSTimeInterval = -1
-
         if levelInfo.type == LevelType.LimitedMoves {
             headerBottomLabel.text = "MOVES"
             headerTopLabel.text = "\(levelInfo.typeCounter)"
         }
 
         if levelInfo.type == LevelType.LimitedTime {
-            headerBottomLabel.text = "SECONDS"
+            headerBottomLabel.text = "TIME"
             headerTopLabel.text = "\(levelInfo.typeCounter)"
-            endInterval = NSTimeInterval(levelInfo.typeCounter)
         }
 
         if levelInfo.type == LevelType.FreeTime {
@@ -663,7 +660,9 @@ class GameScene: SKScene, TileDragDelegate {
         if let counter = self.counter {
             counter.stop()
         } else {
-            counter = Counter(loopInterval: 1.0, endInterval: endInterval, loopCallback: counterLoop, endCallback: counterEnd)
+            { [unowned self] in
+                self.counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
+            }()
         }
 
         let colorsCount: Int = levelInfo.colorTargets.filter({ $1 != 0 }).count
@@ -768,7 +767,9 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func counterEnd() {
+        debugPrint("end callback")
         if levelInfo.type == LevelType.LimitedTime {
+            debugPrint("end callback limited time")
             gameOver()
         }
     }
@@ -784,16 +785,16 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func goToLobby() {
+        toogleMenuOff(false)
         parentController!.dismissViewControllerAnimated(true) { [unowned self] in
-            self.menu = nil
-            self.overlay = nil
-            self.counter.destroy()
+//            self.menu = nil
+//            self.overlay = nil
         }
     }
 
     func toogleMenu() {
         if gameIsPaused {
-            toogleMenuOff()
+            toogleMenuOff(true)
             resumeGame()
         } else {
             toogleMenuOn(true)
@@ -818,17 +819,24 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func toogleMenuOff() {
+    func toogleMenuOff(animated: Bool) {
         if overlay.parent != nil && menu.parent != nil && gameIsPaused {
 
             gameIsPaused = false
 
-            menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
-                self.menu.removeFromParent()
-            }
+            if animated {
+                menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                    self.menu.removeFromParent()
+                }
 
-            overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
-                self.overlay.removeFromParent()
+                overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                    self.overlay.removeFromParent()
+                }
+            } else {
+                menu.removeFromParent()
+                overlay.removeFromParent()
+                menu.alpha = 0
+                overlay.alpha = 0
             }
         }
     }
@@ -1139,7 +1147,7 @@ class GameScene: SKScene, TileDragDelegate {
         headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
         headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerBottomLabel.zPosition = 1
-        headerBottomLabel.setTextWithinSize("SECONDS", size: tileTwoThirds, vertically: false)
+        headerBottomLabel.setTextWithinSize("TIME", size: tileTwoThirds, vertically: false)
 
         headerTopLabel = SKLabelNode()
         headerTopLabel.fontColor = Constants.textColor
