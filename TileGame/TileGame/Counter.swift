@@ -27,7 +27,7 @@ class Counter {
     var loopInterval: NSTimeInterval = 0
 
     // Internal loop for granular time
-    var internalLoopInterval: NSTimeInterval = 0.0001
+    var internalLoopInterval: NSTimeInterval = 0.1
     // method called when counterEnd is reached
     var endCallback: (() -> Void)?
     var loopCallback: (NSTimeInterval -> Void)?
@@ -36,7 +36,6 @@ class Counter {
 
     // if end < 0 infinite counter
     init(loopInterval: NSTimeInterval, endInterval: NSTimeInterval, loopCallback: (NSTimeInterval -> Void)?, endCallback: (() -> Void)?) {
-
         self.loopInterval = loopInterval
         self.endInterval = endInterval
         self.endCallback = endCallback
@@ -77,8 +76,10 @@ class Counter {
     }
 
     func start() {
-        timerThread = MyThread(target: self, selector: "run", object: nil)
-        timerThread.start()
+//        timerThread = MyThread(target: self, selector: "run", object: nil)
+//        timerThread.start()
+        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+        NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
     }
 
     /**
@@ -88,9 +89,7 @@ class Counter {
     */
     func pause() {
         if timer.valid {
-            timer.performSelector("invalidate", onThread: timerThread, withObject: nil, waitUntilDone: false)
-            timerThread.cancel()
-            timerThread = nil
+            timer.invalidate()
         }
     }
 

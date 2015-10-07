@@ -171,7 +171,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if node.name == ButtonType.Pause.rawValue {
-            toogleMenu()
+            toogleMenu(true)
         }
 
         if node.name == ButtonType.Lobby.rawValue {
@@ -307,15 +307,8 @@ class GameScene: SKScene, TileDragDelegate {
         moves++
 
         if levelInfo.type == LevelType.LimitedMoves {
-
             let leftMoves = levelInfo.typeCounter - moves
             headerTopLabel.text = "\(leftMoves)"
-
-            if leftMoves == 1 {
-                headerBottomLabel.text = "MOVE"
-            } else {
-                headerBottomLabel.text = "MOVES"
-            }
         }
     }
 
@@ -582,12 +575,12 @@ class GameScene: SKScene, TileDragDelegate {
 
     func gameOver() {
         prepareButtonsForLose()
-        toogleMenu()
+        toogleMenu(true)
     }
 
     func gameWon() {
         prepareButtonsForWin()
-        toogleMenu()
+        toogleMenu(true)
     }
 
     func nextLevel() {
@@ -648,8 +641,8 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if levelInfo.type == LevelType.LimitedTime {
-            headerBottomLabel.text = "TIME"
-            headerTopLabel.text = "\(levelInfo.typeCounter)"
+            headerBottomLabel.text = "TIMER"
+            headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter)
         }
 
         if levelInfo.type == LevelType.FreeTime {
@@ -754,14 +747,20 @@ class GameScene: SKScene, TileDragDelegate {
         resetTargetsTo(levelInfo)
         changeLevelWith(levelInfo)
         prepareButtonsForPause()
-        toogleMenu()
+        toogleMenu(true)
+    }
+
+    func timeFromSeconds(totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return "\(minutes):\(seconds)"
     }
 
     // MARK: Methods - Counter closures
 
     func counterLoop(value: NSTimeInterval) {
         if levelInfo.type == LevelType.LimitedTime {
-            headerTopLabel.text = "\(levelInfo.typeCounter - Int(value))"
+            headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter - Int(value))
         }
 
     }
@@ -785,25 +784,26 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func goToLobby() {
-        toogleMenuOff(false)
+        toogleMenuOff(true)
         parentController!.dismissViewControllerAnimated(true) { [unowned self] in
-//            self.menu = nil
-//            self.overlay = nil
+            self.menu = nil
+            self.overlay = nil
         }
     }
 
-    func toogleMenu() {
+    func toogleMenu(animated: Bool) {
         if gameIsPaused {
-            toogleMenuOff(true)
-            resumeGame()
+            toogleMenuOff(animated)
         } else {
-            toogleMenuOn(true)
-            pauseGame()
+            toogleMenuOn(animated)
         }
     }
 
     func toogleMenuOn(animated: Bool) {
+
         if overlay.parent == nil && menu.parent == nil  && !gameIsPaused{
+
+            pauseGame()
 
             gameIsPaused = true
             addChild(overlay)
@@ -827,12 +827,14 @@ class GameScene: SKScene, TileDragDelegate {
             if animated {
                 menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
                     self.menu.removeFromParent()
+                    self.resumeGame()
                 }
 
                 overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
                     self.overlay.removeFromParent()
                 }
             } else {
+                resumeGame()
                 menu.removeFromParent()
                 overlay.removeFromParent()
                 menu.alpha = 0
@@ -1147,7 +1149,7 @@ class GameScene: SKScene, TileDragDelegate {
         headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
         headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerBottomLabel.zPosition = 1
-        headerBottomLabel.setTextWithinSize("TIME", size: tileTwoThirds, vertically: false)
+        headerBottomLabel.setTextWithinSize("SECOND", size: tileTwoThirds, vertically: false)
 
         headerTopLabel = SKLabelNode()
         headerTopLabel.fontColor = Constants.textColor
