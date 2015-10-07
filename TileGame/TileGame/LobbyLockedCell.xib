@@ -16,6 +16,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Padlock" translatesAutoresizingMaskIntoConstraints="NO" id="k4o-QB-WhP">
                         <rect key="frame" x="47" y="48" width="50" height="50"/>
                         <animations/>
+                        <color key="tintColor" red="1" green="0.0" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                     </imageView>
                 </subviews>
                 <animations/>

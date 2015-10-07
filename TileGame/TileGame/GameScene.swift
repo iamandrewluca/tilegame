@@ -584,7 +584,11 @@ class GameScene: SKScene, TileDragDelegate {
         toogleMenu(true)
 
         // fly stars
-        // save data
+
+        debugPrint("set level stars")
+        let levelStars = currentStars.filter({ $1 != false }).count
+
+        levelsInfo.setLevelStars(level.section, number: level.number, stars: levelStars)
     }
 
     func nextLevel() {

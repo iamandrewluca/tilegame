@@ -9,6 +9,8 @@
 import Foundation
 import UIKit
 
+// TODO: should calculate frames on the fly
+// in case of many levels, will be a lot of frames
 class LobbyLayout : UICollectionViewLayout {
 
     // MARK: Members
@@ -81,15 +83,18 @@ class LobbyLayout : UICollectionViewLayout {
                 }
             }
         }
+        debugPrint("layoutAttributesForElementsInRect")
 
         return allAttributes
     }
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+        debugPrint("layoutAttributesForItemAtIndexPath")
         return layoutInfo[LobbyCell.identifier]![indexPath]
     }
 
     override func collectionViewContentSize() -> CGSize {
+        debugPrint("collectionViewContentSize")
         var collectionSize = sectionSize
         collectionSize.height *= CGFloat(collectionView!.numberOfSections())
         return collectionSize

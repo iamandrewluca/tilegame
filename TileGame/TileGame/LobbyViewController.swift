@@ -37,6 +37,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     var levelsInfo = LevelsInfo.sharedInstance
 
+    var shouldReload: Bool = false
+
     // MARK: Methods
 
     private func setupLockedSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
@@ -59,11 +61,11 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         let levelStars = levelsInfo.starsAtIndexPath(indexPath)
 
         if levelStars > 0 {
-            cell.firstStar.image = UIImage(named: "Star")
+            cell.firstStar.tintColor = Constants.starColor
             if levelStars > 1 {
-                cell.secondStar.image = UIImage(named: "Star")
+                cell.secondStar.tintColor = Constants.starColor
                 if levelStars > 2 {
-                    cell.thirdStar.image = UIImage(named: "Star")
+                    cell.thirdStar.tintColor = Constants.starColor
                 }
             }
         }
@@ -135,6 +137,11 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
+        if shouldReload {
+            collectionView.reloadData()
+            shouldReload = false
+        }
+
         collectionView.scrollToItemAtIndexPath(
             NSIndexPath(forItem: 0, inSection: levelsInfo.unlockedSections - 1),
             atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
@@ -201,6 +208,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
 
         if indexPath.section < levelsInfo.unlockedSections {
+
+            shouldReload = true
 
             let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
             gameVC.level = (indexPath.section, indexPath.item)
