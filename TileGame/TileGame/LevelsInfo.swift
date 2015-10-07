@@ -28,7 +28,7 @@ class LevelsInfo {
             NSSearchPathDomainMask.UserDomainMask, true) as Array
         let documentsDirecotry = documentDirectories.first as String!
 
-        levelsInfoPath = documentsDirecotry + "/levelsinfo.json"
+        levelsInfoPath = documentsDirecotry + "/levelsdata.json"
 
         levelsInfo = loadLevelsInfo(levelsInfoPath)
 

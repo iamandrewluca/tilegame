@@ -70,6 +70,7 @@ class GameScene: SKScene, TileDragDelegate {
     static let boardPositions: [[CGPoint]] = GameScene.createBoardPositions()
 
     var tiles: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
+    var backgroundTiles: [[SKSpriteNode?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: SKSpriteNode?.None))
 
     // MARK: Members - Game State
 
@@ -581,15 +582,23 @@ class GameScene: SKScene, TileDragDelegate {
     func gameWon() {
         prepareButtonsForWin()
         toogleMenu(true)
+
+        // fly stars
+        // save data
     }
 
     func nextLevel() {
+
+        // remove stars that flyied
+        // menu off
 
 //        changeLevelWith(nextLevel)
 
     }
 
     func changeLevelWith(level: LevelInfo) {
+
+        resetTargetsTo(levelInfo)
 
         self.canTouch = false
 
@@ -602,8 +611,18 @@ class GameScene: SKScene, TileDragDelegate {
                         tile.removeFromParent()
                     }
                 }
+
+                if let backTile = backgroundTiles[i][j] {
+                    backgroundTiles[i][j] = nil
+
+                    backTile.runAction(SKAction.moveTo(CGPoint.zero, duration: tilesAppearInterval)) {
+                        backTile.removeFromParent()
+                    }
+                }
             }
         }
+
+        addBoardBackgroundAndHoles()
 
         self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 0.2)) { [unowned self] in
             self.addBoardTiles()
@@ -641,7 +660,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if levelInfo.type == LevelType.LimitedTime {
-            headerBottomLabel.text = "TIMER"
+            headerBottomLabel.text = "TIME"
             headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter)
         }
 
@@ -744,7 +763,6 @@ class GameScene: SKScene, TileDragDelegate {
 
     func restartGame() {
         gameIsStarted = false
-        resetTargetsTo(levelInfo)
         changeLevelWith(levelInfo)
         prepareButtonsForPause()
         toogleMenu(true)
@@ -868,7 +886,6 @@ class GameScene: SKScene, TileDragDelegate {
         menuRightButton.addChild(menuRestartIcon)
 
     }
-
     func prepareButtonsForLose() {
 
         menuMiddleButton.name = ButtonType.Restart.rawValue
@@ -887,7 +904,6 @@ class GameScene: SKScene, TileDragDelegate {
         menuRightButton.addChild(menuShareIcon)
 
     }
-
     func prepareButtonsForPause() {
 
         menuMiddleButton.name = ButtonType.Continue.rawValue
@@ -969,10 +985,23 @@ class GameScene: SKScene, TileDragDelegate {
 
     func addBoardBackgroundTile(row: Int, column: Int) {
         let backTile = SKSpriteNode(texture: Textures.tileTexture, color: Constants.tileBackgroundColor, size: Tile.tileSize)
-        backTile.position = GameScene.boardPositions[row][column]
         backTile.colorBlendFactor = 1
         backTile.zPosition = 1
+        backgroundTiles[row][column] = backTile
+
+        // funny animation
+        let corners: [CGPoint] = [
+            CGPoint(x: 0, y: 0),
+            CGPoint(x: 0, y: 500),
+            CGPoint(x: 300, y: 0),
+            CGPoint(x: 300, y: 500),
+        ]
+
+        backTile.position = corners[random() % 4]
+
         addChild(backTile)
+        backTile.runAction(SKAction.moveTo(GameScene.boardPositions[row][column], duration: tilesAppearInterval))
+        
     }
 
     func createOverlay() {
@@ -1149,7 +1178,7 @@ class GameScene: SKScene, TileDragDelegate {
         headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
         headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         headerBottomLabel.zPosition = 1
-        headerBottomLabel.setTextWithinSize("SECOND", size: tileTwoThirds, vertically: false)
+        headerBottomLabel.setTextWithinSize("AAAAA", size: tileTwoThirds, vertically: false)
 
         headerTopLabel = SKLabelNode()
         headerTopLabel.fontColor = Constants.textColor

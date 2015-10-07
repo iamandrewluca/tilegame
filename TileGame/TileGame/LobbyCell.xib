@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="8191" systemVersion="15A284" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
@@ -17,6 +17,7 @@
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vrq-o6-uZx">
                         <rect key="frame" x="0.0" y="0.0" width="145" height="101"/>
+                        <animations/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="50"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
@@ -26,47 +27,55 @@
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="rWc-Ct-En6">
                                 <rect key="frame" x="6" y="0.0" width="40" height="38"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="rWc-Ct-En6" secondAttribute="height" multiplier="40:38" id="lev-6d-GyZ"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="5Dz-8F-b61">
                                 <rect key="frame" x="52" y="0.0" width="41" height="38"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="5Dz-8F-b61" secondAttribute="height" multiplier="40:38" id="E6P-Qk-sF7"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="xJ6-yx-wiy">
                                 <rect key="frame" x="99" y="0.0" width="40" height="38"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="xJ6-yx-wiy" secondAttribute="height" multiplier="40:38" id="9et-9m-dou"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-2z-Oai">
                                 <rect key="frame" x="0.0" y="0.0" width="6" height="44"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="wc6-SG-2bQ"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HiU-NM-2TC">
                                 <rect key="frame" x="46" y="0.0" width="6" height="44"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="J90-f9-uQA"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpl-JT-GCZ">
                                 <rect key="frame" x="93" y="0.0" width="6" height="44"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="Eqv-kp-ygp"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ScV-wx-EBJ">
                                 <rect key="frame" x="139" y="0.0" width="6" height="44"/>
+                                <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="HQL-EI-xLT"/>
                                 </constraints>
                             </view>
                         </subviews>
+                        <animations/>
                         <constraints>
                             <constraint firstItem="Hhv-2z-Oai" firstAttribute="top" secondItem="WK3-kP-FMl" secondAttribute="top" id="0AR-k0-J8i"/>
                             <constraint firstAttribute="bottom" secondItem="lpl-JT-GCZ" secondAttribute="bottom" id="5eg-48-Exk"/>
@@ -93,8 +102,10 @@
                         </constraints>
                     </view>
                 </subviews>
+                <animations/>
                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
             </view>
+            <animations/>
             <constraints>
                 <constraint firstItem="vrq-o6-uZx" firstAttribute="top" secondItem="SIs-N4-K9C" secondAttribute="top" id="MaS-dQ-kh3"/>
                 <constraint firstAttribute="trailing" secondItem="WK3-kP-FMl" secondAttribute="trailing" id="OML-du-qGZ"/>
