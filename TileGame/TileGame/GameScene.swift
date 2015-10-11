@@ -48,22 +48,24 @@ class GameScene: SKScene, TileDragDelegate {
     var menuLeftButton: SKSpriteNode!
     var menuMiddleButton: SKSpriteNode!
     var menuRightButton: SKSpriteNode!
+    var menuTopButton: SKSpriteNode!
+
+    var menuTopButtonLabel: SKLabelNode!
+    var menuMiddleLabel: SKLabelNode!
 
     var menuRestartIcon: SKSpriteNode!
     var menuShareIcon: SKSpriteNode!
     var menuPauseIcon: SKSpriteNode!
     var menuNextIcon: SKSpriteNode!
 
-    var menuTopButton: SKSpriteNode!
-    var menuTopButtonLabel: SKLabelNode!
-    var menuMiddleLabel: SKLabelNode!
-
-    // MARK: Members - Board
+    // MARK: Animations intervals
 
     let tilesAppearInterval: NSTimeInterval = 0.4
     let tilesDissappearInterval: NSTimeInterval = 0.2
     let menuToogleInterval: NSTimeInterval = 0.1
     let tileMovingInterval: NSTimeInterval = 0.1
+
+    // MARK: Members - Board
 
     static let boardSize: Int = 6
     static let boardPositions: [[CGPoint]] = GameScene.createBoardPositions()
@@ -99,7 +101,7 @@ class GameScene: SKScene, TileDragDelegate {
     var canTouch: Bool = false
 
     var currentSwipedTile: Tile?
-    var currentTouchedButtonName: String = ""
+//    var currentTouchedButtonName: String = ""
 
     // MARK: Override - SKScene
 
@@ -598,6 +600,8 @@ class GameScene: SKScene, TileDragDelegate {
         var section = levelInfo.section
         var number = levelInfo.number
 
+        debugPrint("\(section) \(number)")
+
         number++
 
         if number >= levelsInfo.levelsPerSection {
@@ -605,19 +609,190 @@ class GameScene: SKScene, TileDragDelegate {
             number = 0
         }
 
-        let nextLevel: LevelInfo = levelsInfo.loadLevel(section, number: number)
-        changeLevelWith(nextLevel)
-        levelInfo = nextLevel
+        levelInfo = levelsInfo.loadLevel(section, number: number)
+        changeLevelWith(levelInfo)
 
         toogleMenu(true)
+        prepareButtonsForPause()
 
     }
 
+    func pauseGame() {
+        if gameIsStarted { counter.pause() }
+    }
+
+    func resumeGame() {
+        if gameIsStarted { counter.start() }
+    }
+
+    func restartGame() {
+        gameIsStarted = false
+        changeLevelWith(levelInfo)
+        prepareButtonsForPause()
+        toogleMenu(true)
+    }
+
+    // MARK: Methods - Counter closures
+
+    func counterLoop(value: NSTimeInterval) {
+        if levelInfo.type == LevelType.LimitedTime {
+            headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter - Int(value))
+        }
+
+    }
+
+    func counterEnd() {
+        debugPrint("end callback")
+        if levelInfo.type == LevelType.LimitedTime {
+            debugPrint("end callback limited time")
+            gameOver()
+        }
+    }
+
+    // MARK: Methods - Buttons actions
+
+    func showAd() {
+
+    }
+
+    func share() {
+
+    }
+
+    func goToLobby() {
+        toogleMenuOff(false)
+        counter.stop()
+        parentController!.dismissViewControllerAnimated(true) { [unowned self] in
+            self.menu = nil
+            self.overlay = nil
+        }
+    }
+
+    // MARK: Menu rekated methods
+
+    func toogleMenu(animated: Bool) {
+        if gameIsPaused {
+            toogleMenuOff(animated)
+        } else {
+            toogleMenuOn(animated)
+        }
+    }
+
+    func toogleMenuOn(animated: Bool) {
+
+        if overlay.parent == nil && menu.parent == nil  && !gameIsPaused{
+
+            pauseGame()
+
+            gameIsPaused = true
+            addChild(overlay)
+            addChild(menu)
+
+            if animated {
+                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
+                menu.runAction(SKAction.fadeInWithDuration(0.3))
+            } else {
+                overlay.alpha = 0.75
+                menu.alpha = 1
+            }
+        }
+    }
+
+    func toogleMenuOff(animated: Bool) {
+        if overlay.parent != nil && menu.parent != nil && gameIsPaused {
+
+            gameIsPaused = false
+
+            if animated {
+                menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                    self.menu.removeFromParent()
+                    if self.gameIsStarted { self.resumeGame() }
+                }
+
+                overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                    self.overlay.removeFromParent()
+                }
+            } else {
+                if gameIsStarted { resumeGame() }
+                menu.removeFromParent()
+                overlay.removeFromParent()
+                menu.alpha = 0
+                overlay.alpha = 0
+            }
+        }
+    }
+
+    // MARK: App goes to background
+
+    func didEnterBackground() {
+        pauseGame()
+        toogleMenuOn(false)
+    }
+
+    // MARK: Methods - Buttons game states changing
+
+    func prepareButtonsForWin() {
+
+        menuMiddleButton.name = ButtonType.Next.rawValue
+        menuRightButton.name = ButtonType.Restart.rawValue
+
+        pauseButton.name = ButtonType.Empty.rawValue
+        pauseIcon.name = ButtonType.Empty.rawValue
+        overlay.name = ButtonType.Empty.rawValue
+
+        menuNextIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuNextIcon)
+
+        menuRestartIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuRestartIcon)
+
+    }
+    func prepareButtonsForLose() {
+
+        menuMiddleButton.name = ButtonType.Restart.rawValue
+        menuRightButton.name = ButtonType.Share.rawValue
+
+        pauseButton.name = ButtonType.Empty.rawValue
+        pauseIcon.name = ButtonType.Empty.rawValue
+        overlay.name = ButtonType.Empty.rawValue
+
+        menuRestartIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuRestartIcon)
+
+        menuShareIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuShareIcon)
+
+    }
+    func prepareButtonsForPause() {
+
+        menuMiddleButton.name = ButtonType.Continue.rawValue
+        menuRightButton.name = ButtonType.Restart.rawValue
+
+        pauseButton.name = ButtonType.Pause.rawValue
+        pauseIcon.name = ButtonType.Pause.rawValue
+        overlay.name = ButtonType.Overlay.rawValue
+
+        menuPauseIcon.removeFromParent()
+        menuMiddleButton.removeAllChildren()
+        menuMiddleButton.addChild(menuPauseIcon)
+
+        menuRestartIcon.removeFromParent()
+        menuRightButton.removeAllChildren()
+        menuRightButton.addChild(menuRestartIcon)
+
+    }
+
+    // MARK: Methods - Create Methods
+
     func changeLevelWith(level: LevelInfo) {
 
-        resetTargetsTo(levelInfo)
-
         self.canTouch = false
+
+        resetTargetsTo(levelInfo)
 
         for i in 0 ..< 6 {
             for j in 0 ..< 6 {
@@ -670,6 +845,7 @@ class GameScene: SKScene, TileDragDelegate {
         // Add new state
 
         moves = 0
+        gameIsStarted = false
 
         if levelInfo.type == LevelType.LimitedMoves {
             headerBottomLabel.text = "MOVES"
@@ -692,6 +868,8 @@ class GameScene: SKScene, TileDragDelegate {
             { [unowned self] in
                 self.counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
             }()
+
+            debugPrint("new counter")
         }
 
         let colorsCount: Int = levelInfo.colorTargets.filter({ $1 != 0 }).count
@@ -765,183 +943,10 @@ class GameScene: SKScene, TileDragDelegate {
             
             colorLabels[value] = label
             colorLabels[value]!.text = "\(0)/\(levelInfo.colorTargets[value]!)"
-
+            
             headerBackground.addChild(label)
         }
     }
-
-    func pauseGame() {
-        if gameIsStarted { counter.pause() }
-    }
-
-    func resumeGame() {
-        if gameIsStarted { counter.start() }
-    }
-
-    func restartGame() {
-        gameIsStarted = false
-        changeLevelWith(levelInfo)
-        prepareButtonsForPause()
-        toogleMenu(true)
-    }
-
-    func timeFromSeconds(totalSeconds: Int) -> String {
-        let minutes = totalSeconds / 60
-        let seconds = totalSeconds % 60
-        return "\(minutes):\(seconds)"
-    }
-
-    // MARK: Methods - Counter closures
-
-    func counterLoop(value: NSTimeInterval) {
-        if levelInfo.type == LevelType.LimitedTime {
-            headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter - Int(value))
-        }
-
-    }
-
-    func counterEnd() {
-        debugPrint("end callback")
-        if levelInfo.type == LevelType.LimitedTime {
-            debugPrint("end callback limited time")
-            gameOver()
-        }
-    }
-
-    // MARK: Methods - Buttons actions
-
-    func showAd() {
-
-    }
-
-    func share() {
-
-    }
-
-    func goToLobby() {
-        toogleMenuOff(false)
-        counter.stop()
-        parentController!.dismissViewControllerAnimated(true) { [unowned self] in
-            self.menu = nil
-            self.overlay = nil
-        }
-    }
-
-    func toogleMenu(animated: Bool) {
-        if gameIsPaused {
-            toogleMenuOff(animated)
-        } else {
-            toogleMenuOn(animated)
-        }
-    }
-
-    func toogleMenuOn(animated: Bool) {
-
-        if overlay.parent == nil && menu.parent == nil  && !gameIsPaused{
-
-            pauseGame()
-
-            gameIsPaused = true
-            addChild(overlay)
-            addChild(menu)
-
-            if animated {
-                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
-                menu.runAction(SKAction.fadeInWithDuration(0.3))
-            } else {
-                overlay.alpha = 0.75
-                menu.alpha = 1
-            }
-        }
-    }
-
-    func toogleMenuOff(animated: Bool) {
-        if overlay.parent != nil && menu.parent != nil && gameIsPaused {
-
-            gameIsPaused = false
-
-            if animated {
-                menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
-                    self.menu.removeFromParent()
-                    self.resumeGame()
-                }
-
-                overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
-                    self.overlay.removeFromParent()
-                }
-            } else {
-                resumeGame()
-                menu.removeFromParent()
-                overlay.removeFromParent()
-                menu.alpha = 0
-                overlay.alpha = 0
-            }
-        }
-    }
-
-    func didEnterBackground() {
-        pauseGame()
-        toogleMenuOn(false)
-    }
-
-    // MARK: Methods - Buttons game states changing
-
-    func prepareButtonsForWin() {
-
-        menuMiddleButton.name = ButtonType.Next.rawValue
-        menuRightButton.name = ButtonType.Restart.rawValue
-
-        pauseButton.name = ButtonType.Empty.rawValue
-        pauseIcon.name = ButtonType.Empty.rawValue
-        overlay.name = ButtonType.Empty.rawValue
-
-        menuNextIcon.removeFromParent()
-        menuMiddleButton.removeAllChildren()
-        menuMiddleButton.addChild(menuNextIcon)
-
-        menuRestartIcon.removeFromParent()
-        menuRightButton.removeAllChildren()
-        menuRightButton.addChild(menuRestartIcon)
-
-    }
-    func prepareButtonsForLose() {
-
-        menuMiddleButton.name = ButtonType.Restart.rawValue
-        menuRightButton.name = ButtonType.Share.rawValue
-
-        pauseButton.name = ButtonType.Empty.rawValue
-        pauseIcon.name = ButtonType.Empty.rawValue
-        overlay.name = ButtonType.Empty.rawValue
-
-        menuRestartIcon.removeFromParent()
-        menuMiddleButton.removeAllChildren()
-        menuMiddleButton.addChild(menuRestartIcon)
-
-        menuShareIcon.removeFromParent()
-        menuRightButton.removeAllChildren()
-        menuRightButton.addChild(menuShareIcon)
-
-    }
-    func prepareButtonsForPause() {
-
-        menuMiddleButton.name = ButtonType.Continue.rawValue
-        menuRightButton.name = ButtonType.Restart.rawValue
-
-        pauseButton.name = ButtonType.Pause.rawValue
-        pauseIcon.name = ButtonType.Pause.rawValue
-        overlay.name = ButtonType.Overlay.rawValue
-
-        menuPauseIcon.removeFromParent()
-        menuMiddleButton.removeAllChildren()
-        menuMiddleButton.addChild(menuPauseIcon)
-
-        menuRestartIcon.removeFromParent()
-        menuRightButton.removeAllChildren()
-        menuRightButton.addChild(menuRestartIcon)
-
-    }
-
-    // MARK: Methods - Create Methods
 
     func addBoardTiles() {
 
@@ -1287,5 +1292,13 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         return board
+    }
+
+    // MARK: Misc methods
+
+    func timeFromSeconds(totalSeconds: Int) -> String {
+        let minutes = totalSeconds / 60
+        let seconds = totalSeconds % 60
+        return "\(minutes):\(seconds)"
     }
 }

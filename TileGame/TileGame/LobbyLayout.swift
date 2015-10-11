@@ -62,7 +62,7 @@ class LobbyLayout : UICollectionViewLayout {
     
     override func prepareLayout() {
 
-        debugPrint("prepareLayout")
+//        debugPrint("prepareLayout")
 
         super.prepareLayout()
 
@@ -78,8 +78,8 @@ class LobbyLayout : UICollectionViewLayout {
 
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 
-        debugPrint("layoutAttributesForElementsInRect")
-        debugPrint(rect)
+//        debugPrint("layoutAttributesForElementsInRect")
+//        debugPrint(rect)
 
         var allAttributes = [UICollectionViewLayoutAttributes]()
 
@@ -96,14 +96,14 @@ class LobbyLayout : UICollectionViewLayout {
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 
-        debugPrint("layoutAttributesForItemAtIndexPath")
+//        debugPrint("layoutAttributesForItemAtIndexPath")
 
         return layoutInfo[LobbyCell.identifier]![indexPath]
     }
 
     override func collectionViewContentSize() -> CGSize {
 
-        debugPrint("collectionViewContentSize")
+//        debugPrint("collectionViewContentSize")
 
         var collectionSize = sectionSize
         collectionSize.height *= CGFloat(collectionView!.numberOfSections())
@@ -112,7 +112,7 @@ class LobbyLayout : UICollectionViewLayout {
 
     override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
 
-        debugPrint("layoutAttributesForSupplementaryViewOfKind")
+//        debugPrint("layoutAttributesForSupplementaryViewOfKind")
 
         var attributes = super.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)
 
