@@ -118,11 +118,11 @@ class LevelsInfo {
         return levelsInfo
     }
 
-    func loadLevel(level: (section: Int, number: Int)) -> LevelInfo {
+    func loadLevel(section: Int, number: Int) -> LevelInfo {
 
-        let levelJSON = loadJSONFromBundle("section_\(level.section)_level_\(level.number)")
+        let levelJSON = loadJSONFromBundle("section_\(section)_level_\(number)")
 
-        let levelInfo = LevelInfo(level: level)
+        let levelInfo = LevelInfo(section: section, number: number)
 
         guard let type = levelJSON["levelType"] as? Int,
             let counter = levelJSON["levelTypeCounter"] as? Int,
@@ -175,11 +175,11 @@ class LevelsInfo {
         return levelsData.reduce([], combine: +).reduce(0, combine: +)
     }
 
-    func setLevelStars(section: Int, number: Int, stars: Int) {
+    func setLevelStars(levelInfo: LevelInfo, stars: Int) {
 
-        levelsData[section][number] = stars
+        levelsData[levelInfo.section][levelInfo.number] = stars
 
-        if starsInSection(section) >= starsToPassSection {
+        if starsInSection(levelInfo.section) >= starsToPassSection {
             if unlockedSections < totalSections {
                 unlockedSections++
                 levelsData.append(Array(count: 6, repeatedValue: 0))

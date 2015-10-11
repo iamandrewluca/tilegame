@@ -22,12 +22,8 @@ class LobbyLockedCell: UICollectionViewCell {
         super.awakeFromNib()
 
         backgroundColor = UIColor.whiteColor()
-        layer.cornerRadius = 10
+        layer.cornerRadius = Tile.tileCornerRadius * 2
         layer.masksToBounds = false
-        layer.shadowOpacity = 0.25
-        layer.shadowColor = UIColor.grayColor().CGColor
-        layer.shadowRadius = 2.0
-        layer.shadowOffset = CGSizeZero
     }
 
 

@@ -13,7 +13,7 @@ class GameViewController: UIViewController {
 
     // MARK: Members
 
-    var level = (section: 0, number: 0)
+    var levelInfo: LevelInfo!
     var gameScene: GameScene!
 
     // MARK: UIViewController
@@ -31,9 +31,10 @@ class GameViewController: UIViewController {
         skView.ignoresSiblingOrder = true
 
         gameScene = GameScene(size: skView.frame.size)
+        gameScene.levelInfo = levelInfo
         gameScene.parentController = self
         gameScene.scaleMode = SKSceneScaleMode.AspectFill
-        gameScene.level = level
+
 
         skView.presentScene(gameScene)
     }

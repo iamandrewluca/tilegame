@@ -20,7 +20,6 @@ class GameScene: SKScene, TileDragDelegate {
 
     var levelsInfo: LevelsInfo = LevelsInfo.sharedInstance
     var levelInfo: LevelInfo!
-    var level: (section: Int, number: Int)!
 
     // MARK: Members - Header
 
@@ -111,8 +110,6 @@ class GameScene: SKScene, TileDragDelegate {
     override func didMoveToView(view: SKView) {
         super.didMoveToView(view)
         /* Setup your scene here */
-
-        levelInfo = levelsInfo.loadLevel(level)
 
         backgroundColor = Constants.backgroundColor
 
@@ -588,7 +585,7 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("set level stars")
         let levelStars = currentStars.filter({ $1 != false }).count
 
-        levelsInfo.setLevelStars(level.section, number: level.number, stars: levelStars)
+        levelsInfo.setLevelStars(levelInfo, stars: levelStars)
     }
 
     func nextLevel() {
@@ -597,6 +594,22 @@ class GameScene: SKScene, TileDragDelegate {
         // menu off
 
 //        changeLevelWith(nextLevel)
+
+        var section = levelInfo.section
+        var number = levelInfo.number
+
+        number++
+
+        if number >= levelsInfo.levelsPerSection {
+            section++
+            number = 0
+        }
+
+        let nextLevel: LevelInfo = levelsInfo.loadLevel(section, number: number)
+        changeLevelWith(nextLevel)
+        levelInfo = nextLevel
+
+        toogleMenu(true)
 
     }
 
@@ -806,7 +819,8 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func goToLobby() {
-        toogleMenuOff(true)
+        toogleMenuOff(false)
+        counter.stop()
         parentController!.dismissViewControllerAnimated(true) { [unowned self] in
             self.menu = nil
             self.overlay = nil

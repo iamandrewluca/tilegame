@@ -62,6 +62,8 @@ class LobbyLayout : UICollectionViewLayout {
     
     override func prepareLayout() {
 
+        debugPrint("prepareLayout")
+
         super.prepareLayout()
 
         if !isLayoutPrepared {
@@ -71,9 +73,14 @@ class LobbyLayout : UICollectionViewLayout {
         }
 
         createHeaderLayoutAttributes()
+
     }
 
     override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+
+        debugPrint("layoutAttributesForElementsInRect")
+        debugPrint(rect)
+
         var allAttributes = [UICollectionViewLayoutAttributes]()
 
         for (_, elementsInfo) in layoutInfo {
@@ -83,24 +90,29 @@ class LobbyLayout : UICollectionViewLayout {
                 }
             }
         }
-        debugPrint("layoutAttributesForElementsInRect")
 
         return allAttributes
     }
 
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+
         debugPrint("layoutAttributesForItemAtIndexPath")
+
         return layoutInfo[LobbyCell.identifier]![indexPath]
     }
 
     override func collectionViewContentSize() -> CGSize {
+
         debugPrint("collectionViewContentSize")
+
         var collectionSize = sectionSize
         collectionSize.height *= CGFloat(collectionView!.numberOfSections())
         return collectionSize
     }
 
     override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
+
+        debugPrint("layoutAttributesForSupplementaryViewOfKind")
 
         var attributes = super.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)
 
@@ -112,6 +124,8 @@ class LobbyLayout : UICollectionViewLayout {
     }
 
     override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+//        debugPrint("shouldInvalidateLayoutForBoundsChange")
+//        debugPrint(newBounds)
         return true
     }
 

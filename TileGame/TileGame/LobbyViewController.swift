@@ -212,7 +212,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             shouldReload = true
 
             let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
-            gameVC.level = (indexPath.section, indexPath.item)
+            gameVC.levelInfo = levelsInfo.loadLevel(indexPath.section, number: indexPath.item)
 
             navigationController!.presentViewController(gameVC, animated: true, completion: nil)
         }
