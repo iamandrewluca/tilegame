@@ -593,25 +593,23 @@ class GameScene: SKScene, TileDragDelegate {
     func nextLevel() {
 
         // remove stars that flyied
-        // menu off
 
-//        changeLevelWith(nextLevel)
+        if levelInfo.section  < levelsInfo.totalSections - 1 {
 
-        var section = levelInfo.section
-        var number = levelInfo.number
+            var section = levelInfo.section
+            var number = levelInfo.number
 
-        debugPrint("\(section) \(number)")
+            number++
 
-        number++
+            if number >= levelsInfo.levelsPerSection {
+                section++
+                number = 0
+            }
 
-        if number >= levelsInfo.levelsPerSection {
-            section++
-            number = 0
+            levelInfo = levelsInfo.loadLevel(section, number: number)
+            // TODO: what if last level in game?
         }
 
-        // TODO: what if last level in game?
-
-        levelInfo = levelsInfo.loadLevel(section, number: number)
         changeLevelWith(levelInfo)
 
         toogleMenu(true)
@@ -667,6 +665,7 @@ class GameScene: SKScene, TileDragDelegate {
         parentController!.dismissViewControllerAnimated(true) { [unowned self] in
             self.menu = nil
             self.overlay = nil
+            self.counter = nil
         }
     }
 
@@ -867,9 +866,7 @@ class GameScene: SKScene, TileDragDelegate {
         if let counter = self.counter {
             counter.stop()
         } else {
-            { [unowned self] in
-                self.counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
-            }()
+            counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
 
             debugPrint("new counter")
         }

@@ -64,12 +64,12 @@ class Counter {
         counter += internalLoopInterval
 
         if let call = loopCallback where shouldCallLoopCallback {
-            debugPrint("loop")
+//            debugPrint("loop")
             call(counter)
         }
 
         if let call = endCallback where endInterval > 0 && counter >= endInterval {
-            debugPrint("end")
+//            debugPrint("end")
             pause()
             call()
         }
