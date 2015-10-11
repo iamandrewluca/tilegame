@@ -609,6 +609,8 @@ class GameScene: SKScene, TileDragDelegate {
             number = 0
         }
 
+        // TODO: what if last level in game?
+
         levelInfo = levelsInfo.loadLevel(section, number: number)
         changeLevelWith(levelInfo)
 
