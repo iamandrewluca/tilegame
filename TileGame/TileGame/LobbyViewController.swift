@@ -37,7 +37,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     var levelsInfo = LevelsInfo.sharedInstance
 
-    var shouldReload: Bool = false
+    var sectionsToReload: [Int] = []
+    var shouldAddNextSection: Bool = false
 
     // MARK: Methods
 
@@ -115,6 +116,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         backButton.tintColor = Constants.textColor
     }
 
+    func addNextSection() {
+
+    }
+
     // MARK: UIViewController
 
     deinit {
@@ -130,16 +135,24 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         registerNibsForCollectionView()
 
         setupViews()
-
-        middleLabel.text = "\(levelsInfo.totalStars()) stars"
     }
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
 
-        if shouldReload {
-            collectionView.reloadData()
-            shouldReload = false
+        middleLabel.text = "\(levelsInfo.totalStars()) stars"
+
+        if sectionsToReload.count != 0 {
+            for sectionToReload in sectionsToReload {
+                collectionView.reloadSections(NSIndexSet(index: sectionToReload))
+            }
+
+            sectionsToReload = []
+        }
+
+        if shouldAddNextSection {
+            addNextSection()
+            shouldAddNextSection = false
         }
 
         collectionView.scrollToItemAtIndexPath(
@@ -209,9 +222,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         if indexPath.section < levelsInfo.unlockedSections {
 
-            shouldReload = true
-
             let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
+            gameVC.lobbyVC = self
             gameVC.levelInfo = levelsInfo.loadLevel(indexPath.section, number: indexPath.item)
 
             navigationController!.presentViewController(gameVC, animated: true, completion: nil)

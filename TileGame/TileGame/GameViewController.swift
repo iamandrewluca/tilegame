@@ -16,6 +16,8 @@ class GameViewController: UIViewController {
     var levelInfo: LevelInfo!
     var gameScene: GameScene!
 
+    var lobbyVC: LobbyViewController!
+
     // MARK: UIViewController
 
     deinit {
@@ -32,7 +34,7 @@ class GameViewController: UIViewController {
 
         gameScene = GameScene(size: skView.frame.size)
         gameScene.levelInfo = levelInfo
-        gameScene.parentController = self
+        gameScene.gameVC = self
         gameScene.scaleMode = SKSceneScaleMode.AspectFill
 
 

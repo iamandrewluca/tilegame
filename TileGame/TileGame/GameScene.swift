@@ -14,7 +14,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Members - Parent Controller
 
-    weak var parentController: GameViewController!
+    weak var gameVC: GameViewController!
 
     // MARK: Members - Game Info
 
@@ -662,14 +662,14 @@ class GameScene: SKScene, TileDragDelegate {
     func goToLobby() {
         toogleMenuOff(false)
         counter.stop()
-        parentController!.dismissViewControllerAnimated(true) { [unowned self] in
+        gameVC!.dismissViewControllerAnimated(true) { [unowned self] in
             self.menu = nil
             self.overlay = nil
             self.counter = nil
         }
     }
 
-    // MARK: Menu rekated methods
+    // MARK: Menu related methods
 
     func toogleMenu(animated: Bool) {
         if gameIsPaused {

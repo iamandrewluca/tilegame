@@ -30,8 +30,6 @@ class LobbyLayout : UICollectionViewLayout {
     
     var layoutInfo = [String : [NSIndexPath : UICollectionViewLayoutAttributes]]()
 
-    var isLayoutPrepared = false
-
     // MARK: LobbyLayout
 
     required init?(coder aDecoder: NSCoder) {
@@ -56,30 +54,30 @@ class LobbyLayout : UICollectionViewLayout {
 
         sectionSize.width = collectionWidth
         sectionSize.height = headerSize.height + spacingBetweenCells + rowsPerSection * (spacingBetweenCells + cellSize.height)
+
+        layoutInfo[LobbyHeader.identifier] = [NSIndexPath : UICollectionViewLayoutAttributes]()
+        layoutInfo[LobbyCell.identifier] = [NSIndexPath : UICollectionViewLayoutAttributes]()
     }
 
     // MARK: UICollectionViewLayout
     
     override func prepareLayout() {
 
-//        debugPrint("prepareLayout")
-
         super.prepareLayout()
 
-        if !isLayoutPrepared {
-            isLayoutPrepared = true
-
-            createCellLayoutAttributes()
-        }
+        createCellLayoutAttributes()
 
         createHeaderLayoutAttributes()
 
     }
 
-    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
+    override func collectionViewContentSize() -> CGSize {
+        var collectionSize = sectionSize
+        collectionSize.height *= CGFloat(collectionView!.numberOfSections())
+        return collectionSize
+    }
 
-//        debugPrint("layoutAttributesForElementsInRect")
-//        debugPrint(rect)
+    override func layoutAttributesForElementsInRect(rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
 
         var allAttributes = [UICollectionViewLayoutAttributes]()
 
@@ -94,25 +92,15 @@ class LobbyLayout : UICollectionViewLayout {
         return allAttributes
     }
 
+    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
+        return true
+    }
+
     override func layoutAttributesForItemAtIndexPath(indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-
-//        debugPrint("layoutAttributesForItemAtIndexPath")
-
         return layoutInfo[LobbyCell.identifier]![indexPath]
     }
 
-    override func collectionViewContentSize() -> CGSize {
-
-//        debugPrint("collectionViewContentSize")
-
-        var collectionSize = sectionSize
-        collectionSize.height *= CGFloat(collectionView!.numberOfSections())
-        return collectionSize
-    }
-
     override func layoutAttributesForSupplementaryViewOfKind(elementKind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionViewLayoutAttributes? {
-
-//        debugPrint("layoutAttributesForSupplementaryViewOfKind")
 
         var attributes = super.layoutAttributesForSupplementaryViewOfKind(elementKind, atIndexPath: indexPath)
 
@@ -121,12 +109,6 @@ class LobbyLayout : UICollectionViewLayout {
         }
 
         return attributes
-    }
-
-    override func shouldInvalidateLayoutForBoundsChange(newBounds: CGRect) -> Bool {
-//        debugPrint("shouldInvalidateLayoutForBoundsChange")
-//        debugPrint(newBounds)
-        return true
     }
 
     // MARK: Methods
@@ -155,15 +137,38 @@ class LobbyLayout : UICollectionViewLayout {
         return frame
     }
 
+    func createCellLayoutAttributes() {
+
+        let sectionCount = collectionView!.numberOfSections()
+        var indexPath: NSIndexPath!
+
+        for section in (0 ... sectionCount - 1).reverse() {
+            let itemCount = 6
+
+            for item in (0 ... itemCount - 1).reverse() {
+                indexPath = NSIndexPath(forItem: item, inSection: section)
+
+                if layoutInfo[LobbyCell.identifier]![indexPath] == nil {
+                    layoutInfo[LobbyCell.identifier]![indexPath] = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
+                    layoutInfo[LobbyCell.identifier]![indexPath]?.frame = frameForCellAtIndexPath(indexPath)
+                } else {
+                    return
+                }
+            }
+        }
+    }
+
     func createHeaderLayoutAttributes() {
 
-        var headerLayoutInfo = [NSIndexPath : UICollectionViewLayoutAttributes]()
-
-        for i in 0..<collectionView!.numberOfSections() {
+        for i in 0 ..< collectionView!.numberOfSections() {
 
             let indexPath = NSIndexPath(forItem: 0, inSection: i)
 
-            let attributes = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: LobbyHeader.identifier, withIndexPath: indexPath)
+            if layoutInfo[LobbyHeader.identifier]![indexPath] == nil {
+                layoutInfo[LobbyHeader.identifier]![indexPath] = UICollectionViewLayoutAttributes(forSupplementaryViewOfKind: LobbyHeader.identifier, withIndexPath: indexPath)
+            }
+
+            let attributes = layoutInfo[LobbyHeader.identifier]![indexPath]!
 
             let sectionFrame = frameForSection(i)
 
@@ -172,35 +177,7 @@ class LobbyLayout : UICollectionViewLayout {
 
             attributes.frame = CGRectMake(0, min(minimumY, maximumY), collectionWidth, headerSize.height)
             attributes.zIndex = 1
-
-            headerLayoutInfo[indexPath] = attributes
         }
-
-        layoutInfo[LobbyHeader.identifier] = headerLayoutInfo
-
-    }
-
-    func createCellLayoutAttributes() {
-
-        var cellLayoutInfo = [NSIndexPath : UICollectionViewLayoutAttributes]()
-
-        let sectionCount = collectionView!.numberOfSections()
-        var indexPath: NSIndexPath!
-
-        for section in 0..<sectionCount {
-            let itemCount = collectionView!.numberOfItemsInSection(section)
-
-            for item in 0..<itemCount {
-                indexPath = NSIndexPath(forItem: item, inSection: section)
-
-                let itemAttributes = UICollectionViewLayoutAttributes(forCellWithIndexPath: indexPath)
-                itemAttributes.frame = frameForCellAtIndexPath(indexPath)
-
-                cellLayoutInfo[indexPath] = itemAttributes
-            }
-        }
-
-        layoutInfo[LobbyCell.identifier] = cellLayoutInfo
     }
     
     func frameForCellAtIndexPath(indexPath: NSIndexPath) -> CGRect {

@@ -177,7 +177,9 @@ class LevelsInfo {
 
     func setLevelStars(levelInfo: LevelInfo, stars: Int) {
 
-        levelsData[levelInfo.section][levelInfo.number] = stars
+        if levelsData[levelInfo.section][levelInfo.number] < stars {
+            levelsData[levelInfo.section][levelInfo.number] = stars
+        }
 
         if starsInSection(levelInfo.section) >= starsToPassSection {
             if unlockedSections < totalSections {
