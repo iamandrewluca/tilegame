@@ -53,6 +53,7 @@ class Tile: SKSpriteNode {
     }
 
     weak var tileDragDelegate: TileDragDelegate?
+    weak var myScene: GameScene!
 
     // MARK: Methods - SKSpriteNode
 
@@ -66,6 +67,7 @@ class Tile: SKSpriteNode {
         type = tileType
 
         tileDragDelegate = delegate
+        myScene = delegate as! GameScene
         
         if type != TileType.Hole {
 
@@ -88,18 +90,18 @@ class Tile: SKSpriteNode {
     // MARK: Touches
     
     override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(scene!))
+        tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(myScene!))
     }
     
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragMoved(self, position: touches.first!.locationInNode(scene!))
+        tileDragDelegate!.tileDragMoved(self, position: touches.first!.locationInNode(myScene!))
     }
     
     override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragCancelled(self, position: touches!.first!.locationInNode(scene!))
+        tileDragDelegate!.tileDragCancelled(self, position: touches!.first!.locationInNode(myScene!))
     }
     
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragEnded(self, position: touches.first!.locationInNode(scene!))
+        tileDragDelegate!.tileDragEnded(self, position: touches.first!.locationInNode(myScene!))
     }
 }
