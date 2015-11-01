@@ -69,7 +69,7 @@ class Counter {
         }
 
         if let call = endCallback where endInterval > 0 && counter >= endInterval {
-//            debugPrint("end")
+            debugPrint("end")
             pause()
             call()
         }

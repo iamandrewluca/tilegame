@@ -299,12 +299,12 @@ class GameScene: SKScene, TileDragDelegate {
 
     func tileWasMoved(tile: Tile, completion: () -> Void) {
 
+        moves++
+
         var tilesToCheck: [Tile] = [tile]
         checkTilesAndDestroy(&tilesToCheck) {
             completion()
         }
-
-        moves++
 
         if levelInfo.type == LevelType.LimitedMoves {
             let leftMoves = levelInfo.typeCounter - moves
@@ -594,7 +594,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         // remove stars that flyied
 
-        if levelInfo.section  < levelsInfo.totalSections - 1 {
+        if levelInfo.section < levelsInfo.totalSections - 1 {
 
             var section = levelInfo.section
             var number = levelInfo.number
@@ -607,6 +607,7 @@ class GameScene: SKScene, TileDragDelegate {
             }
 
             levelInfo = levelsInfo.loadLevel(section, number: number)
+            debugPrint(levelInfo.type)
             // TODO: what if last level in game?
         }
 
@@ -865,6 +866,10 @@ class GameScene: SKScene, TileDragDelegate {
 
         if let counter = self.counter {
             counter.stop()
+
+            if levelInfo.type != LevelType.LimitedMoves {
+                counter.endInterval = NSTimeInterval(levelInfo.typeCounter)
+            }
         } else {
             counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
 

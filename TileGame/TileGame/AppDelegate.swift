@@ -20,6 +20,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         debugPrint(NSHomeDirectory())
 
+        // some class to change fast available sections?!
+
         // for performance should cache textures
         Textures.createTextures()
 

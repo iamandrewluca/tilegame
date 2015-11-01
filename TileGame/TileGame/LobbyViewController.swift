@@ -142,6 +142,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         middleLabel.text = "\(levelsInfo.totalStars()) stars"
 
+        // check bellow
+        collectionView.reloadData()
+
         if sectionsToReload.count != 0 {
             for sectionToReload in sectionsToReload {
                 collectionView.reloadSections(NSIndexSet(index: sectionToReload))
@@ -172,6 +175,11 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
 
     func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+
+        if levelsInfo.unlockedSections == levelsInfo.totalSections {
+            return levelsInfo.totalSections
+        }
+
         return levelsInfo.unlockedSections + 1
     }
 
