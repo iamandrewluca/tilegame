@@ -58,12 +58,15 @@ class GameScene: SKScene, TileDragDelegate {
     var menuPauseIcon: SKSpriteNode!
     var menuNextIcon: SKSpriteNode!
 
+    var winStarsShadows: [SKSpriteNode] = []
+
     // MARK: Animations intervals
 
     let tilesAppearInterval: NSTimeInterval = 0.4
     let tilesDissappearInterval: NSTimeInterval = 0.2
     let menuToogleInterval: NSTimeInterval = 0.1
     let tileMovingInterval: NSTimeInterval = 0.1
+    let overlayAlpha: CGFloat = 0.8
 
     // MARK: Members - Board
 
@@ -101,7 +104,6 @@ class GameScene: SKScene, TileDragDelegate {
     var canTouch: Bool = false
 
     var currentSwipedTile: Tile?
-//    var currentTouchedButtonName: String = ""
 
     // MARK: Override - SKScene
 
@@ -120,6 +122,8 @@ class GameScene: SKScene, TileDragDelegate {
         createMenu()
 
         createHeader()
+
+        createWinStarsShadows()
 
         addBoardBackgroundAndHoles()
 
@@ -691,10 +695,10 @@ class GameScene: SKScene, TileDragDelegate {
             addChild(menu)
 
             if animated {
-                overlay.runAction(SKAction.fadeAlphaTo(0.75, duration: 0.3))
-                menu.runAction(SKAction.fadeInWithDuration(0.3))
+                overlay.runAction(SKAction.fadeAlphaTo(overlayAlpha, duration: menuToogleInterval))
+                menu.runAction(SKAction.fadeInWithDuration(menuToogleInterval))
             } else {
-                overlay.alpha = 0.75
+                overlay.alpha = overlayAlpha
                 menu.alpha = 1
             }
         }
@@ -706,12 +710,12 @@ class GameScene: SKScene, TileDragDelegate {
             gameIsPaused = false
 
             if animated {
-                menu.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                menu.runAction(SKAction.fadeOutWithDuration(menuToogleInterval)) { [unowned self] in
                     self.menu.removeFromParent()
                     if self.gameIsStarted { self.resumeGame() }
                 }
 
-                overlay.runAction(SKAction.fadeOutWithDuration(0.3)) { [unowned self] in
+                overlay.runAction(SKAction.fadeOutWithDuration(menuToogleInterval)) { [unowned self] in
                     self.overlay.removeFromParent()
                 }
             } else {
@@ -1275,6 +1279,44 @@ class GameScene: SKScene, TileDragDelegate {
         resetTargetsTo(levelInfo)
         
         addChild(headerBackground)
+    }
+
+    func createWinStarsShadows() {
+
+        let firstStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
+        let secondStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
+        let thirdStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
+
+        firstStarShadow.setScale(1.5)
+        secondStarShadow.setScale(2)
+        thirdStarShadow.setScale(1.5)
+
+        firstStarShadow.colorBlendFactor = 1.0
+        secondStarShadow.colorBlendFactor = 1.0
+        thirdStarShadow.colorBlendFactor = 1.0
+
+        firstStarShadow.alpha = 0.1
+        secondStarShadow.alpha = 0.1
+        thirdStarShadow.alpha = 0.1
+
+        firstStarShadow.zPosition = 5
+        secondStarShadow.zPosition = 5
+        thirdStarShadow.zPosition = 5
+
+        firstStarShadow.position = GameScene.boardPositions[0][1]
+        secondStarShadow.position = GameScene.boardPositions[0][2]
+        secondStarShadow.position.x += (GameScene.boardPositions[0][3].x - GameScene.boardPositions[0][2].x) / 2
+        secondStarShadow.position.y += Tile.tileLength / 4
+        thirdStarShadow.position = GameScene.boardPositions[0][4]
+
+        addChild(firstStarShadow)
+        addChild(secondStarShadow)
+        addChild(thirdStarShadow)
+
+        winStarsShadows.append(firstStarShadow)
+        winStarsShadows.append(secondStarShadow)
+        winStarsShadows.append(thirdStarShadow)
+
     }
 
     static func createBoardPositions() -> [[CGPoint]] {

@@ -83,6 +83,7 @@ class Constants {
     static var overlayColor: UIColor { return UIColor.brownColor() }
     static var menuBackgroundColor: UIColor { return navigationButtonColor }
     static var menuButtonColor: UIColor { return navigationBackgroundColor }
+    static var winStarsBackgroundColor: UIColor { return menuButtonColor }
 
     static var lightColor: UIColor { return gameColors[0][0] }
     static var darkColor: UIColor { return gameColors[1][0] }
