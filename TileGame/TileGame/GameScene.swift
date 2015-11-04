@@ -334,13 +334,13 @@ class GameScene: SKScene, TileDragDelegate {
 
         if tilesToDestroy.count >= 3 {
 
-            debugPrint("\(tilesToDestroy.count) is >= 3")
+//            debugPrint("\(tilesToDestroy.count) is >= 3")
 
             currentTargets[tileType]! += tilesToDestroy.count
 
-            if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! {
+            if currentTargets[tileType]! + 3 < levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
-            } else if currentTargets[tileType]! > levelInfo.colorTargets[tileType]! {
+            } else if currentTargets[tileType]! + 3 > levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "FAIL"
             } else {
                 colorLabels[tileType]!.text = "DONE"
@@ -551,7 +551,7 @@ class GameScene: SKScene, TileDragDelegate {
         // then check for game over
 
         for (key, value) in currentTargets {
-            if value > levelInfo.colorTargets[key] {
+            if value + 3 > levelInfo.colorTargets[key] {
                 gameIsOver = true
                 break
             }
@@ -586,12 +586,28 @@ class GameScene: SKScene, TileDragDelegate {
         prepareButtonsForWin()
         toogleMenu(true)
 
-        // fly stars
+        flyStarsIn()
 
         debugPrint("set level stars")
         let levelStars = currentStars.filter({ $1 != false }).count
 
         levelsInfo.setLevelStars(levelInfo, stars: levelStars)
+    }
+
+    func flyStarsIn() {
+
+        for winStarShadow in winStarsShadows {
+            winStarShadow.hidden = false
+        }
+
+        var count = 0
+        for (key, value) in currentStars where value != false {
+            topSmallStars[key]!.runAction(SKAction.group([
+                SKAction.moveTo(winStarsShadows[count].position, duration: 1),
+                SKAction.scaleTo(2, duration: 1)
+                ]))
+        }
+
     }
 
     func nextLevel() {
@@ -1317,6 +1333,10 @@ class GameScene: SKScene, TileDragDelegate {
         winStarsShadows.append(secondStarShadow)
         winStarsShadows.append(thirdStarShadow)
 
+        for winStarShadow in winStarsShadows {
+            winStarShadow.hidden = true
+        }
+
     }
 
     static func createBoardPositions() -> [[CGPoint]] {
@@ -1345,6 +1365,11 @@ class GameScene: SKScene, TileDragDelegate {
     func timeFromSeconds(totalSeconds: Int) -> String {
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60
-        return "\(minutes):\(seconds)"
+
+        if seconds < 10 {
+            return "\(minutes):0\(seconds)"
+        } else {
+            return "\(minutes):\(seconds)"
+        }
     }
 }

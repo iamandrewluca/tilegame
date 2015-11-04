@@ -158,9 +158,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             shouldAddNextSection = false
         }
 
-        collectionView.scrollToItemAtIndexPath(
-            NSIndexPath(forItem: 0, inSection: levelsInfo.unlockedSections - 1),
-            atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+        // TODO:
+//        collectionView.scrollToItemAtIndexPath(
+//            NSIndexPath(forItem: 0, inSection: levelsInfo.unlockedSections - 1),
+//            atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
     }
 
     override func didReceiveMemoryWarning() {
