@@ -338,9 +338,10 @@ class GameScene: SKScene, TileDragDelegate {
 
             currentTargets[tileType]! += tilesToDestroy.count
 
-            if currentTargets[tileType]! + 3 < levelInfo.colorTargets[tileType]! {
+            if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
-            } else if currentTargets[tileType]! + 3 > levelInfo.colorTargets[tileType]! {
+            } else if currentTargets[tileType]! != levelInfo.colorTargets[tileType]!
+                    && currentTargets[tileType]! + 3 > levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "FAIL"
             } else {
                 colorLabels[tileType]!.text = "DONE"
@@ -391,8 +392,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         currentStars[forColor] = true
 
-        let scenePosition = scene!.convertPoint(tile.position, toNode: self)
-        let headerPosition = scene!.convertPoint(scenePosition, toNode: topSmallTiles[forColor]!)
+        let headerPosition = scene!.convertPoint(tile.position, toNode: topSmallTiles[forColor]!)
         tile.position = headerPosition
 
         tile.removeFromParent()
@@ -551,8 +551,9 @@ class GameScene: SKScene, TileDragDelegate {
         // then check for game over
 
         for (key, value) in currentTargets {
-            if value + 3 > levelInfo.colorTargets[key] {
+            if value != levelInfo.colorTargets[key] && value + 3 > levelInfo.colorTargets[key]  {
                 gameIsOver = true
+                debugPrint("game over?")
                 break
             }
         }
@@ -597,22 +598,41 @@ class GameScene: SKScene, TileDragDelegate {
     func flyStarsIn() {
 
         for winStarShadow in winStarsShadows {
-            winStarShadow.hidden = false
+            addChild(winStarShadow)
         }
 
-        var count = 0
+        var count: Int = 0
         for (key, value) in currentStars where value != false {
+
+            let headerPosition = topSmallTiles[key]!.convertPoint(topSmallStars[key]!.position, toNode: scene!)
+
+            topSmallStars[key]!.removeFromParent()
+
+            topSmallStars[key]!.zPosition = 6
+            topSmallStars[key]!.position = headerPosition
+
+            addChild(topSmallStars[key]!)
+
             topSmallStars[key]!.runAction(SKAction.group([
-                SKAction.moveTo(winStarsShadows[count].position, duration: 1),
-                SKAction.scaleTo(2, duration: 1)
-                ]))
+                SKAction.moveTo(winStarsShadows[count].position, duration: 0.5),
+                SKAction.scaleTo(winStarsShadows[count].xScale, duration: 0.5),
+                SKAction.rotateToAngle(0, duration: 0.5)
+            ]))
+
+            count++
         }
 
     }
 
+    func removeWinStarsShadows() {
+        for winStarShadow in winStarsShadows {
+            winStarShadow.removeFromParent()
+        }
+    }
+
     func nextLevel() {
 
-        // remove stars that flyied
+        removeWinStarsShadows()
 
         if levelInfo.section < levelsInfo.totalSections - 1 {
 
@@ -648,6 +668,8 @@ class GameScene: SKScene, TileDragDelegate {
 
     func restartGame() {
         gameIsStarted = false
+
+        removeWinStarsShadows()
         changeLevelWith(levelInfo)
         prepareButtonsForPause()
         toogleMenu(true)
@@ -1325,18 +1347,9 @@ class GameScene: SKScene, TileDragDelegate {
         secondStarShadow.position.y += Tile.tileLength / 4
         thirdStarShadow.position = GameScene.boardPositions[0][4]
 
-        addChild(firstStarShadow)
-        addChild(secondStarShadow)
-        addChild(thirdStarShadow)
-
         winStarsShadows.append(firstStarShadow)
         winStarsShadows.append(secondStarShadow)
         winStarsShadows.append(thirdStarShadow)
-
-        for winStarShadow in winStarsShadows {
-            winStarShadow.hidden = true
-        }
-
     }
 
     static func createBoardPositions() -> [[CGPoint]] {
