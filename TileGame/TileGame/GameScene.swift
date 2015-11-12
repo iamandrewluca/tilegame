@@ -108,6 +108,7 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Override - SKScene
 
     deinit {
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         debugPrint("GameScene deinit")
     }
 
