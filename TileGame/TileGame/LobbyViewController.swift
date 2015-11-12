@@ -38,7 +38,6 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     var levelsInfo = LevelsInfo.sharedInstance
 
     var sectionsToReload: [Int] = []
-    var shouldAddNextSection: Bool = false
 
     // MARK: Methods
 
@@ -116,10 +115,6 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         backButton.tintColor = Constants.textColor
     }
 
-    func addNextSection() {
-
-    }
-
     // MARK: UIViewController
 
     deinit {
@@ -151,11 +146,6 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             }
 
             sectionsToReload = []
-        }
-
-        if shouldAddNextSection {
-            addNextSection()
-            shouldAddNextSection = false
         }
 
         // TODO:
