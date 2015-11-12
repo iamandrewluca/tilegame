@@ -652,6 +652,8 @@ class GameScene: SKScene, TileDragDelegate {
                 number = 0
             }
 
+            gameVC.lobbyVC.saveLastIndexPath(NSIndexPath(forItem: number, inSection: section))
+
             levelInfo = levelsInfo.loadLevel(section, number: number)
 //            debugPrint(levelInfo.type)
             // TODO: what if last level in game?

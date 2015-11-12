@@ -39,6 +39,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     var sectionsToReload: [Int] = []
 
+    let LAST_INDEX_PATH_ITEM_KEY: String = "LAST_INDEX_PATH_ITEM_KEY"
+    let LAST_INDEX_PATH_SECTION_KEY: String = "LAST_INDEX_PATH_SECTION_KEY"
+
+
     // MARK: Methods
 
     private func setupLockedSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
@@ -155,10 +159,16 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             sectionsToReload.removeAll()
         }
 
-        // TODO:
-//        collectionView.scrollToItemAtIndexPath(
-//            NSIndexPath(forItem: 0, inSection: levelsInfo.unlockedSections - 1),
-//            atScrollPosition: UICollectionViewScrollPosition.Top, animated: false)
+        scrollToLastIndexPath()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
+        /**
+        This is here because collection view first must layou subviews and then scroll
+        */
+        scrollToLastIndexPath()
     }
 
     override func didReceiveMemoryWarning() {
@@ -232,7 +242,45 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             gameVC.lobbyVC = self
             gameVC.levelInfo = levelsInfo.loadLevel(indexPath.section, number: indexPath.item)
 
+            saveLastIndexPath(indexPath)
+
             navigationController!.presentViewController(gameVC, animated: true, completion: nil)
         }
     }
+
+    /**
+     We can't save an NSIndexPath in user defaults
+
+     - parameter indexPath: index path to save in user defaults
+     */
+    func saveLastIndexPath(indexPath: NSIndexPath) {
+        NSUserDefaults.standardUserDefaults().setInteger(indexPath.item, forKey: LAST_INDEX_PATH_ITEM_KEY)
+        NSUserDefaults.standardUserDefaults().setInteger(indexPath.section, forKey: LAST_INDEX_PATH_SECTION_KEY)
+    }
+
+    /**
+     Loads index path for last played game
+
+     - returns: NSIndexPath?
+     */
+    func loadLastIndexPath() -> NSIndexPath? {
+
+        var lastIndexPath: NSIndexPath? = NSIndexPath?.None
+
+        if let lastIndexPathItem = NSUserDefaults.standardUserDefaults().valueForKey(LAST_INDEX_PATH_ITEM_KEY) as! Int!,
+            lastIndexPathSection = NSUserDefaults.standardUserDefaults().valueForKey(LAST_INDEX_PATH_SECTION_KEY) as! Int!{
+                lastIndexPath = NSIndexPath(forItem: lastIndexPathItem, inSection: lastIndexPathSection)
+        }
+
+        return lastIndexPath
+    }
+
+    func scrollToLastIndexPath() {
+        if let lastIndexPath = loadLastIndexPath() {
+            collectionView.scrollToItemAtIndexPath(
+                lastIndexPath,
+                atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+        }
+    }
+
 }
