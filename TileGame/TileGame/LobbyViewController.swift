@@ -137,15 +137,22 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         middleLabel.text = "\(levelsInfo.totalStars()) stars"
 
-        // check bellow
-        collectionView.reloadData()
-
         if sectionsToReload.count != 0 {
-            for sectionToReload in sectionsToReload {
-                collectionView.reloadSections(NSIndexSet(index: sectionToReload))
-            }
+//            debugPrint("reload sections")
+//            debugPrint(sectionsToReload)
+//            debugPrint(collectionView.numberOfSections())
+//
+//            let sectionsRange = NSRange.init(location: sectionsToReload.first!, length: sectionsToReload.count)
+//
+//            debugPrint("before reload")
+//            collectionView.reloadSections(NSIndexSet(indexesInRange: sectionsRange))
+//            debugPrint("afeter reload")
 
-            sectionsToReload = []
+            // TODO: If performance issues above code must be fixed
+            // for now w'll reload entire collectionview
+            collectionView.reloadData()
+
+            sectionsToReload.removeAll()
         }
 
         // TODO:

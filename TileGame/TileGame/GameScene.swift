@@ -151,7 +151,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        debugPrint("began on \(node.name)")
+//        debugPrint("began on \(node.name)")
     }
     override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
 
@@ -160,7 +160,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        debugPrint("move on \(node.name)")
+//        debugPrint("move on \(node.name)")
     }
     override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
 
@@ -169,7 +169,7 @@ class GameScene: SKScene, TileDragDelegate {
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
 
-        debugPrint("ended on \(node.name)")
+//        debugPrint("ended on \(node.name)")
 
         if node.name == ButtonType.Overlay.rawValue {
             toogleMenuOff(true)
@@ -281,7 +281,7 @@ class GameScene: SKScene, TileDragDelegate {
 
             self.tileWasMoved(tile) { [unowned self] in
                 self.checkAndChangeGameState()
-                debugPrint("now can touch")
+//                debugPrint("now can touch")
                 self.canTouch = true
             }
 
@@ -380,7 +380,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         if tilesToCheck.count != 0 {
-            debugPrint("cycle check tyles to destroy")
+//            debugPrint("cycle check tyles to destroy")
             self.runAction(SKAction.waitForDuration(tilesDissappearInterval - 0.1)) { [unowned self] in
                 self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
             }
@@ -543,7 +543,7 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        debugPrint("game won \(gameIsWon)")
+//        debugPrint("game won \(gameIsWon)")
         if gameIsWon {
             gameWon()
             return
@@ -554,7 +554,7 @@ class GameScene: SKScene, TileDragDelegate {
         for (key, value) in currentTargets {
             if value != levelInfo.colorTargets[key] && value + 3 > levelInfo.colorTargets[key]  {
                 gameIsOver = true
-                debugPrint("game over?")
+//                debugPrint("game over?")
                 break
             }
         }
@@ -565,7 +565,7 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        debugPrint("game over \(gameIsOver)")
+//        debugPrint("game over \(gameIsOver)")
         if gameIsOver {
             gameOver()
             return
@@ -590,10 +590,15 @@ class GameScene: SKScene, TileDragDelegate {
 
         flyStarsIn()
 
-        debugPrint("set level stars")
+//        debugPrint("set level stars")
         let levelStars = currentStars.filter({ $1 != false }).count
 
         levelsInfo.setLevelStars(levelInfo, stars: levelStars)
+
+        if !gameVC.lobbyVC.sectionsToReload.contains(levelInfo.section) {
+            gameVC.lobbyVC.sectionsToReload.append(levelInfo.section)
+            debugPrint(gameVC.lobbyVC.sectionsToReload)
+        }
     }
 
     func flyStarsIn() {
@@ -648,7 +653,7 @@ class GameScene: SKScene, TileDragDelegate {
             }
 
             levelInfo = levelsInfo.loadLevel(section, number: number)
-            debugPrint(levelInfo.type)
+//            debugPrint(levelInfo.type)
             // TODO: what if last level in game?
         }
 
@@ -686,9 +691,9 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func counterEnd() {
-        debugPrint("end callback")
+//        debugPrint("end callback")
         if levelInfo.type == LevelType.LimitedTime {
-            debugPrint("end callback limited time")
+//            debugPrint("end callback limited time")
             gameOver()
         }
     }

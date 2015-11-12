@@ -88,7 +88,7 @@ class LevelsInfo {
         levelsDataJSON["sections"] = levelsData
 
         do {
-            debugPrint("trying to save")
+//            debugPrint("trying to save")
             let levelsNSData = try NSJSONSerialization.dataWithJSONObject(levelsDataJSON, options: NSJSONWritingOptions.init(rawValue: 0))
             NSFileManager.defaultManager().createFileAtPath(levelsDataPath, contents: levelsNSData, attributes: nil)
         } catch {
@@ -181,15 +181,17 @@ class LevelsInfo {
             levelsData[levelInfo.section][levelInfo.number] = stars
 
             if starsInSection(levelInfo.section) >= starsToPassSection {
+                debugPrint("maybe new section?")
 
                 if unlockedSections < totalSections && levelInfo.section + 1 == unlockedSections {
+                    debugPrint("ok, new section")
                     unlockedSections++
                     levelsData.append(Array(count: 6, repeatedValue: 0))
                 }
             }
         }
 
-        debugPrint("save level data")
+//        debugPrint("save level data")
         saveLevelsData()
     }
 }
