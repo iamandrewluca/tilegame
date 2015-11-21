@@ -85,8 +85,8 @@ class GameScene: SKScene, TileDragDelegate {
         Direction.Left: (row: 0, column: 0)
     ]
 
-    var startTouchPosition: CGPoint = CGPointZero
-    var lastTouchPosition: CGPoint = CGPointZero
+    var startTouchPoint: CGPoint = CGPointZero
+    var lastTouchPoint: CGPoint = CGPointZero
     var startTilePoint: CGPoint = CGPointZero
     var endTilePoint: CGPoint = CGPointZero
 
@@ -220,8 +220,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         calculateLimits(tile)
 
-        startTouchPosition = position
-        lastTouchPosition = startTouchPosition
+        startTouchPoint = position
+        lastTouchPoint = startTouchPoint
 
         fromDirection = Direction.None
         toDirection = Direction.None
@@ -233,13 +233,11 @@ class GameScene: SKScene, TileDragDelegate {
 
         if currentSwipedTile != tile { return }
 
-        let currentTouchPosition = position
+        let currentTouchPoint = position
 
         if toDirection == Direction.None {
 
-            let deltaFromStart = currentTouchPosition - startTouchPosition
-
-            getDirections(deltaFromStart)
+            setDirs(startTouchPoint, end: currentTouchPoint)
 
             startTilePoint = getPlacePosition(tile.place)
             endTilePoint = getPlacePosition(limits[toDirection]!)
@@ -256,10 +254,13 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        tile.position.x = clamp(startTilePoint.x, endTilePoint.x, currentTouchPosition.x)
-        tile.position.y = clamp(startTilePoint.y, endTilePoint.y, currentTouchPosition.y)
+        currentDirection = getDirFromPointsForceAxis(lastTouchPoint, end: currentTouchPoint, axis: getAxisFromDir(toDirection))
+//        debugPrint(currentDirection)
 
-        lastTouchPosition = currentTouchPosition
+        tile.position.x = clamp(startTilePoint.x, endTilePoint.x, currentTouchPoint.x)
+        tile.position.y = clamp(startTilePoint.y, endTilePoint.y, currentTouchPoint.y)
+
+        lastTouchPoint = currentTouchPoint
     }
     func tileDragEnded(tile: Tile, position: CGPoint) {
 
@@ -270,29 +271,39 @@ class GameScene: SKScene, TileDragDelegate {
 
         canTouch = false
 
-        tile.runAction(SKAction.moveTo(endTilePoint, duration: tileMovingInterval)) { [unowned self] in
+        if currentDirection == toDirection {
+            tile.runAction(SKAction.moveTo(endTilePoint, duration: tileMovingInterval)) { [unowned self] in
 
-            let startPlace = self.currentSwipedTile!.place
-            let endPlace = self.limits[self.toDirection]!
+                let startPlace = self.currentSwipedTile!.place
+                let endPlace = self.limits[self.toDirection]!
 
-            self.tiles[endPlace.row][endPlace.column] = self.currentSwipedTile
-            self.tiles[startPlace.row][startPlace.column] = nil
-            self.currentSwipedTile!.place = endPlace
+                self.tiles[endPlace.row][endPlace.column] = self.currentSwipedTile
+                self.tiles[startPlace.row][startPlace.column] = nil
+                self.currentSwipedTile!.place = endPlace
 
-            self.tileWasMoved(tile) { [unowned self] in
-                self.checkAndChangeGameState()
-//                debugPrint("now can touch")
-                self.canTouch = true
+                self.tileWasMoved(tile) { [unowned self] in
+                    self.checkAndChangeGameState()
+                    //                debugPrint("now can touch")
+                    self.canTouch = true
+                }
+
+                self.currentSwipedTile = nil
+                self.fromDirection = Direction.None
+                self.toDirection = Direction.None
+                self.currentDirection = Direction.None
+
+                // TODO: from here all is going to hell for SpriteKit
+                // check in debugger
+                // po myFuckingTile!.scene
             }
-
-            self.currentSwipedTile = nil
-            self.fromDirection = Direction.None
-            self.toDirection = Direction.None
-            self.currentDirection = Direction.None
-
-            // TODO: from here all is going to hell for SpriteKit
-            // check in debugger
-            // po myFuckingTile!.scene
+        } else {
+            tile.runAction(SKAction.moveTo(startTilePoint, duration: tileMovingInterval)) { [unowned self] in
+                self.canTouch = true
+                self.currentSwipedTile = nil
+                self.fromDirection = Direction.None
+                self.toDirection = Direction.None
+                self.currentDirection = Direction.None
+            }
         }
     }
     func tileDragCancelled(tile: Tile, position: CGPoint) {
@@ -497,27 +508,84 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func getDirections(delta: CGPoint) {
+    func getAxisFromDir(dir: Direction) -> Axis {
 
-        if max(fabs(delta.x), fabs(delta.y)) > 0 {
-            if fabs(delta.x) > fabs(delta.y) {
+        if dir == Direction.Left || dir == Direction.Right {
+            return Axis.Horizontal
+        }
+
+        if dir == Direction.Up || dir == Direction.Down {
+            return Axis.Vertical
+        }
+
+        return Axis.None
+    }
+
+    func getDirFromPointsWithErrorForceAxis(start: CGPoint, end: CGPoint, error: CGFloat, axis: Axis) -> Direction {
+
+        let delta = end - start
+
+        if max(fabs(delta.x), fabs(delta.y)) > error {
+
+            if axis == Axis.Horizontal {
                 if delta.x > 0.0 {
-                    fromDirection = Direction.Left
-                    toDirection = Direction.Right
+                    return Direction.Right
                 } else {
-                    fromDirection = Direction.Right
-                    toDirection = Direction.Left
+                    return Direction.Left
+                }
+            } else if axis == Axis.Vertical {
+                if delta.y > 0.0 {
+                    return Direction.Up
+                } else {
+                    return Direction.Down
                 }
             } else {
-                if delta.y > 0.0 {
-                    fromDirection = Direction.Down
-                    toDirection = Direction.Up
+                if fabs(delta.x) > fabs(delta.y) {
+                    if delta.x > 0.0 {
+                        return Direction.Right
+                    } else {
+                        return Direction.Left
+                    }
                 } else {
-                    fromDirection = Direction.Up
-                    toDirection = Direction.Down
+                    if delta.y > 0.0 {
+                        return Direction.Up
+                    } else {
+                        return Direction.Down
+                    }
                 }
             }
-            currentDirection = toDirection
+        }
+
+        return Direction.None
+    }
+
+    func getDirFromPointsWithError(start: CGPoint, end: CGPoint, error: CGFloat) -> Direction {
+        return getDirFromPointsWithErrorForceAxis(start, end: end, error: error, axis: Axis.None)
+    }
+
+    func getDirFromPointsForceAxis(start: CGPoint, end: CGPoint, axis: Axis) -> Direction {
+        return getDirFromPointsWithErrorForceAxis(start, end: end, error: 0.0, axis: axis)
+    }
+
+    func getDirFromPoints(start: CGPoint, end: CGPoint) -> Direction {
+        return getDirFromPointsWithErrorForceAxis(start, end: end, error: 0.0, axis: Axis.None)
+    }
+
+    func setDirs(start: CGPoint, end: CGPoint) {
+
+        toDirection = getDirFromPoints(start, end: end)
+
+        switch toDirection {
+        case Direction.Left:
+            fromDirection = Direction.Right
+        case Direction.Right:
+            fromDirection = Direction.Left
+        case Direction.Up:
+            fromDirection = Direction.Down
+        case Direction.Down:
+            fromDirection = Direction.Up
+        default:
+            fromDirection = Direction.None
         }
     }
     

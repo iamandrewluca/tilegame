@@ -17,7 +17,7 @@ enum Direction: Int {
     case None = -1, Right, Up, Left, Down
 }
 
-enum Orientation: Int {
+enum Axis: Int {
     case None = -1, Horizontal, Vertical
 }
 
