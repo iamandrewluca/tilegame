@@ -20,6 +20,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         debugPrint(NSHomeDirectory())
 
+        if Settings.musicOn {
+            AudioPlayer.play()
+        }
+
         // some class to change fast available sections?!
 
         // for performance should cache textures

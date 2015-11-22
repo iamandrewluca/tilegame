@@ -24,10 +24,12 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: IB Actions
 
     @IBAction func goBack(sender: AnyObject) {
+        AudioPlayer.tap()
         navigationController!.popViewControllerAnimated(true)
     }
 
     @IBAction func openLeaderboard(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("leaderboard")
     }
 
@@ -243,6 +245,8 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
             gameVC.levelInfo = levelsInfo.loadLevel(indexPath.section, number: indexPath.item)
 
             saveLastIndexPath(indexPath)
+
+            AudioPlayer.tap()
 
             navigationController!.presentViewController(gameVC, animated: true, completion: nil)
         }

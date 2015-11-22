@@ -25,17 +25,22 @@
 		15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15A905991AC9D05400B37BEB /* Tile.swift */; };
 		15C8367A1ACFC1F900784FEC /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C836791ACFC1F900784FEC /* Constants.swift */; };
 		15C8367C1ACFC20000784FEC /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C8367B1ACFC20000784FEC /* Settings.swift */; };
-		750217851BC587C5007297E6 /* section_2_level_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 7502177F1BC587C5007297E6 /* section_2_level_5.json */; settings = {ASSET_TAGS = (); }; };
-		750217861BC587C5007297E6 /* section_2_level_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217801BC587C5007297E6 /* section_2_level_4.json */; settings = {ASSET_TAGS = (); }; };
-		750217871BC587C5007297E6 /* section_2_level_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217811BC587C5007297E6 /* section_2_level_3.json */; settings = {ASSET_TAGS = (); }; };
-		750217881BC587C5007297E6 /* section_2_level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217821BC587C5007297E6 /* section_2_level_0.json */; settings = {ASSET_TAGS = (); }; };
-		750217891BC587C5007297E6 /* section_2_level_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217831BC587C5007297E6 /* section_2_level_1.json */; settings = {ASSET_TAGS = (); }; };
-		7502178A1BC587C5007297E6 /* section_2_level_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217841BC587C5007297E6 /* section_2_level_2.json */; settings = {ASSET_TAGS = (); }; };
+		750217851BC587C5007297E6 /* section_2_level_5.json in Resources */ = {isa = PBXBuildFile; fileRef = 7502177F1BC587C5007297E6 /* section_2_level_5.json */; };
+		750217861BC587C5007297E6 /* section_2_level_4.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217801BC587C5007297E6 /* section_2_level_4.json */; };
+		750217871BC587C5007297E6 /* section_2_level_3.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217811BC587C5007297E6 /* section_2_level_3.json */; };
+		750217881BC587C5007297E6 /* section_2_level_0.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217821BC587C5007297E6 /* section_2_level_0.json */; };
+		750217891BC587C5007297E6 /* section_2_level_1.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217831BC587C5007297E6 /* section_2_level_1.json */; };
+		7502178A1BC587C5007297E6 /* section_2_level_2.json in Resources */ = {isa = PBXBuildFile; fileRef = 750217841BC587C5007297E6 /* section_2_level_2.json */; };
 		750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750268F21B6B7F6400946480 /* LevelInfo.swift */; };
 		750320B81B7117820035E58B /* GameScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 750320B71B7117820035E58B /* GameScene.swift */; };
-		753AC05F1BC2BE5E0053F607 /* MyThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753AC05E1BC2BE5E0053F607 /* MyThread.swift */; settings = {ASSET_TAGS = (); }; };
+		753AC05F1BC2BE5E0053F607 /* MyThread.swift in Sources */ = {isa = PBXBuildFile; fileRef = 753AC05E1BC2BE5E0053F607 /* MyThread.swift */; };
+		7559F0CB1C01FB280045A07C /* AudioPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7559F0CA1C01FB260045A07C /* AudioPlayer.swift */; };
+		7559F0D01C0215FC0045A07C /* destroy.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CC1C0215FC0045A07C /* destroy.mp3 */; };
+		7559F0D11C0215FC0045A07C /* swipe.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CD1C0215FC0045A07C /* swipe.mp3 */; };
+		7559F0D21C0215FC0045A07C /* fly.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CE1C0215FC0045A07C /* fly.mp3 */; };
+		7559F0D31C0215FC0045A07C /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CF1C0215FC0045A07C /* tap.mp3 */; };
 		75801F521B6B77E9007A63E5 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75801F511B6B77E9007A63E5 /* Enums.swift */; };
-		75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ACDB3D1BB2CF630013F1C4 /* Textures.swift */; settings = {ASSET_TAGS = (); }; };
+		75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ACDB3D1BB2CF630013F1C4 /* Textures.swift */; };
 		75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */; };
 		75B5E3AA1B288EA7000C5C95 /* LobbyLockedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B5E3A81B288EA7000C5C95 /* LobbyLockedCell.swift */; };
 		75B5E3AB1B288EA7000C5C95 /* LobbyLockedCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 75B5E3A91B288EA7000C5C95 /* LobbyLockedCell.xib */; };
@@ -100,6 +105,11 @@
 		750320B71B7117820035E58B /* GameScene.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameScene.swift; sourceTree = "<group>"; };
 		753AC05E1BC2BE5E0053F607 /* MyThread.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyThread.swift; sourceTree = "<group>"; };
 		754E910F1B05519A0030C303 /* LobbyLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyLayout.swift; sourceTree = "<group>"; };
+		7559F0CA1C01FB260045A07C /* AudioPlayer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayer.swift; sourceTree = "<group>"; };
+		7559F0CC1C0215FC0045A07C /* destroy.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = destroy.mp3; sourceTree = "<group>"; };
+		7559F0CD1C0215FC0045A07C /* swipe.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = swipe.mp3; sourceTree = "<group>"; };
+		7559F0CE1C0215FC0045A07C /* fly.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fly.mp3; sourceTree = "<group>"; };
+		7559F0CF1C0215FC0045A07C /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tap.mp3; sourceTree = "<group>"; };
 		75801F511B6B77E9007A63E5 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		75ACDB3D1BB2CF630013F1C4 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
 		75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyHeader.swift; sourceTree = "<group>"; };
@@ -227,6 +237,10 @@
 		154E6D001AD0165800929955 /* SFX */ = {
 			isa = PBXGroup;
 			children = (
+				7559F0CC1C0215FC0045A07C /* destroy.mp3 */,
+				7559F0CD1C0215FC0045A07C /* swipe.mp3 */,
+				7559F0CE1C0215FC0045A07C /* fly.mp3 */,
+				7559F0CF1C0215FC0045A07C /* tap.mp3 */,
 				154E6D011AD0167400929955 /* backgroundMusic.mp3 */,
 				154E6D021AD0167400929955 /* buttonClick.mp3 */,
 				154E6D031AD0167400929955 /* slide.mp3 */,
@@ -279,6 +293,7 @@
 				750268F21B6B7F6400946480 /* LevelInfo.swift */,
 				75ACDB3D1BB2CF630013F1C4 /* Textures.swift */,
 				753AC05E1BC2BE5E0053F607 /* MyThread.swift */,
+				7559F0CA1C01FB260045A07C /* AudioPlayer.swift */,
 			);
 			name = Helpers;
 			sourceTree = "<group>";
@@ -375,13 +390,17 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7559F0D21C0215FC0045A07C /* fly.mp3 in Resources */,
 				75B5E3AD1B288EDB000C5C95 /* LobbyCell.xib in Resources */,
 				750217851BC587C5007297E6 /* section_2_level_5.json in Resources */,
+				7559F0D01C0215FC0045A07C /* destroy.mp3 in Resources */,
 				75CF0F871B0CC23600A13514 /* section_0_level_5.json in Resources */,
 				75CF0F901B0CC29800A13514 /* section_1_level_2.json in Resources */,
 				151B5A921AC9BA92002BD68C /* LaunchScreen.xib in Resources */,
 				75CF0F851B0CC22800A13514 /* section_0_level_4.json in Resources */,
+				7559F0D11C0215FC0045A07C /* swipe.mp3 in Resources */,
 				154E6D061AD0167400929955 /* slide.mp3 in Resources */,
+				7559F0D31C0215FC0045A07C /* tap.mp3 in Resources */,
 				75CF0F811B0C7F5B00A13514 /* LobbyHeader.xib in Resources */,
 				154E6D041AD0167400929955 /* backgroundMusic.mp3 in Resources */,
 				151B5A8F1AC9BA92002BD68C /* Images.xcassets in Resources */,
@@ -427,6 +446,7 @@
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
 				75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */,
 				75F09C001AE08064003C061B /* Helpers.swift in Sources */,
+				7559F0CB1C01FB280045A07C /* AudioPlayer.swift in Sources */,
 				75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */,
 				750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */,
 				15A905981AC9C22E00B37BEB /* LobbyCell.swift in Sources */,

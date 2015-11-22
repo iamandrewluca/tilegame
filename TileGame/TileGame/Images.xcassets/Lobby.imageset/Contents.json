@@ -2,23 +2,22 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "Hotel Filled-50.png"
+      "filename" : "Hotel Filled-50.png",
+      "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "scale" : "2x",
-      "filename" : "Hotel Filled-64.png"
+      "filename" : "Hotel Filled-64.png",
+      "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "scale" : "3x",
-      "filename" : "Hotel Filled-100.png"
+      "filename" : "Hotel Filled-100.png",
+      "scale" : "3x"
     }
   ],
   "info" : {
     "version" : 1,
-    "author" : "xcode",
-    "template-rendering-intent" : "template"
+    "author" : "xcode"
   }
 }

@@ -14,6 +14,10 @@ class LobbyCell: UICollectionViewCell {
 
     static let identifier = "LobbyCell"
 
+    static let starImage: UIImage = { () -> UIImage in
+        return (UIImage(named: "Star")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
+    }()
+
     // MARK: IBOutlets
     
     @IBOutlet weak var levelNumber: UILabel!
@@ -28,6 +32,10 @@ class LobbyCell: UICollectionViewCell {
 
         layer.cornerRadius = Tile.tileCornerRadius * 2
         layer.masksToBounds = false
+
+        firstStar.image = LobbyCell.starImage
+        secondStar.image = LobbyCell.starImage
+        thirdStar.image = LobbyCell.starImage
 
         backgroundColor = Constants.cellBackgroundColor
         levelNumber.textColor = Constants.textColor

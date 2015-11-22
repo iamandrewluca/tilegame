@@ -12,6 +12,8 @@ class MenuViewController: UIViewController {
 
     // MARK: Members
 
+    static let toLobbySegueIdentifier: String = "toLobby"
+
     var levelsInfo = LevelsInfo.sharedInstance
     var started = false
 
@@ -33,21 +35,27 @@ class MenuViewController: UIViewController {
     // MARK: IBActions
 
     @IBAction func soundButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("sound")
     }
     @IBAction func themeButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("theme")
     }
     @IBAction func musicButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("music")
     }
     @IBAction func adsButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("ads")
     }
     @IBAction func shareButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("share")
     }
     @IBAction func rateButtonPressed(sender: AnyObject) {
+        AudioPlayer.tap()
         debugPrint("rate")
     }
 
@@ -95,6 +103,15 @@ class MenuViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        super.prepareForSegue(segue, sender: sender)
+
+        if segue.identifier == MenuViewController.toLobbySegueIdentifier {
+            debugPrint("prepare")
+            AudioPlayer.tap()
+        }
     }
 
     // MARK: Methods

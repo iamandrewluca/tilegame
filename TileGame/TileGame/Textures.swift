@@ -56,7 +56,7 @@ class Textures {
 //        starShape.path = starPath
 //        starTexture = view.textureFromNode(starShape)
 
-        starTexture = SKTexture(image: UIImage(imageLiteral: "Star"))
+        starTexture = SKTexture(image: LobbyCell.starImage)
 
         // header background texture
         let headerBackgroundPath = UIBezierPath(

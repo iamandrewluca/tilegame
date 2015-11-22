@@ -271,6 +271,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         canTouch = false
 
+        AudioPlayer.swipe()
+
         if currentDirection == toDirection {
             tile.runAction(SKAction.moveTo(endTilePoint, duration: tileMovingInterval)) { [unowned self] in
 
@@ -354,6 +356,8 @@ class GameScene: SKScene, TileDragDelegate {
             } else {
                 colorLabels[tileType]!.text = "DONE"
             }
+
+            AudioPlayer.destroy()
 
             for tile in tilesToDestroy {
                 tiles[tile.place.row][tile.place.column] = nil
