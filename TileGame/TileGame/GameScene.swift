@@ -148,8 +148,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         if !canTouch { return }
 
-        let location = touches.first!.locationInNode(self)
-        let node = nodeAtPoint(location)
+//        let location = touches.first!.locationInNode(self)
+//        let node = nodeAtPoint(location)
 
 //        debugPrint("began on \(node.name)")
     }
@@ -157,8 +157,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         if !canTouch { return }
 
-        let location = touches.first!.locationInNode(self)
-        let node = nodeAtPoint(location)
+//        let location = touches.first!.locationInNode(self)
+//        let node = nodeAtPoint(location)
 
 //        debugPrint("move on \(node.name)")
     }
@@ -291,10 +291,6 @@ class GameScene: SKScene, TileDragDelegate {
                 self.fromDirection = Direction.None
                 self.toDirection = Direction.None
                 self.currentDirection = Direction.None
-
-                // TODO: from here all is going to hell for SpriteKit
-                // check in debugger
-                // po myFuckingTile!.scene
             }
         } else {
             tile.runAction(SKAction.moveTo(startTilePoint, duration: tileMovingInterval)) { [unowned self] in

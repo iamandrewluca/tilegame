@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
     </dependencies>
     <objects>
@@ -16,59 +16,59 @@
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="9999" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vrq-o6-uZx">
-                        <rect key="frame" x="0.0" y="0.0" width="145" height="101"/>
+                        <rect key="frame" x="0.0" y="0.0" width="145" height="88"/>
                         <animations/>
                         <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="50"/>
                         <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                         <nil key="highlightedColor"/>
                     </label>
                     <view contentMode="scaleToFill" verticalHuggingPriority="1000" horizontalCompressionResistancePriority="751" translatesAutoresizingMaskIntoConstraints="NO" id="WK3-kP-FMl">
-                        <rect key="frame" x="0.0" y="101" width="145" height="44"/>
+                        <rect key="frame" x="0.0" y="88" width="145" height="57"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="rWc-Ct-En6">
-                                <rect key="frame" x="6" y="0.0" width="40" height="38"/>
+                                <rect key="frame" x="6" y="0.0" width="44" height="44"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="rWc-Ct-En6" secondAttribute="height" multiplier="40:38" id="lev-6d-GyZ"/>
+                                    <constraint firstAttribute="width" secondItem="rWc-Ct-En6" secondAttribute="height" multiplier="1:1" id="lev-6d-GyZ"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="5Dz-8F-b61">
-                                <rect key="frame" x="52" y="0.0" width="41" height="38"/>
+                                <rect key="frame" x="46" y="0.0" width="53" height="54"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="5Dz-8F-b61" secondAttribute="height" multiplier="40:38" id="E6P-Qk-sF7"/>
+                                    <constraint firstAttribute="width" secondItem="5Dz-8F-b61" secondAttribute="height" multiplier="1:1" id="E6P-Qk-sF7"/>
                                 </constraints>
                             </imageView>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Star" translatesAutoresizingMaskIntoConstraints="NO" id="xJ6-yx-wiy">
-                                <rect key="frame" x="99" y="0.0" width="40" height="38"/>
+                                <rect key="frame" x="95" y="0.0" width="44" height="44"/>
                                 <animations/>
                                 <constraints>
-                                    <constraint firstAttribute="width" secondItem="xJ6-yx-wiy" secondAttribute="height" multiplier="40:38" id="9et-9m-dou"/>
+                                    <constraint firstAttribute="width" secondItem="xJ6-yx-wiy" secondAttribute="height" multiplier="1:1" id="9et-9m-dou"/>
                                 </constraints>
                             </imageView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Hhv-2z-Oai">
-                                <rect key="frame" x="0.0" y="0.0" width="6" height="44"/>
+                                <rect key="frame" x="0.0" y="0.0" width="6" height="57"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="wc6-SG-2bQ"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="HiU-NM-2TC">
-                                <rect key="frame" x="46" y="0.0" width="6" height="44"/>
+                                <rect key="frame" x="50" y="0.0" width="6" height="57"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="J90-f9-uQA"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="lpl-JT-GCZ">
-                                <rect key="frame" x="93" y="0.0" width="6" height="44"/>
+                                <rect key="frame" x="89" y="0.0" width="6" height="57"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="Eqv-kp-ygp"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ScV-wx-EBJ">
-                                <rect key="frame" x="139" y="0.0" width="6" height="44"/>
+                                <rect key="frame" x="139" y="0.0" width="6" height="57"/>
                                 <animations/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="6" id="HQL-EI-xLT"/>
@@ -81,17 +81,17 @@
                             <constraint firstAttribute="bottom" secondItem="lpl-JT-GCZ" secondAttribute="bottom" id="5eg-48-Exk"/>
                             <constraint firstAttribute="bottom" secondItem="ScV-wx-EBJ" secondAttribute="bottom" id="5jh-ke-64a"/>
                             <constraint firstItem="Hhv-2z-Oai" firstAttribute="leading" secondItem="WK3-kP-FMl" secondAttribute="leading" id="6UJ-Nx-eqH"/>
-                            <constraint firstItem="5Dz-8F-b61" firstAttribute="leading" secondItem="HiU-NM-2TC" secondAttribute="trailing" id="BpK-rw-nRh"/>
+                            <constraint firstItem="5Dz-8F-b61" firstAttribute="leading" secondItem="HiU-NM-2TC" secondAttribute="trailing" constant="-10" id="BpK-rw-nRh"/>
                             <constraint firstAttribute="bottom" secondItem="HiU-NM-2TC" secondAttribute="bottom" id="DeS-uZ-a5y"/>
                             <constraint firstItem="rWc-Ct-En6" firstAttribute="leading" secondItem="Hhv-2z-Oai" secondAttribute="trailing" id="GDL-4U-sFT"/>
-                            <constraint firstAttribute="bottom" secondItem="5Dz-8F-b61" secondAttribute="bottom" constant="6" id="JlD-Qo-5Bt"/>
+                            <constraint firstAttribute="bottom" secondItem="5Dz-8F-b61" secondAttribute="bottom" constant="3" id="JlD-Qo-5Bt"/>
                             <constraint firstItem="rWc-Ct-En6" firstAttribute="top" secondItem="WK3-kP-FMl" secondAttribute="top" id="Ltv-3W-5Fa"/>
-                            <constraint firstItem="lpl-JT-GCZ" firstAttribute="leading" secondItem="5Dz-8F-b61" secondAttribute="trailing" id="Psa-zU-mQe"/>
+                            <constraint firstItem="lpl-JT-GCZ" firstAttribute="leading" secondItem="5Dz-8F-b61" secondAttribute="trailing" constant="-10" id="Psa-zU-mQe"/>
                             <constraint firstItem="xJ6-yx-wiy" firstAttribute="top" secondItem="WK3-kP-FMl" secondAttribute="top" id="V6U-FO-t3F"/>
                             <constraint firstAttribute="bottom" secondItem="Hhv-2z-Oai" secondAttribute="bottom" id="du6-Hb-2b6"/>
                             <constraint firstItem="ScV-wx-EBJ" firstAttribute="leading" secondItem="xJ6-yx-wiy" secondAttribute="trailing" id="fjz-Ss-8VB"/>
-                            <constraint firstAttribute="bottom" secondItem="xJ6-yx-wiy" secondAttribute="bottom" constant="6" id="iAA-Hg-6ei"/>
-                            <constraint firstAttribute="bottom" secondItem="rWc-Ct-En6" secondAttribute="bottom" constant="6" id="ojJ-IB-0hX"/>
+                            <constraint firstAttribute="bottom" secondItem="xJ6-yx-wiy" secondAttribute="bottom" constant="13" id="iAA-Hg-6ei"/>
+                            <constraint firstAttribute="bottom" secondItem="rWc-Ct-En6" secondAttribute="bottom" constant="13" id="ojJ-IB-0hX"/>
                             <constraint firstItem="lpl-JT-GCZ" firstAttribute="top" secondItem="WK3-kP-FMl" secondAttribute="top" id="qv6-2C-rVO"/>
                             <constraint firstItem="ScV-wx-EBJ" firstAttribute="top" secondItem="WK3-kP-FMl" secondAttribute="top" id="tXb-O7-R6Z"/>
                             <constraint firstItem="HiU-NM-2TC" firstAttribute="leading" secondItem="rWc-Ct-En6" secondAttribute="trailing" id="uOe-9O-TlJ"/>
@@ -126,6 +126,6 @@
         </collectionViewCell>
     </objects>
     <resources>
-        <image name="Star" width="50" height="50"/>
+        <image name="Star" width="100" height="100"/>
     </resources>
 </document>

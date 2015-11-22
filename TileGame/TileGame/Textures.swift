@@ -50,11 +50,13 @@ class Textures {
         tileTexture = view.textureFromNode(tileShape)
 
         // star texture
-        let starPath = getStarPath(0, y: 0, radius: Tile.tileLength / 2 * screenRatio, sides: 5, pointyness: 2)
-        let starShape = SKShapeNode()
-        starShape.fillColor = SKColor.whiteColor()
-        starShape.path = starPath
-        starTexture = view.textureFromNode(starShape)
+//        let starPath = getStarPath(0, y: 0, radius: Tile.tileLength / 2 * screenRatio, sides: 5, pointyness: 2)
+//        let starShape = SKShapeNode()
+//        starShape.fillColor = SKColor.whiteColor()
+//        starShape.path = starPath
+//        starTexture = view.textureFromNode(starShape)
+
+        starTexture = SKTexture(image: UIImage(imageLiteral: "Star"))
 
         // header background texture
         let headerBackgroundPath = UIBezierPath(
