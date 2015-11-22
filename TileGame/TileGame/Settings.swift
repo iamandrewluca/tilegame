@@ -27,7 +27,7 @@ class Settings {
         return Settings.getBoolSettings(Settings.SETTINGS_MUSIC_KEY)
     }()
 
-    private(set) static var lightTheme: Bool = { () -> Bool in
+    private(set) static var lightThemeOn: Bool = { () -> Bool in
         return Settings.getBoolSettings(Settings.SETTINGS_LIGHT_THEME_KEY)
     }()
 
@@ -46,7 +46,7 @@ class Settings {
     }
 
     static func toogleTheme() {
-        Settings.setLightTheme(!Settings.lightTheme)
+        Settings.setLightTheme(!Settings.lightThemeOn)
     }
 
     private static func getBoolSettings(key: String) -> Bool {
@@ -83,7 +83,7 @@ class Settings {
     }
 
     private static func setLightTheme(value: Bool) {
-        Settings.lightTheme = value
+        Settings.lightThemeOn = value
         Settings.setBoolSettings(Settings.SETTINGS_LIGHT_THEME_KEY, value: value)
     }
 

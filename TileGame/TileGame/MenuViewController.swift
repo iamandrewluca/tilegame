@@ -35,14 +35,24 @@ class MenuViewController: UIViewController {
     // MARK: IBActions
 
     @IBAction func soundButtonPressed(sender: AnyObject) {
+        Settings.toogleSound()
         AudioPlayer.tap()
         debugPrint("sound")
     }
     @IBAction func themeButtonPressed(sender: AnyObject) {
+        Settings.toogleTheme()
+
+        if Settings.lightThemeOn {
+            debugPrint("Change to light theme")
+        } else {
+            debugPrint("Change to dark theme")
+        }
+
         AudioPlayer.tap()
         debugPrint("theme")
     }
     @IBAction func musicButtonPressed(sender: AnyObject) {
+        Settings.toogleMusic()
         AudioPlayer.tap()
         debugPrint("music")
     }
