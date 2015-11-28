@@ -709,6 +709,7 @@ class GameScene: SKScene, TileDragDelegate {
         let starsInSection = levelsInfo.starsInSection(levelInfo.section)
 
         if levelInfo.number + 1 >= levelsInfo.levelsPerSection && starsInSection < levelsInfo.starsToPassSection {
+            goToLobby()
             return
         }
 
