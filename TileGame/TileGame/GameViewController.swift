@@ -21,6 +21,7 @@ class GameViewController: UIViewController {
     // MARK: UIViewController
 
     deinit {
+        UIApplication.sharedApplication().idleTimerDisabled = false;
         debugPrint("gvc deinit")
     }
 
@@ -36,6 +37,8 @@ class GameViewController: UIViewController {
         gameScene.levelInfo = levelInfo
         gameScene.gameVC = self
         gameScene.scaleMode = SKSceneScaleMode.AspectFill
+
+        UIApplication.sharedApplication().idleTimerDisabled = true;
 
         skView.presentScene(gameScene)
     }
