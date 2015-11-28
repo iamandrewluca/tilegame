@@ -706,6 +706,12 @@ class GameScene: SKScene, TileDragDelegate {
 
     func nextLevel() {
 
+        let starsInSection = levelsInfo.starsInSection(levelInfo.section)
+
+        if levelInfo.number + 1 >= levelsInfo.levelsPerSection && starsInSection < levelsInfo.starsToPassSection {
+            return
+        }
+
         removeWinStarsShadows()
 
         if levelInfo.section < levelsInfo.totalSections - 1 {

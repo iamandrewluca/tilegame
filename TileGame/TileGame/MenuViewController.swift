@@ -62,11 +62,25 @@ class MenuViewController: UIViewController {
     }
     @IBAction func shareButtonPressed(sender: AnyObject) {
         AudioPlayer.tap()
-        debugPrint("share")
+
+        var sharingItems = [AnyObject]()
+
+        // Text
+        sharingItems.append("Check out this awesome game!")
+        // URL
+        sharingItems.append(NSURL(fileURLWithPath: "http://google.com"))
+        // Image
+        sharingItems.append(UIImage(named: "Star")!)
+
+        let shareVC = UIActivityViewController(activityItems: [], applicationActivities: nil)
+        presentViewController(shareVC, animated: true, completion: nil)
     }
     @IBAction func rateButtonPressed(sender: AnyObject) {
         AudioPlayer.tap()
-        debugPrint("rate")
+
+        let appURL: NSURL = NSURL(fileURLWithPath: "http://www.google.com")
+
+        debugPrint(UIApplication.sharedApplication().openURL(appURL))
     }
 
     // MARK: UIViewController
