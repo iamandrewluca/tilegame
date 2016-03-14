@@ -31,11 +31,11 @@ class Constants {
     // MARK: Tiles Themes
 
     private static let tilesColors: [[UIColor]] = [[
-            UIColor(red: 219/255, green: 51/255, blue: 64/255, alpha: 1.0),
-            UIColor(red: 232/255, green: 183/255, blue: 26/255, alpha: 1.0),
-            UIColor(red: 247/255, green: 234/255, blue: 200/255, alpha: 1.0),
-            UIColor(red: 31/255, green: 218/255, blue: 154/255, alpha: 1.0),
-            UIColor(red: 40/255, green: 171/255, blue: 227/255, alpha: 1.0)
+            UIColor(red: 213/255, green: 83/255, blue: 102/255, alpha: 1.0),
+            UIColor(red: 241/255, green: 94/255, blue: 67/255, alpha: 1.0),
+            UIColor(red: 246/255, green: 209/255, blue: 44/255, alpha: 1.0),
+            UIColor(red: 99/255, green: 124/255, blue: 189/255, alpha: 1.0),
+            UIColor(red: 0/255, green: 184/255, blue: 186/255, alpha: 1.0)
         ], [
             UIColor(red: 105/255, green: 210/255, blue: 231/255, alpha: 1.0),
             UIColor(red: 167/255, green: 219/255, blue: 219/255, alpha: 1.0),

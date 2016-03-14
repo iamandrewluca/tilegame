@@ -36,6 +36,12 @@
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
 	</array>
+	<key>UIAppFonts</key>
+	<array>
+		<string>Comfortaa-Regular.ttf</string>
+		<string>Comfortaa-Light.ttf</string>
+		<string>Comfortaa-Bold.ttf</string>
+	</array>
 	<key>UISupportedInterfaceOrientations~ipad</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

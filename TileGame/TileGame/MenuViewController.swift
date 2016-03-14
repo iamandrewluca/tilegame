@@ -17,7 +17,7 @@ class MenuViewController: UIViewController {
     var levelsInfo = LevelsInfo.sharedInstance
     var started = false
 
-    // MARK: IBOutlets
+    // MARK: IBOutlets Buttons
 
     @IBOutlet weak var buttonsHorizontalConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsVerticalConstraint: NSLayoutConstraint!
@@ -31,6 +31,22 @@ class MenuViewController: UIViewController {
     @IBOutlet weak var adsButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
     @IBOutlet weak var rateButton: UIButton!
+
+    // MARK: Bottom Tiles outlets
+
+    @IBOutlet weak var bottomContainer: UIView!
+    @IBOutlet weak var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet weak var tile1: UIView!
+    @IBOutlet weak var tile2: UIView!
+    @IBOutlet weak var tile3: UIView!
+    @IBOutlet weak var tile4: UIView!
+    @IBOutlet weak var tile5: UIView!
+
+    // MARK: Random tiles
+
+    @IBOutlet weak var rtile1: UIImageView!
+    @IBOutlet weak var rtile2: UIImageView!
+    @IBOutlet weak var rtile3: UIImageView!
 
     // MARK: IBActions
 
@@ -102,6 +118,7 @@ class MenuViewController: UIViewController {
 
         if !started {
             started = true
+            prepareBottomTiles()
             animateMenu()
         }
     }
@@ -152,7 +169,7 @@ class MenuViewController: UIViewController {
     }
 
     private func prepareMenu() {
-        let fifthPart = (self.view.frame.height / 2 - self.buttonsContainer.frame.height) / 2 + self.buttonsContainer.frame.height / 2
+        let fifthPart = self.view.bounds.height / 5
 
         buttonsVerticalConstraint.constant = -fifthPart
         buttonsHorizontalConstraint.constant = self.view.frame.width / 2 + buttonsContainer.frame.width / 2
@@ -160,62 +177,32 @@ class MenuViewController: UIViewController {
         titleTopConstraint.constant = -titleLabel.frame.height
     }
 
+    private func prepareBottomTiles() {
+        bottomConstraint.constant -= bottomContainer.bounds.height / 3 * 2
+
+        tile1.layer.cornerRadius = tile1.bounds.height / 3
+        tile2.layer.cornerRadius = tile1.bounds.height / 3
+        tile3.layer.cornerRadius = tile1.bounds.height / 3
+        tile4.layer.cornerRadius = tile1.bounds.height / 3
+        tile5.layer.cornerRadius = tile1.bounds.height / 3
+
+
+        view.layoutIfNeeded()
+    }
+
     func setupButtons() {
 
-        var sizeRatio: CGFloat = 1
-        
-        if UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Pad {
-            sizeRatio = 2
-        }
-        
-        let playLayer = CAShapeLayer()
-        playLayer.path = UIBezierPath(
-            roundedRect: self.playButton.bounds,
-            byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSizeMake(30, 30) * sizeRatio).CGPath
-        self.playButton.layer.mask = playLayer
-        
-        let musicLayer = CAShapeLayer()
-        musicLayer.path = UIBezierPath(
-            roundedRect: self.musicButton.bounds,
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.BottomRight, UIRectCorner.TopRight],
-            cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
-        self.musicButton.layer.mask = musicLayer
-        
-        let soundLayer = CAShapeLayer()
-        soundLayer.path = UIBezierPath(
-            roundedRect: self.soundButton.bounds,
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopLeft, UIRectCorner.BottomRight],
-            cornerRadii: CGSizeMake(25, 25) * sizeRatio).CGPath
-        self.soundButton.layer.mask = soundLayer
-        
-        let resetLayer = CAShapeLayer()
-        resetLayer.path = UIBezierPath(
-            roundedRect: self.themeButton.bounds,
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopLeft, UIRectCorner.BottomRight],
-            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
-        self.themeButton.layer.mask = resetLayer
-        
-        let shareLayer = CAShapeLayer()
-        shareLayer.path = UIBezierPath(
-            roundedRect: self.shareButton.bounds,
-            byRoundingCorners: [UIRectCorner.BottomRight, UIRectCorner.TopRight, UIRectCorner.BottomLeft],
-            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
-        self.shareButton.layer.mask = shareLayer
-        
-        let adsLayer = CAShapeLayer()
-        adsLayer.path = UIBezierPath(
-            roundedRect: self.adsButton.bounds,
-            byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
-        self.adsButton.layer.mask = adsLayer
-        
-        let rateLayer = CAShapeLayer()
-        rateLayer.path = UIBezierPath(
-            roundedRect: self.rateButton.bounds,
-            byRoundingCorners: [UIRectCorner.BottomRight, UIRectCorner.TopRight, UIRectCorner.TopLeft],
-            cornerRadii: CGSizeMake(20, 20) * sizeRatio).CGPath
-        self.rateButton.layer.mask = rateLayer
+        rtile1.layer.cornerRadius = rtile1.bounds.height / 2
+        rtile2.layer.cornerRadius = rtile2.bounds.height / 2
+        rtile3.layer.cornerRadius = rtile3.bounds.height / 2
+
+        self.playButton.layer.cornerRadius = self.playButton.bounds.height / 4
+        self.musicButton.layer.cornerRadius = self.musicButton.bounds.height / 3
+        self.soundButton.layer.cornerRadius = self.soundButton.bounds.height / 3
+        self.themeButton.layer.cornerRadius = self.themeButton.bounds.height / 3
+        self.shareButton.layer.cornerRadius = self.shareButton.bounds.height / 3
+        self.adsButton.layer.cornerRadius = self.adsButton.bounds.height / 2
+        self.rateButton.layer.cornerRadius = self.rateButton.bounds.height / 3
     }
 
     func setupColors() {
@@ -239,5 +226,15 @@ class MenuViewController: UIViewController {
         self.adsButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
         self.shareButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
         self.rateButton.setTitleColor(Constants.darkColor, forState: UIControlState.Normal)
+
+        self.tile1.backgroundColor = Constants.Color1
+        self.tile2.backgroundColor = Constants.Color2
+        self.tile3.backgroundColor = Constants.Color3
+        self.tile4.backgroundColor = Constants.Color4
+        self.tile5.backgroundColor = Constants.Color5
+
+        self.rtile1.backgroundColor = Constants.Color2
+        self.rtile2.backgroundColor = Constants.Color1
+        self.rtile3.backgroundColor = Constants.Color2
     }
 }

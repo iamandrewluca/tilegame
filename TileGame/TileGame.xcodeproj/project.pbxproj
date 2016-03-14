@@ -39,6 +39,9 @@
 		7559F0D11C0215FC0045A07C /* swipe.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CD1C0215FC0045A07C /* swipe.mp3 */; };
 		7559F0D21C0215FC0045A07C /* fly.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CE1C0215FC0045A07C /* fly.mp3 */; };
 		7559F0D31C0215FC0045A07C /* tap.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 7559F0CF1C0215FC0045A07C /* tap.mp3 */; };
+		7570FAB71C97603300DAA4E3 /* Comfortaa-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7570FAB41C97603300DAA4E3 /* Comfortaa-Bold.ttf */; };
+		7570FAB81C97603300DAA4E3 /* Comfortaa-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7570FAB51C97603300DAA4E3 /* Comfortaa-Light.ttf */; };
+		7570FAB91C97603300DAA4E3 /* Comfortaa-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7570FAB61C97603300DAA4E3 /* Comfortaa-Regular.ttf */; };
 		75801F521B6B77E9007A63E5 /* Enums.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75801F511B6B77E9007A63E5 /* Enums.swift */; };
 		75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75ACDB3D1BB2CF630013F1C4 /* Textures.swift */; };
 		75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */; };
@@ -110,6 +113,9 @@
 		7559F0CD1C0215FC0045A07C /* swipe.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = swipe.mp3; sourceTree = "<group>"; };
 		7559F0CE1C0215FC0045A07C /* fly.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = fly.mp3; sourceTree = "<group>"; };
 		7559F0CF1C0215FC0045A07C /* tap.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = tap.mp3; sourceTree = "<group>"; };
+		7570FAB41C97603300DAA4E3 /* Comfortaa-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Bold.ttf"; sourceTree = "<group>"; };
+		7570FAB51C97603300DAA4E3 /* Comfortaa-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Light.ttf"; sourceTree = "<group>"; };
+		7570FAB61C97603300DAA4E3 /* Comfortaa-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Comfortaa-Regular.ttf"; sourceTree = "<group>"; };
 		75801F511B6B77E9007A63E5 /* Enums.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Enums.swift; sourceTree = "<group>"; };
 		75ACDB3D1BB2CF630013F1C4 /* Textures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Textures.swift; sourceTree = "<group>"; };
 		75B52BF11B066ED200DCDB91 /* LobbyHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LobbyHeader.swift; sourceTree = "<group>"; };
@@ -171,6 +177,7 @@
 		151B5A801AC9BA92002BD68C /* TileGame */ = {
 			isa = PBXGroup;
 			children = (
+				7570FAB31C97600900DAA4E3 /* Fonts */,
 				154E6D0A1AD016C400929955 /* Helpers */,
 				154E6D091AD016B100929955 /* Game */,
 				154E6D081AD016A100929955 /* Lobby */,
@@ -309,6 +316,16 @@
 			name = Main;
 			sourceTree = "<group>";
 		};
+		7570FAB31C97600900DAA4E3 /* Fonts */ = {
+			isa = PBXGroup;
+			children = (
+				7570FAB41C97603300DAA4E3 /* Comfortaa-Bold.ttf */,
+				7570FAB51C97603300DAA4E3 /* Comfortaa-Light.ttf */,
+				7570FAB61C97603300DAA4E3 /* Comfortaa-Regular.ttf */,
+			);
+			name = Fonts;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -393,14 +410,17 @@
 				7559F0D21C0215FC0045A07C /* fly.mp3 in Resources */,
 				75B5E3AD1B288EDB000C5C95 /* LobbyCell.xib in Resources */,
 				750217851BC587C5007297E6 /* section_2_level_5.json in Resources */,
+				7570FAB91C97603300DAA4E3 /* Comfortaa-Regular.ttf in Resources */,
 				7559F0D01C0215FC0045A07C /* destroy.mp3 in Resources */,
 				75CF0F871B0CC23600A13514 /* section_0_level_5.json in Resources */,
+				7570FAB71C97603300DAA4E3 /* Comfortaa-Bold.ttf in Resources */,
 				75CF0F901B0CC29800A13514 /* section_1_level_2.json in Resources */,
 				151B5A921AC9BA92002BD68C /* LaunchScreen.xib in Resources */,
 				75CF0F851B0CC22800A13514 /* section_0_level_4.json in Resources */,
 				7559F0D11C0215FC0045A07C /* swipe.mp3 in Resources */,
 				154E6D061AD0167400929955 /* slide.mp3 in Resources */,
 				7559F0D31C0215FC0045A07C /* tap.mp3 in Resources */,
+				7570FAB81C97603300DAA4E3 /* Comfortaa-Light.ttf in Resources */,
 				75CF0F811B0C7F5B00A13514 /* LobbyHeader.xib in Resources */,
 				154E6D041AD0167400929955 /* backgroundMusic.mp3 in Resources */,
 				151B5A8F1AC9BA92002BD68C /* Images.xcassets in Resources */,
