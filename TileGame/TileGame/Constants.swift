@@ -19,23 +19,28 @@ class Constants {
 
     // MARK: Fonts
 
-    static let primaryFont: String = "HelveticaNeue-UltraLight"
-    static let secondaryFont: String = "HelveticaNeue-CondensedBold"
+    static let primaryFont: String = "Comfortaa-Light"
+    static let secondaryFont: String = "Comofortaa-Bold"
 
     // MARK: Colors
-    
+
+    static let purpleColor: SKColor = SKColor(red: 213/255, green: 83/255, blue: 102/255, alpha: 1.0)
+    static let redColor: SKColor = SKColor(red: 241/255, green: 94/255, blue: 67/255, alpha: 1.0)
+    static let yellowColor: SKColor = SKColor(red: 246/255, green: 209/255, blue: 44/255, alpha: 1.0)
+    static let blueColor: SKColor = SKColor(red: 99/255, green: 124/255, blue: 189/255, alpha: 1.0)
+    static let cyanColor: SKColor = SKColor(red: 0/255, green: 184/255, blue: 186/255, alpha: 1.0)
+    static let darkColor: SKColor = SKColor(red: 47/255, green: 47/255, blue: 47/255, alpha: 1.0)
+    static let lightColor: SKColor = SKColor(red: 254/255, green: 242/255, blue: 242/255, alpha: 1.0)
+
     // this will be set from user preferences
     static var tilesTheme: Int { return 0 }
-    static var gameTheme: Int { return 0 }
-    
-    // MARK: Tiles Themes
 
     private static let tilesColors: [[UIColor]] = [[
-            UIColor(red: 213/255, green: 83/255, blue: 102/255, alpha: 1.0),
-            UIColor(red: 241/255, green: 94/255, blue: 67/255, alpha: 1.0),
-            UIColor(red: 246/255, green: 209/255, blue: 44/255, alpha: 1.0),
-            UIColor(red: 99/255, green: 124/255, blue: 189/255, alpha: 1.0),
-            UIColor(red: 0/255, green: 184/255, blue: 186/255, alpha: 1.0)
+            Constants.purpleColor,
+            Constants.redColor,
+            Constants.yellowColor,
+            Constants.blueColor,
+            Constants.cyanColor
         ], [
             UIColor(red: 105/255, green: 210/255, blue: 231/255, alpha: 1.0),
             UIColor(red: 167/255, green: 219/255, blue: 219/255, alpha: 1.0),
@@ -51,45 +56,9 @@ class Constants {
     static var Color4: UIColor { return tilesColors[tilesTheme][3] }
     static var Color5: UIColor { return tilesColors[tilesTheme][4] }
 
-    // MARK: Theme Color
+    // MARK: Game Theme Color
 
-    // Light Colors
-    // Dark Colors
-    private static let gameColors: [[UIColor]] = [[
-            UIColor(red: 247/255, green: 247/255, blue: 239/255, alpha: 1.0), // Tone 1
-            UIColor(red: 206/255, green: 190/255, blue: 173/255, alpha: 1.0), // Tone 2
-            UIColor(red: 189/255, green: 174/255, blue: 156/255, alpha: 1.0), // Tone 3
-            UIColor(red: 123/255, green: 109/255, blue: 99/255, alpha: 1.0), // Tone 4
-            UIColor(red: 49/255, green: 36/255, blue: 25/255, alpha: 1.0) // Tone 5
-        ], [
-            UIColor(red: 49/255, green: 36/255, blue: 25/255, alpha: 1.0),
-            UIColor(red: 156/255, green: 146/255, blue: 132/255, alpha: 1.0),
-            UIColor(red: 132/255, green: 121/255, blue: 107/255, alpha: 1.0),
-            UIColor(red: 123/255, green: 109/255, blue: 99/255, alpha: 1.0),
-            UIColor(red: 247/255, green: 247/255, blue: 239/255, alpha: 1.0)
-        ]
-    ]
+    static var textColor: UIColor { return (Settings.lightThemeOn ? darkColor : lightColor) }
+    static var backgroundColor: UIColor { return (Settings.lightThemeOn ? lightColor : darkColor) }
 
-    static var backgroundColor: UIColor { return gameColors[gameTheme][0] }
-    static var textColor: UIColor { return gameColors[gameTheme][4] }
-    static var navigationBackgroundColor: UIColor { return gameColors[gameTheme][2] }
-    static var headerBackgroundColor: UIColor { return gameColors[gameTheme][1] }
-    static var cellBackgroundColor: UIColor { return UIColor.whiteColor() }
-    static var cellTextColor: UIColor { return darkColor }
-    static var tileBackgroundColor: UIColor { return UIColor.whiteColor() }
-    static var navigationButtonColor: UIColor { return gameColors[gameTheme][1] }
-    static var starColor: UIColor { return UIColor.yellowColor() }
-    static var noStarColor: UIColor { return UIColor.lightGrayColor() }
-    static var overlayColor: UIColor { return UIColor.brownColor() }
-    static var menuBackgroundColor: UIColor { return navigationButtonColor }
-    static var menuButtonColor: UIColor { return navigationBackgroundColor }
-    static var winStarsBackgroundColor: UIColor { return menuButtonColor }
-
-    static var lightColor: UIColor { return gameColors[0][0] }
-    static var darkColor: UIColor { return gameColors[1][0] }
-
-    // MARK: Other Colors
-
-    static let orangeColor = UIColor(red: 255/255, green: 126/255, blue: 0/255, alpha: 1.0)
-    static let yellowColor = UIColor(red: 255/255, green: 255/255, blue: 0/255, alpha: 1.0)
 }

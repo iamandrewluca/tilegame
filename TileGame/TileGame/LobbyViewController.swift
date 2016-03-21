@@ -67,11 +67,11 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         let levelStars = levelsInfo.starsAtIndexPath(indexPath)
 
         if levelStars > 0 {
-            cell.firstStar.tintColor = Constants.starColor
+            cell.firstStar.tintColor = Constants.Color3
             if levelStars > 1 {
-                cell.secondStar.tintColor = Constants.starColor
+                cell.secondStar.tintColor = Constants.Color3
                 if levelStars > 2 {
-                    cell.thirdStar.tintColor = Constants.starColor
+                    cell.thirdStar.tintColor = Constants.Color3
                 }
             }
         }
@@ -111,9 +111,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         leaderboardButtonContainer.layer.mask = leaderboardMask
         backButtonContainer.layer.mask = backMask
 
-        backButtonContainer.backgroundColor = Constants.navigationButtonColor
-        leaderboardButtonContainer.backgroundColor = Constants.navigationButtonColor
-        navigationView.backgroundColor = Constants.navigationBackgroundColor
+        backButtonContainer.backgroundColor = Constants.Color5
+        leaderboardButtonContainer.backgroundColor = Constants.Color5
+        navigationView.backgroundColor = Constants.Color5
         middleLabel.textColor = Constants.textColor
         collectionView.backgroundColor = Constants.backgroundColor
 

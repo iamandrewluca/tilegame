@@ -26,7 +26,7 @@ class LobbyHeader: UICollectionReusableView {
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = Constants.headerBackgroundColor
+        backgroundColor = Constants.Color5
         headerLabel.textColor = Constants.textColor
     }
 }

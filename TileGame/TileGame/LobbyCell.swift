@@ -37,17 +37,17 @@ class LobbyCell: UICollectionViewCell {
         secondStar.image = LobbyCell.starImage
         thirdStar.image = LobbyCell.starImage
 
-        backgroundColor = Constants.cellBackgroundColor
+        backgroundColor = Constants.backgroundColor
         levelNumber.textColor = Constants.textColor
-        firstStar.tintColor = Constants.noStarColor
-        secondStar.tintColor = Constants.noStarColor
-        thirdStar.tintColor = Constants.noStarColor
+        firstStar.tintColor = Constants.backgroundColor
+        secondStar.tintColor = Constants.backgroundColor
+        thirdStar.tintColor = Constants.backgroundColor
     }
 
     override func prepareForReuse() {
-        firstStar.tintColor = Constants.noStarColor
-        secondStar.tintColor = Constants.noStarColor
-        thirdStar.tintColor = Constants.noStarColor
+        firstStar.tintColor = Constants.backgroundColor
+        secondStar.tintColor = Constants.backgroundColor
+        thirdStar.tintColor = Constants.backgroundColor
         levelNumber.text = "0"
     }
 }

@@ -15,6 +15,8 @@
             <string>Comfortaa</string>
             <string>Comfortaa</string>
             <string>Comfortaa</string>
+            <string>Comfortaa</string>
+            <string>Comfortaa</string>
         </mutableArray>
     </customFonts>
     <scenes>
@@ -239,7 +241,7 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="heightClass=regular-widthClass=regular">
-                                            <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="35"/>
+                                            <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="40"/>
                                         </variation>
                                         <connections>
                                             <segue destination="hVi-5l-GF7" kind="show" identifier="toLobby" id="ys0-x0-qE9"/>
@@ -265,7 +267,7 @@
                                             <action selector="musicButtonPressed:" destination="H2m-Iu-GgB" eventType="touchUpInside" id="J0s-l7-3lL"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QMB-KR-eW1">
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="QMB-KR-eW1">
                                         <rect key="frame" x="5" y="85" width="65" height="65"/>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -275,7 +277,7 @@
                                             <constraint firstAttribute="width" secondItem="QMB-KR-eW1" secondAttribute="height" multiplier="1:1" id="LO7-3I-8jH"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="15"/>
-                                        <state key="normal" title="Dark">
+                                        <state key="normal" title="Dark Version">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                         <variation key="heightClass=regular-widthClass=regular">
@@ -396,7 +398,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="on" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="a0K-A7-h8O">
-                                        <rect key="frame" x="157" y="154" width="25" height="25"/>
+                                        <rect key="frame" x="159" y="152" width="25" height="25"/>
                                         <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="wbW-zd-WxA">
@@ -404,12 +406,12 @@
                                             </constraint>
                                             <constraint firstAttribute="width" secondItem="a0K-A7-h8O" secondAttribute="height" multiplier="1:1" id="xVP-8O-wxR"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="off" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vrh-Wh-4TO">
-                                        <rect key="frame" x="79" y="154" width="25" height="25"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="on" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vrh-Wh-4TO">
+                                        <rect key="frame" x="81" y="152" width="25" height="25"/>
                                         <color key="backgroundColor" red="0.50196081400000003" green="0.25098040700000002" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="25" id="LWB-ZQ-Dkr">
@@ -417,7 +419,7 @@
                                             </constraint>
                                             <constraint firstAttribute="width" secondItem="Vrh-Wh-4TO" secondAttribute="height" multiplier="1:1" id="zBk-xV-BSL"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                        <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="12"/>
                                         <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -444,8 +446,8 @@
                                     <constraint firstItem="ecT-kQ-Rr9" firstAttribute="leading" secondItem="26j-9c-pph" secondAttribute="trailing" constant="8" id="HmX-72-Fbd">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
                                     </constraint>
-                                    <constraint firstItem="a0K-A7-h8O" firstAttribute="trailing" secondItem="DtV-6a-6eI" secondAttribute="trailing" constant="4" id="LxG-73-DnW">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="8"/>
+                                    <constraint firstItem="a0K-A7-h8O" firstAttribute="trailing" secondItem="DtV-6a-6eI" secondAttribute="trailing" constant="6" id="LxG-73-DnW">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="12"/>
                                     </constraint>
                                     <constraint firstItem="Dif-Bp-1iU" firstAttribute="leading" secondItem="DtV-6a-6eI" secondAttribute="trailing" constant="8" id="MfG-EU-ys0">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
@@ -461,8 +463,8 @@
                                     <constraint firstAttribute="width" constant="250" id="au5-HY-T2h">
                                         <variation key="heightClass=regular-widthClass=regular" constant="500"/>
                                     </constraint>
-                                    <constraint firstItem="Vrh-Wh-4TO" firstAttribute="trailing" secondItem="3ve-i5-aQE" secondAttribute="trailing" constant="4" id="cvh-dY-kNj">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="8"/>
+                                    <constraint firstItem="Vrh-Wh-4TO" firstAttribute="trailing" secondItem="3ve-i5-aQE" secondAttribute="trailing" constant="6" id="cvh-dY-kNj">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="12"/>
                                     </constraint>
                                     <constraint firstItem="DtV-6a-6eI" firstAttribute="leading" secondItem="3ve-i5-aQE" secondAttribute="trailing" constant="8" id="gk0-1d-e8g">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
@@ -470,16 +472,16 @@
                                     <constraint firstItem="Dif-Bp-1iU" firstAttribute="top" secondItem="26j-9c-pph" secondAttribute="bottom" constant="8" id="h9f-2r-rdt">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
                                     </constraint>
-                                    <constraint firstItem="a0K-A7-h8O" firstAttribute="top" secondItem="DtV-6a-6eI" secondAttribute="top" constant="-4" id="s1b-gf-bSg">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="-8"/>
+                                    <constraint firstItem="a0K-A7-h8O" firstAttribute="top" secondItem="DtV-6a-6eI" secondAttribute="top" constant="-6" id="s1b-gf-bSg">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="-12"/>
                                     </constraint>
                                     <constraint firstAttribute="centerY" secondItem="26j-9c-pph" secondAttribute="centerY" constant="25" id="syU-yf-XDX"/>
                                     <constraint firstItem="DtV-6a-6eI" firstAttribute="top" secondItem="26j-9c-pph" secondAttribute="bottom" constant="8" id="tUT-rX-Mwe">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
                                     </constraint>
                                     <constraint firstItem="ecT-kQ-Rr9" firstAttribute="leading" secondItem="vao-Hy-EO1" secondAttribute="trailing" constant="8" id="xT2-xo-FcG"/>
-                                    <constraint firstItem="Vrh-Wh-4TO" firstAttribute="top" secondItem="3ve-i5-aQE" secondAttribute="top" constant="-4" id="yuk-k6-eG8">
-                                        <variation key="heightClass=regular-widthClass=regular" constant="-8"/>
+                                    <constraint firstItem="Vrh-Wh-4TO" firstAttribute="top" secondItem="3ve-i5-aQE" secondAttribute="top" constant="-6" id="yuk-k6-eG8">
+                                        <variation key="heightClass=regular-widthClass=regular" constant="-12"/>
                                     </constraint>
                                     <constraint firstItem="Dif-Bp-1iU" firstAttribute="top" secondItem="8gs-PM-9Sj" secondAttribute="bottom" constant="8" id="zFf-PU-boj">
                                         <variation key="heightClass=regular-widthClass=regular" constant="16"/>
@@ -581,6 +583,7 @@
                         <outlet property="buttonsHorizontalConstraint" destination="ggV-lc-IRb" id="3pU-V3-qZ0"/>
                         <outlet property="buttonsVerticalConstraint" destination="wBb-sM-EfZ" id="hPg-UT-d80"/>
                         <outlet property="musicButton" destination="DtV-6a-6eI" id="gK0-gt-Zn4"/>
+                        <outlet property="musicButtonLabel" destination="a0K-A7-h8O" id="YmB-aZ-75A"/>
                         <outlet property="playButton" destination="26j-9c-pph" id="RAE-xY-Qkx"/>
                         <outlet property="rateButton" destination="ecT-kQ-Rr9" id="h1S-rW-GKV"/>
                         <outlet property="rtile1" destination="qTZ-Rc-0Os" id="sAl-c1-LVU"/>
@@ -588,6 +591,7 @@
                         <outlet property="rtile3" destination="vao-Hy-EO1" id="FxK-FT-x3R"/>
                         <outlet property="shareButton" destination="8gs-PM-9Sj" id="Mzb-Jm-zOo"/>
                         <outlet property="soundButton" destination="3ve-i5-aQE" id="7xF-h5-xts"/>
+                        <outlet property="soundButtonLabel" destination="Vrh-Wh-4TO" id="iyg-6p-yeV"/>
                         <outlet property="themeButton" destination="QMB-KR-eW1" id="q7k-Af-7v0"/>
                         <outlet property="tile1" destination="aSP-ST-ucu" id="T5z-ff-bxe"/>
                         <outlet property="tile2" destination="Qa9-Jz-mAf" id="F7Q-O4-qam"/>

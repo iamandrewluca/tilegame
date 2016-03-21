@@ -1044,7 +1044,7 @@ class GameScene: SKScene, TileDragDelegate {
 
             if levelInfo.starTargets[value] != false {
                 let star = SKSpriteNode(texture: Textures.starTexture,
-                    color: Constants.navigationBackgroundColor,
+                    color: Constants.textColor,
                     size: CGSizeMake(Tile.tileLength / 3, Tile.tileLength / 3))
 
                 star.colorBlendFactor = 1.0
@@ -1136,7 +1136,7 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func addBoardBackgroundTile(row: Int, column: Int) {
-        let backTile = SKSpriteNode(texture: Textures.tileTexture, color: Constants.tileBackgroundColor, size: Tile.tileSize)
+        let backTile = SKSpriteNode(texture: Textures.tileTexture, color: Constants.backgroundColor, size: Tile.tileSize)
         backTile.colorBlendFactor = 1
         backTile.zPosition = 1
         backgroundTiles[row][column] = backTile
@@ -1157,7 +1157,7 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func createOverlay() {
-        overlay = SKSpriteNode(color: Constants.darkColor, size: size);
+        overlay = SKSpriteNode(color: Constants.backgroundColor, size: size);
         overlay.anchorPoint = CGPointZero
         overlay.zPosition = 4
         overlay.name = ButtonType.Overlay.rawValue
@@ -1173,7 +1173,7 @@ class GameScene: SKScene, TileDragDelegate {
         let menuBackgroundSize: CGSize = CGSizeMake(menuBackgroundWidth, menuBackgroundHeight)
 
         let menuBackground: SKSpriteNode = SKSpriteNode(texture: Textures.menuBackgroundTexture,
-            color: Constants.menuBackgroundColor, size: menuBackgroundSize)
+            color: Constants.backgroundColor, size: menuBackgroundSize)
 
         menuBackground.colorBlendFactor = 1.0
         menuBackground.anchorPoint = CGPointZero
@@ -1191,16 +1191,16 @@ class GameScene: SKScene, TileDragDelegate {
         let menuTopButtonsSize: CGSize = CGSize(width: topButtonWidth, height: buttonHeight)
 
         menuLeftButton = SKSpriteNode(texture: Textures.menuLeftButtonTexture,
-            color: Constants.menuButtonColor, size: menuButtonsSize)
+            color: Constants.backgroundColor, size: menuButtonsSize)
 
         menuMiddleButton = SKSpriteNode(texture: Textures.menuMiddleButtonTexture,
-            color: Constants.menuButtonColor, size: menuButtonsSize)
+            color: Constants.backgroundColor, size: menuButtonsSize)
 
         menuRightButton = SKSpriteNode(texture: Textures.menuRightButtonTexture,
-            color: Constants.menuButtonColor, size: menuButtonsSize)
+            color: Constants.backgroundColor, size: menuButtonsSize)
 
         menuTopButton = SKSpriteNode(texture: Textures.menuTopButtonTexture,
-            color: Constants.menuButtonColor, size: menuTopButtonsSize)
+            color: Constants.backgroundColor, size: menuTopButtonsSize)
 
         menuLeftButton.zPosition = 1
         menuMiddleButton.zPosition = 1
@@ -1239,7 +1239,7 @@ class GameScene: SKScene, TileDragDelegate {
         lobbyIcon.position = CGPoint(x: buttonWidth / 2, y: buttonHeight / 2)
         lobbyIcon.name = ButtonType.Lobby.rawValue
         lobbyIcon.colorBlendFactor = 1.0
-        lobbyIcon.color = Constants.menuBackgroundColor
+        lobbyIcon.color = Constants.backgroundColor
         lobbyIcon.zPosition = 1
 
         menuPauseIcon = SKSpriteNode(imageNamed: "Pause")
@@ -1247,7 +1247,7 @@ class GameScene: SKScene, TileDragDelegate {
         menuPauseIcon.position = lobbyIcon.position
         menuPauseIcon.name = ButtonType.Pause.rawValue
         menuPauseIcon.colorBlendFactor = 1.0
-        menuPauseIcon.color = Constants.menuBackgroundColor
+        menuPauseIcon.color = Constants.backgroundColor
         menuPauseIcon.zPosition = 1
 
         menuRestartIcon = SKSpriteNode(imageNamed: "Restart")
@@ -1255,21 +1255,21 @@ class GameScene: SKScene, TileDragDelegate {
         menuRestartIcon.position = lobbyIcon.position
         menuRestartIcon.name = ButtonType.Restart.rawValue
         menuRestartIcon.colorBlendFactor = 1.0
-        menuRestartIcon.color = Constants.menuBackgroundColor
+        menuRestartIcon.color = Constants.backgroundColor
         menuRestartIcon.zPosition = 1
 
         menuShareIcon = SKSpriteNode(imageNamed: "Share")
         menuShareIcon.position = lobbyIcon.position
         menuShareIcon.name = ButtonType.Share.rawValue
         menuShareIcon.colorBlendFactor = 1.0
-        menuShareIcon.color = Constants.menuBackgroundColor
+        menuShareIcon.color = Constants.backgroundColor
         menuShareIcon.zPosition = 1
 
         menuNextIcon = SKSpriteNode(imageNamed: "Next")
         menuNextIcon.position = lobbyIcon.position
         menuNextIcon.name = ButtonType.Next.rawValue
         menuNextIcon.colorBlendFactor = 1.0
-        menuNextIcon.color = Constants.menuBackgroundColor
+        menuNextIcon.color = Constants.backgroundColor
         menuNextIcon.zPosition = 1
 
         // add top label
@@ -1360,7 +1360,7 @@ class GameScene: SKScene, TileDragDelegate {
     func createHeader() {
 
         headerBackground = SKSpriteNode(texture: Textures.headerBackgroundTexture,
-            color: Constants.navigationBackgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
+            color: Constants.backgroundColor, size: CGSizeMake(Constants.screenSize.width, Tile.tileLength))
 
         headerBackground.colorBlendFactor = 1.0
         headerBackground.anchorPoint = CGPointZero
@@ -1368,7 +1368,7 @@ class GameScene: SKScene, TileDragDelegate {
         headerBackground.zPosition = 5
 
         headerLeftIcon = SKSpriteNode(texture: Textures.headerLeftCornerTexture,
-            color: Constants.navigationButtonColor, size: Tile.tileSize)
+            color: Constants.backgroundColor, size: Tile.tileSize)
 
         headerLeftIcon.position = CGPoint(x: Tile.tileLength / 2, y: Tile.tileLength / 2)
         headerLeftIcon.colorBlendFactor = 1.0
@@ -1380,7 +1380,7 @@ class GameScene: SKScene, TileDragDelegate {
         // add right button
 
         pauseButton = SKSpriteNode(texture: Textures.headerRightCornerTexture,
-            color: Constants.navigationButtonColor, size: Tile.tileSize)
+            color: Constants.backgroundColor, size: Tile.tileSize)
         pauseButton.colorBlendFactor = 1.0
         pauseButton.zPosition = 1
         pauseButton.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
@@ -1404,9 +1404,9 @@ class GameScene: SKScene, TileDragDelegate {
 
     func createWinStarsShadows() {
 
-        let firstStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
-        let secondStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
-        let thirdStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.winStarsBackgroundColor, size: Tile.tileSize)
+        let firstStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
+        let secondStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
+        let thirdStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
 
         firstStarShadow.setScale(1.5)
         secondStarShadow.setScale(2)
