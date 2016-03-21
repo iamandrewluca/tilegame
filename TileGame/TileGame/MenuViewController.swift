@@ -21,8 +21,8 @@ class MenuViewController: UIViewController {
 
     @IBOutlet weak var buttonsHorizontalConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsVerticalConstraint: NSLayoutConstraint!
-    @IBOutlet weak var titleTopConstraint: NSLayoutConstraint!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var logoImageView: UIImageView!
+    @IBOutlet weak var logoTopConstraint: NSLayoutConstraint!
     @IBOutlet weak var buttonsContainer: UIView!
     @IBOutlet weak var playButton: UIButton!
     @IBOutlet weak var soundButton: UIButton!
@@ -161,7 +161,7 @@ class MenuViewController: UIViewController {
 
         UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: { [unowned self] in
 
-            self.titleTopConstraint.constant = self.view.frame.height / 4
+            self.logoTopConstraint.constant = self.view.frame.height / 8
             self.buttonsHorizontalConstraint.constant = 0
             self.view.layoutIfNeeded()
 
@@ -174,7 +174,7 @@ class MenuViewController: UIViewController {
         buttonsVerticalConstraint.constant = -fifthPart
         buttonsHorizontalConstraint.constant = self.view.frame.width / 2 + buttonsContainer.frame.width / 2
 
-        titleTopConstraint.constant = -titleLabel.frame.height
+        logoTopConstraint.constant = -logoImageView.frame.height
     }
 
     private func prepareBottomTiles() {
@@ -278,7 +278,6 @@ class MenuViewController: UIViewController {
     func toogleTheme(lightThemeOn: Bool) {
 
         self.view.backgroundColor = Constants.backgroundColor
-        self.titleLabel.textColor = Constants.textColor
 
         if lightThemeOn {
 
@@ -313,6 +312,8 @@ class MenuViewController: UIViewController {
 
             self.themeButton.setTitle("Dark Version", forState: UIControlState.Normal)
 
+            self.logoImageView.image = UIImage(named: "Logo")
+
         } else {
 
             self.playButton.backgroundColor = Constants.backgroundColor
@@ -345,6 +346,8 @@ class MenuViewController: UIViewController {
             self.toogleMusicButtonLook(Settings.musicOn)
 
             self.themeButton.setTitle("Light Version", forState: UIControlState.Normal)
+
+            self.logoImageView.image = UIImage(named: "LogoOutlined")
 
         }
     }

@@ -4,7 +4,6 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9530"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <customFonts key="customFonts">
         <mutableArray key="Comfortaa-Regular.ttf">
@@ -215,15 +214,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="SWIPER" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="6bE-Yk-stg">
-                                <rect key="frame" x="4" y="50" width="592" height="86"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="75"/>
-                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
-                                <nil key="highlightedColor"/>
-                                <variation key="heightClass=regular-widthClass=regular">
-                                    <fontDescription key="fontDescription" name="HelveticaNeue-UltraLight" family="Helvetica Neue" pointSize="125"/>
-                                </variation>
-                            </label>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="RQs-n2-ThA">
                                 <rect key="frame" x="175" y="200" width="250" height="250"/>
                                 <subviews>
@@ -407,7 +397,7 @@
                                             <constraint firstAttribute="width" secondItem="a0K-A7-h8O" secondAttribute="height" multiplier="1:1" id="xVP-8O-wxR"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="on" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Vrh-Wh-4TO">
@@ -420,7 +410,7 @@
                                             <constraint firstAttribute="width" secondItem="Vrh-Wh-4TO" secondAttribute="height" multiplier="1:1" id="zBk-xV-BSL"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Comfortaa" family="Comfortaa" pointSize="12"/>
-                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
@@ -560,15 +550,18 @@
                                     </constraint>
                                 </constraints>
                             </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="Logo" translatesAutoresizingMaskIntoConstraints="NO" id="Gb1-GT-8bO">
+                                <rect key="frame" x="32" y="45" width="536" height="110"/>
+                            </imageView>
                         </subviews>
                         <color key="backgroundColor" red="0.96862745098039216" green="0.96862745098039216" blue="0.93725490196078431" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="6bE-Yk-stg" firstAttribute="leading" secondItem="wRq-hc-cVR" secondAttribute="leadingMargin" constant="-16" id="K5h-hJ-2Ac"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="6bE-Yk-stg" secondAttribute="trailing" constant="-16" id="dGQ-I5-uH2"/>
+                            <constraint firstItem="Gb1-GT-8bO" firstAttribute="leading" secondItem="wRq-hc-cVR" secondAttribute="leading" constant="32" id="BMa-iA-dDc"/>
+                            <constraint firstAttribute="trailing" secondItem="Gb1-GT-8bO" secondAttribute="trailing" constant="32" id="BS5-ie-RG1"/>
                             <constraint firstAttribute="trailing" secondItem="mmK-5u-sKy" secondAttribute="trailing" id="dTp-22-ZWT"/>
                             <constraint firstAttribute="bottom" secondItem="mmK-5u-sKy" secondAttribute="bottom" id="fzO-OD-rpl"/>
                             <constraint firstAttribute="centerX" secondItem="RQs-n2-ThA" secondAttribute="centerX" id="ggV-lc-IRb"/>
-                            <constraint firstItem="6bE-Yk-stg" firstAttribute="top" secondItem="g3A-T0-zAz" secondAttribute="bottom" constant="50" id="tIL-3W-rlP"/>
+                            <constraint firstItem="Gb1-GT-8bO" firstAttribute="top" secondItem="g3A-T0-zAz" secondAttribute="bottom" constant="45" id="hvo-T3-spK"/>
                             <constraint firstAttribute="centerY" secondItem="RQs-n2-ThA" secondAttribute="centerY" constant="-25" id="wBb-sM-EfZ"/>
                             <constraint firstItem="mmK-5u-sKy" firstAttribute="leading" secondItem="wRq-hc-cVR" secondAttribute="leading" id="y6D-AF-bYc"/>
                         </constraints>
@@ -582,6 +575,8 @@
                         <outlet property="buttonsContainer" destination="RQs-n2-ThA" id="G4a-Yd-bLl"/>
                         <outlet property="buttonsHorizontalConstraint" destination="ggV-lc-IRb" id="3pU-V3-qZ0"/>
                         <outlet property="buttonsVerticalConstraint" destination="wBb-sM-EfZ" id="hPg-UT-d80"/>
+                        <outlet property="logoImageView" destination="Gb1-GT-8bO" id="yFw-jt-cV2"/>
+                        <outlet property="logoTopConstraint" destination="hvo-T3-spK" id="mOf-V9-iVt"/>
                         <outlet property="musicButton" destination="DtV-6a-6eI" id="gK0-gt-Zn4"/>
                         <outlet property="musicButtonLabel" destination="a0K-A7-h8O" id="YmB-aZ-75A"/>
                         <outlet property="playButton" destination="26j-9c-pph" id="RAE-xY-Qkx"/>
@@ -598,8 +593,6 @@
                         <outlet property="tile3" destination="ne1-Db-yKI" id="eRb-jh-XQ4"/>
                         <outlet property="tile4" destination="C0I-Xj-gnJ" id="jgn-AK-Nxi"/>
                         <outlet property="tile5" destination="jub-EC-TZB" id="Giu-G9-Ka1"/>
-                        <outlet property="titleLabel" destination="6bE-Yk-stg" id="Lk3-wW-vhB"/>
-                        <outlet property="titleTopConstraint" destination="tIL-3W-rlP" id="vgZ-Wt-Kcz"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="6cK-T8-reb" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -610,5 +603,6 @@
     <resources>
         <image name="Back" width="50" height="50"/>
         <image name="Leaderboard" width="50" height="50"/>
+        <image name="Logo" width="291" height="110"/>
     </resources>
 </document>
