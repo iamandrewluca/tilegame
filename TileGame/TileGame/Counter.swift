@@ -50,7 +50,7 @@ class Counter {
     // MARK: Methods
 
     @objc private func run() {
-        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
 
         let timerRunLoop = NSRunLoop.currentRunLoop()
         timerRunLoop.addTimer(timer, forMode: NSRunLoopCommonModes)
@@ -78,7 +78,7 @@ class Counter {
     func start() {
 //        timerThread = MyThread(target: self, selector: "run", object: nil)
 //        timerThread.start()
-        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: "intervalLoop", userInfo: nil, repeats: true)
+        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
         NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
     }
 

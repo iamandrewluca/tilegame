@@ -18,6 +18,10 @@ class LobbyCell: UICollectionViewCell {
         return (UIImage(named: "Star")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
     }()
 
+    static let starImageOutlined: UIImage = { () -> UIImage in
+        return (UIImage(named: "StarOutlined")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
+    }()
+
     // MARK: IBOutlets
     
     @IBOutlet weak var levelNumber: UILabel!
@@ -30,24 +34,26 @@ class LobbyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        layer.cornerRadius = Tile.tileCornerRadius * 2
-        layer.masksToBounds = false
+        layer.borderWidth = 2
+        layer.borderColor = Constants.orangeColor.CGColor
+        layer.cornerRadius = bounds.width / 5
 
-        firstStar.image = LobbyCell.starImage
-        secondStar.image = LobbyCell.starImage
-        thirdStar.image = LobbyCell.starImage
+        firstStar.image = LobbyCell.starImageOutlined
+        secondStar.image = LobbyCell.starImageOutlined
+        thirdStar.image = LobbyCell.starImageOutlined
 
-        backgroundColor = Constants.backgroundColor
         levelNumber.textColor = Constants.textColor
-        firstStar.tintColor = Constants.backgroundColor
-        secondStar.tintColor = Constants.backgroundColor
-        thirdStar.tintColor = Constants.backgroundColor
+        prepareForReuse()
+
     }
 
     override func prepareForReuse() {
-        firstStar.tintColor = Constants.backgroundColor
-        secondStar.tintColor = Constants.backgroundColor
-        thirdStar.tintColor = Constants.backgroundColor
+
+        backgroundColor = Constants.backgroundColor
+        firstStar.tintColor = Constants.yellowColor
+        secondStar.tintColor = Constants.yellowColor
+        thirdStar.tintColor = Constants.yellowColor
+
         levelNumber.text = "0"
     }
 }

@@ -136,13 +136,13 @@ class LevelsInfo {
         levelInfo.typeCounter = counter
 
         // get tiles targets
-        for var i = 0; i < targets.count && i < levelInfo.colorTargets.count; ++i {
+        for i in 0 ..< levelInfo.colorTargets.count {
             levelInfo.colorTargets[TileType(rawValue: i + 1)!] = targets[i]
         }
 
         // get main and child tile types
-        for var i = 0; i < tiles.count && i < levelInfo.mainTiles.count; ++i {
-            for var j = 0; j < tiles[i].count && i < levelInfo.mainTiles[i].count; ++j {
+        for i in 0 ..< levelInfo.mainTiles.count {
+            for j in 0 ..< levelInfo.mainTiles[i].count {
 
                 let value = tiles[i][j]
 
@@ -185,7 +185,7 @@ class LevelsInfo {
 
                 if unlockedSections < totalSections && levelInfo.section + 1 == unlockedSections {
                     debugPrint("ok, new section")
-                    unlockedSections++
+                    unlockedSections += 1
                     levelsData.append(Array(count: 6, repeatedValue: 0))
                 }
             }

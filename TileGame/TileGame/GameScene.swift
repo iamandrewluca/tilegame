@@ -129,7 +129,7 @@ class GameScene: SKScene, TileDragDelegate {
         addBoardBackgroundAndHoles()
 
         NSNotificationCenter.defaultCenter()
-            .addObserver(self, selector: "didEnterBackground", name: UIApplicationWillResignActiveNotification, object: nil)
+            .addObserver(self, selector: #selector(GameScene.didEnterBackground), name: UIApplicationWillResignActiveNotification, object: nil)
 
         // tiles are added in viewDidAppear
     }
@@ -313,7 +313,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     func tileWasMoved(tile: Tile, completion: () -> Void) {
 
-        moves++
+        moves += 1
 
         var tilesToCheck: [Tile] = [tile]
         checkTilesAndDestroy(&tilesToCheck) {
@@ -484,25 +484,26 @@ class GameScene: SKScene, TileDragDelegate {
         }
 
         // right check
-        for var i = tile.place.column + 1; i < GameScene.boardSize; ++i {
+        for i in tile.place.column + 1 ..< GameScene.boardSize {
             if tiles[tile.place.row][i] != nil { break }
             limits[Direction.Right] = (tile.place.row, i)
         }
 
         // up check
-        for var i = tile.place.row - 1; i >= 0; --i {
+
+        for i in (0 ..< tile.place.row).reverse() {
             if tiles[i][tile.place.column] != nil { break }
             limits[Direction.Up] = (i, tile.place.column)
         }
 
         // left check
-        for var i = tile.place.column - 1; i >= 0; --i {
+        for i in (0 ..< tile.place.column).reverse() {
             if tiles[tile.place.row][i] != nil { break }
             limits[Direction.Left] = (tile.place.row, i)
         }
 
         // down check
-        for var i = tile.place.row + 1; i < GameScene.boardSize; ++i {
+        for i in tile.place.row + 1 ..< GameScene.boardSize {
             if tiles[i][tile.place.column] != nil { break }
             limits[Direction.Down] = (i, tile.place.column)
         }
@@ -693,7 +694,7 @@ class GameScene: SKScene, TileDragDelegate {
                 SKAction.rotateToAngle(0, duration: 0.5)
             ]))
 
-            count++
+            count += 1
         }
 
     }
@@ -720,10 +721,10 @@ class GameScene: SKScene, TileDragDelegate {
             var section = levelInfo.section
             var number = levelInfo.number
 
-            number++
+            number += 1
 
             if number >= levelsInfo.levelsPerSection {
-                section++
+                section += 1
                 number = 0
             }
 

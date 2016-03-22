@@ -86,7 +86,7 @@ private func polygonPointArray(sides: Int, x: CGFloat, y: CGFloat, radius: CGFlo
         let xpo = cx - r * cos(angle * CGFloat(i)+degree2radian(adjustment))
         let ypo = cy - r * sin(angle * CGFloat(i)+degree2radian(adjustment))
         points.append(CGPoint(x: xpo, y: ypo))
-        i--;
+        i -= 1;
     }
     return points
 }
@@ -102,7 +102,7 @@ func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness
     for p in points {
         CGPathAddLineToPoint(path, nil, points2[i].x, points2[i].y)
         CGPathAddLineToPoint(path, nil, p.x, p.y)
-        i++
+        i += 1
     }
     CGPathCloseSubpath(path)
 

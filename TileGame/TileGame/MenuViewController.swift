@@ -226,8 +226,8 @@ class MenuViewController: UIViewController {
     }
 
     func setupColors() {
-        self.tile1.backgroundColor = Constants.purpleColor
-        self.tile2.backgroundColor = Constants.redColor
+        self.tile1.backgroundColor = Constants.redColor
+        self.tile2.backgroundColor = Constants.orangeColor
         self.tile3.backgroundColor = Constants.yellowColor
         self.tile4.backgroundColor = Constants.blueColor
         self.tile5.backgroundColor = Constants.cyanColor
@@ -281,14 +281,14 @@ class MenuViewController: UIViewController {
 
         if lightThemeOn {
 
-            self.playButton.backgroundColor = Constants.purpleColor
+            self.playButton.backgroundColor = Constants.redColor
             self.themeButton.backgroundColor = Constants.darkColor
             self.adsButton.backgroundColor = Constants.cyanColor
             self.shareButton.backgroundColor = Constants.yellowColor
-            self.rateButton.backgroundColor = Constants.redColor
+            self.rateButton.backgroundColor = Constants.orangeColor
 
-            self.rtile1.backgroundColor = Constants.redColor
-            self.rtile2.backgroundColor = Constants.purpleColor
+            self.rtile1.backgroundColor = Constants.orangeColor
+            self.rtile2.backgroundColor = Constants.redColor
             self.rtile3.backgroundColor = Constants.blueColor
 
             self.playButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
@@ -297,14 +297,14 @@ class MenuViewController: UIViewController {
             self.shareButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
             self.rateButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
 
-            self.playButton.layer.borderColor = Constants.purpleColor.CGColor
+            self.playButton.layer.borderColor = Constants.redColor.CGColor
             self.themeButton.layer.borderColor = Constants.darkColor.CGColor
             self.adsButton.layer.borderColor = Constants.cyanColor.CGColor
             self.shareButton.layer.borderColor = Constants.yellowColor.CGColor
-            self.rateButton.layer.borderColor = Constants.redColor.CGColor
+            self.rateButton.layer.borderColor = Constants.orangeColor.CGColor
 
-            self.rtile1.layer.borderColor = Constants.redColor.CGColor
-            self.rtile2.layer.borderColor = Constants.purpleColor.CGColor
+            self.rtile1.layer.borderColor = Constants.orangeColor.CGColor
+            self.rtile2.layer.borderColor = Constants.redColor.CGColor
             self.rtile3.layer.borderColor = Constants.blueColor.CGColor
 
             self.toogleSoundButtonLook(Settings.soundOn)
@@ -326,20 +326,20 @@ class MenuViewController: UIViewController {
             self.rtile2.backgroundColor = Constants.backgroundColor
             self.rtile3.backgroundColor = Constants.backgroundColor
 
-            self.playButton.setTitleColor(Constants.purpleColor, forState: UIControlState.Normal)
+            self.playButton.setTitleColor(Constants.redColor, forState: UIControlState.Normal)
             self.themeButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
             self.adsButton.setTitleColor(Constants.cyanColor, forState: UIControlState.Normal)
             self.shareButton.setTitleColor(Constants.yellowColor, forState: UIControlState.Normal)
-            self.rateButton.setTitleColor(Constants.redColor, forState: UIControlState.Normal)
+            self.rateButton.setTitleColor(Constants.orangeColor, forState: UIControlState.Normal)
 
-            self.playButton.layer.borderColor = Constants.purpleColor.CGColor
+            self.playButton.layer.borderColor = Constants.redColor.CGColor
             self.themeButton.layer.borderColor = Constants.lightColor.CGColor
             self.adsButton.layer.borderColor = Constants.cyanColor.CGColor
             self.shareButton.layer.borderColor = Constants.yellowColor.CGColor
-            self.rateButton.layer.borderColor = Constants.redColor.CGColor
+            self.rateButton.layer.borderColor = Constants.orangeColor.CGColor
 
-            self.rtile1.layer.borderColor = Constants.redColor.CGColor
-            self.rtile2.layer.borderColor = Constants.purpleColor.CGColor
+            self.rtile1.layer.borderColor = Constants.orangeColor.CGColor
+            self.rtile2.layer.borderColor = Constants.redColor.CGColor
             self.rtile3.layer.borderColor = Constants.blueColor.CGColor
 
             self.toogleSoundButtonLook(Settings.soundOn)

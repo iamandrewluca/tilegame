@@ -24,8 +24,8 @@ class Constants {
 
     // MARK: Colors
 
-    static let purpleColor: SKColor = SKColor(red: 213/255, green: 83/255, blue: 102/255, alpha: 1.0)
-    static let redColor: SKColor = SKColor(red: 241/255, green: 94/255, blue: 67/255, alpha: 1.0)
+    static let redColor: SKColor = SKColor(red: 213/255, green: 83/255, blue: 102/255, alpha: 1.0)
+    static let orangeColor: SKColor = SKColor(red: 241/255, green: 94/255, blue: 67/255, alpha: 1.0)
     static let yellowColor: SKColor = SKColor(red: 246/255, green: 209/255, blue: 44/255, alpha: 1.0)
     static let blueColor: SKColor = SKColor(red: 99/255, green: 124/255, blue: 189/255, alpha: 1.0)
     static let cyanColor: SKColor = SKColor(red: 0/255, green: 184/255, blue: 186/255, alpha: 1.0)
@@ -36,8 +36,8 @@ class Constants {
     static var tilesTheme: Int { return 0 }
 
     private static let tilesColors: [[UIColor]] = [[
-            Constants.purpleColor,
             Constants.redColor,
+            Constants.orangeColor,
             Constants.yellowColor,
             Constants.blueColor,
             Constants.cyanColor
