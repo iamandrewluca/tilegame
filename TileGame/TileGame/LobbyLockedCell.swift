@@ -24,12 +24,12 @@ class LobbyLockedCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
-        backgroundColor = UIColor.whiteColor()
-        layer.cornerRadius = Tile.tileCornerRadius * 2
-        layer.masksToBounds = false
+        layer.borderWidth = 2
+        layer.borderColor = Constants.orangeColor.CGColor
+        layer.cornerRadius = bounds.width / 5
 
         lockpadImageView.image = LobbyLockedCell.padLockImage
-        lockpadImageView.tintColor = Constants.textColor
+        lockpadImageView.tintColor = Constants.orangeColor
     }
 
 

@@ -38,11 +38,11 @@ class LobbyCell: UICollectionViewCell {
         layer.borderColor = Constants.orangeColor.CGColor
         layer.cornerRadius = bounds.width / 5
 
-        firstStar.image = LobbyCell.starImageOutlined
-        secondStar.image = LobbyCell.starImageOutlined
-        thirdStar.image = LobbyCell.starImageOutlined
+        firstStar.tintColor = Constants.yellowColor
+        secondStar.tintColor = Constants.yellowColor
+        thirdStar.tintColor = Constants.yellowColor
 
-        levelNumber.textColor = Constants.textColor
+        levelNumber.textColor = Constants.orangeColor
         prepareForReuse()
 
     }
@@ -50,9 +50,10 @@ class LobbyCell: UICollectionViewCell {
     override func prepareForReuse() {
 
         backgroundColor = Constants.backgroundColor
-        firstStar.tintColor = Constants.yellowColor
-        secondStar.tintColor = Constants.yellowColor
-        thirdStar.tintColor = Constants.yellowColor
+
+        firstStar.image = LobbyCell.starImageOutlined
+        secondStar.image = LobbyCell.starImageOutlined
+        thirdStar.image = LobbyCell.starImageOutlined
 
         levelNumber.text = "0"
     }
