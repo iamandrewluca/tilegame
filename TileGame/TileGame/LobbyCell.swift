@@ -34,15 +34,21 @@ class LobbyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        var cellColor: UIColor = Constants.lightColor
+
+        if Settings.lightThemeOn {
+            cellColor = Constants.orangeColor
+        }
+
         layer.borderWidth = 2
-        layer.borderColor = Constants.orangeColor.CGColor
+        layer.borderColor = cellColor.CGColor
         layer.cornerRadius = bounds.width / 5
 
         firstStar.tintColor = Constants.yellowColor
         secondStar.tintColor = Constants.yellowColor
         thirdStar.tintColor = Constants.yellowColor
 
-        levelNumber.textColor = Constants.orangeColor
+        levelNumber.textColor = cellColor
         prepareForReuse()
 
     }

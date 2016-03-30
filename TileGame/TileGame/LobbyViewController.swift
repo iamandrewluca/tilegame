@@ -51,13 +51,16 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
         let starsToPass  = levelsInfo.starsToPassSection - levelsInfo.starsInSection(indexPath.section - 1)
 
-        view.headerLabel.text = "+\(starsToPass) stars in section \(indexPath.section) to unlock"
+        view.sectionLabel.text = "Section \(indexPath.section + 1)"
+        view.starsLabel.text = "\(starsToPass) stars to unlock"
     }
 
     private func setupSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
 
         let totalStars = levelsInfo.starsInSection(indexPath.section)
-        view.headerLabel.text = "\(totalStars) stars in section \(indexPath.section + 1)"
+
+        view.sectionLabel.text = "Section \(indexPath.section + 1)"
+        view.starsLabel.text = "\(totalStars) stars"
     }
 
     private func setupCellWithIndexPath(cell: LobbyCell, indexPath: NSIndexPath) {
@@ -67,11 +70,14 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         let levelStars = levelsInfo.starsAtIndexPath(indexPath)
 
         if levelStars > 0 {
-            cell.firstStar.tintColor = Constants.Color3
+            cell.firstStar.image = LobbyCell.starImage
             if levelStars > 1 {
-                cell.secondStar.tintColor = Constants.Color3
+                cell.secondStar.image = LobbyCell.starImage
                 if levelStars > 2 {
-                    cell.thirdStar.tintColor = Constants.Color3
+                    debugPrint("jora")
+                    cell.thirdStar.image = LobbyCell.starImage
+                    cell.backgroundColor = Constants.allStarsCellBackgroundColor
+                    cell.levelNumber.textColor = Constants.allStarsTextColor
                 }
             }
         }
