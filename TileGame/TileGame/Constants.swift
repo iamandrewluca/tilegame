@@ -19,8 +19,9 @@ class Constants {
 
     // MARK: Fonts
 
-    static let primaryFont: String = "Comfortaa-Light"
-    static let secondaryFont: String = "Comofortaa-Bold"
+    static let primaryFont: String = "Comfortaa"
+    static let secondaryFont: String = "Comofortaa-Light"
+    static let thirdFont: String = "Comfortaa-Bold"
 
     // MARK: Colors
 

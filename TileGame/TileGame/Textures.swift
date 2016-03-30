@@ -16,6 +16,8 @@ class Textures {
     private static var texturesAreCreated: Bool = false
 
     static var tileTexture: SKTexture!
+    static var tileBackgroundTexture: SKTexture!
+    static var tileTopTexture: SKTexture!
     static var starTexture: SKTexture!
 
     static var headerBackgroundTexture: SKTexture!
@@ -44,10 +46,27 @@ class Textures {
         let roundRectPath = UIBezierPath(
             roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio , Tile.tileLength * screenRatio),
             cornerRadius: Tile.tileCornerRadius * screenRatio).CGPath
+
         let tileShape = SKShapeNode()
         tileShape.fillColor = UIColor.whiteColor()
+        tileShape.lineWidth = 0
         tileShape.path = roundRectPath
         tileTexture = view.textureFromNode(tileShape)
+
+        // tile back texture
+
+        tileShape.fillColor = UIColor.clearColor()
+        tileShape.strokeColor = UIColor.whiteColor()
+        tileShape.lineWidth = 1 * Constants.screenRatio
+        tileBackgroundTexture = view.textureFromNode(tileShape)
+
+        // tile top texture
+
+        let roundPath = UIBezierPath(ovalInRect: CGRect(origin: CGPointZero, size: Tile.tileSize * screenRatio / 2)).CGPath
+        let tileTopShape = SKShapeNode();
+        tileTopShape.fillColor = UIColor.whiteColor()
+        tileTopShape.path = roundPath
+        tileTopTexture = view.textureFromNode(tileTopShape)
 
         // star texture
 //        let starPath = getStarPath(0, y: 0, radius: Tile.tileLength / 2 * screenRatio, sides: 5, pointyness: 2)
@@ -58,46 +77,13 @@ class Textures {
 
         starTexture = SKTexture(image: LobbyCell.starImage)
 
-        // header background texture
-        let headerBackgroundPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Constants.screenSize.width * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.TopRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerBackgroundShape = SKShapeNode()
-        headerBackgroundShape.path = headerBackgroundPath.CGPath
-        headerBackgroundShape.fillColor = SKColor.whiteColor()
-        headerBackgroundTexture = view.textureFromNode(headerBackgroundShape)
-
-        // header left corner texture
-        let headerLeftCornerPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.BottomRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerLeftCornerShape = SKShapeNode()
-        headerLeftCornerShape.path = headerLeftCornerPath.CGPath
-        headerLeftCornerShape.fillColor = SKColor.whiteColor()
-        headerLeftCornerTexture = view.textureFromNode(headerLeftCornerShape)
-
-        // header right corner texture
-        let headerRightCornerPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio, Tile.tileLength * screenRatio),
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopRight],
-            cornerRadii: CGSizeMake(Tile.tileLength * screenRatio / 2, Tile.tileLength * screenRatio / 2))
-
-        let headerRightCornerShape = SKShapeNode()
-        headerRightCornerShape.path = headerRightCornerPath.CGPath
-        headerRightCornerShape.fillColor = SKColor.whiteColor()
-        headerRightCornerTexture = view.textureFromNode(headerRightCornerShape)
-
         // menu background texture
 
         let menuBackgroundSize = CGSizeMake(
             GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x,
             GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y)
 
-        let menuCornerRadius = Tile.tileLength / 4 * 3
+        let menuCornerRadius = Tile.tileLength / 4
 
         let menuBackgroundPath: UIBezierPath = UIBezierPath(
             roundedRect: CGRect(origin: CGPointZero, size: menuBackgroundSize * screenRatio),

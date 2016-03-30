@@ -2,17 +2,17 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "Restart Filled-50.png",
+      "filename" : "restart@x1.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Restart Filled-64.png",
+      "filename" : "restart@x2.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "Restart Filled-100.png",
+      "filename" : "restart@x3.png",
       "scale" : "3x"
     }
   ],

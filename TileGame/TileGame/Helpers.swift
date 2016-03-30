@@ -9,6 +9,8 @@
 import Foundation
 import SpriteKit
 
+// MARK: Operator overloading
+
 func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
     return CGPointMake(lhs.x - rhs.x, lhs.y - rhs.y)
 }
@@ -29,6 +31,20 @@ func !=(lhs: CGPoint, rhs: CGPoint) -> Bool {
     return lhs.x != rhs.x && lhs.y != rhs.y
 }
 
+func *(lhs: CGSize, rhs: CGFloat) -> CGSize {
+    return CGSize(width: lhs.width * rhs, height: lhs.height * rhs)
+}
+
+func /(lhs: CGSize, rhs: CGFloat) -> CGSize {
+    return CGSize(width: lhs.width / rhs, height: lhs.height / rhs)
+}
+
+func ==(lhs: (row: Int, column: Int), rhs: (row: Int, column: Int)) -> Bool {
+    return lhs.row == rhs.row && lhs.column == rhs.column
+}
+
+// MARK: Other useful functions
+
 func clamp(firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGFloat {
 
     var minValue: CGFloat
@@ -43,31 +59,6 @@ func clamp(firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGF
     }
 
     return max(minValue, min(value, maxValue))
-}
-
-extension CGFloat {
-    mutating func roundDecimals(numberOfDecimals: Int) {
-        let multiplier = pow(10.0, CGFloat(numberOfDecimals))
-        self = round(self * multiplier) / multiplier
-    }
-}
-
-func *(lhs: CGSize, rhs: CGFloat) -> CGSize {
-    var multipliedSize = lhs
-    multipliedSize.width *= rhs
-    multipliedSize.height *= rhs
-    return multipliedSize
-}
-
-func /(lhs: CGSize, rhs: CGFloat) -> CGSize {
-    var dividedSize = lhs
-    dividedSize.width /= rhs
-    dividedSize.height /= rhs
-    return dividedSize
-}
-
-func ==(lhs: (row: Int, column: Int), rhs: (row: Int, column: Int)) -> Bool {
-    return lhs.row == rhs.row && lhs.column == rhs.column
 }
 
 func degree2radian(a:CGFloat) -> CGFloat {
@@ -108,6 +99,15 @@ func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness
 
     var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
     return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)!
+}
+
+// MARK: Extensions
+
+extension CGFloat {
+    mutating func roundDecimals(numberOfDecimals: Int) {
+        let multiplier = pow(10.0, CGFloat(numberOfDecimals))
+        self = round(self * multiplier) / multiplier
+    }
 }
 
 extension SKLabelNode {
