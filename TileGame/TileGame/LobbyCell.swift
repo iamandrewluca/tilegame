@@ -34,15 +34,21 @@ class LobbyCell: UICollectionViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
 
+        var cellColor: UIColor = Constants.lightColor
+
+        if Settings.lightThemeOn {
+            cellColor = Constants.orangeColor
+        }
+
         layer.borderWidth = 2
-        layer.borderColor = Constants.orangeColor.CGColor
+        layer.borderColor = cellColor.CGColor
         layer.cornerRadius = bounds.width / 5
 
-        firstStar.image = LobbyCell.starImageOutlined
-        secondStar.image = LobbyCell.starImageOutlined
-        thirdStar.image = LobbyCell.starImageOutlined
+        firstStar.tintColor = Constants.yellowColor
+        secondStar.tintColor = Constants.yellowColor
+        thirdStar.tintColor = Constants.yellowColor
 
-        levelNumber.textColor = Constants.textColor
+        levelNumber.textColor = cellColor
         prepareForReuse()
 
     }
@@ -50,9 +56,10 @@ class LobbyCell: UICollectionViewCell {
     override func prepareForReuse() {
 
         backgroundColor = Constants.backgroundColor
-        firstStar.tintColor = Constants.yellowColor
-        secondStar.tintColor = Constants.yellowColor
-        thirdStar.tintColor = Constants.yellowColor
+
+        firstStar.image = LobbyCell.starImageOutlined
+        secondStar.image = LobbyCell.starImageOutlined
+        thirdStar.image = LobbyCell.starImageOutlined
 
         levelNumber.text = "0"
     }

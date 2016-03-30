@@ -61,4 +61,7 @@ class Constants {
     static var textColor: UIColor { return (Settings.lightThemeOn ? darkColor : lightColor) }
     static var backgroundColor: UIColor { return (Settings.lightThemeOn ? lightColor : darkColor) }
 
+    static var allStarsCellBackgroundColor: UIColor { return (Settings.lightThemeOn ? orangeColor : lightColor) }
+    static var allStarsTextColor: UIColor { return (Settings.lightThemeOn ? lightColor : darkColor) }
+
 }

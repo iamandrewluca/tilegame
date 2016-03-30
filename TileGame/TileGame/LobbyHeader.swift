@@ -16,17 +16,20 @@ class LobbyHeader: UICollectionReusableView {
 
     // MARK: IBOutlets
 
-    @IBOutlet weak var headerLabel: UILabel!
+    @IBOutlet weak var sectionLabel: UILabel!
+    @IBOutlet weak var starsLabel: UILabel!
 
     // MARK: UICollectionReusableView
     
     override func prepareForReuse() {
-        headerLabel.text = ""
+        sectionLabel.text = ""
+        starsLabel.text = ""
     }
 
     override func awakeFromNib() {
         super.awakeFromNib()
-        backgroundColor = Constants.Color5
-        headerLabel.textColor = Constants.textColor
+        backgroundColor = Constants.textColor
+        sectionLabel.textColor = Constants.backgroundColor
+        starsLabel.textColor = Constants.backgroundColor
     }
 }
