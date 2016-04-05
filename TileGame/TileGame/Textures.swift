@@ -100,7 +100,7 @@ class Textures {
         let buttonHeight = (menuBackgroundSize.height - buttonMargin * 4) / 3
         let buttonWidth = (menuBackgroundSize.width - buttonMargin * 4) / 3
         let buttonSize: CGSize = CGSize(width: buttonWidth, height: buttonHeight)
-        let buttonCornerRadius = menuCornerRadius - Tile.tileLength / 4
+        let buttonCornerRadius = menuCornerRadius - Tile.tileLength / 8
 
         // left button texture
 
@@ -142,10 +142,9 @@ class Textures {
 
         let topButtonSize: CGSize = CGSize(width: menuBackgroundSize.width - buttonMargin * 2, height: buttonHeight)
 
-        let topButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: topButtonSize * screenRatio),
-            byRoundingCorners: UIRectCorner.AllCorners,
-            cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
+        let topButtonPath: UIBezierPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.zero, size: topButtonSize * screenRatio),
+            cornerRadius: buttonCornerRadius * screenRatio)
+        
 
         let topButtonShape = SKShapeNode()
         topButtonShape.fillColor = UIColor.whiteColor()

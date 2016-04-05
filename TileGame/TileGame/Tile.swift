@@ -26,6 +26,7 @@ class Tile: SKSpriteNode {
     static let tileSize: CGSize = CGSize(width: tileLength, height: tileLength)
     static let tileCornerRadius: CGFloat = tileLength / 4
     static let tileSpacing: CGFloat = tileLength / 8
+    static let starOutlineTexture: SKTexture = SKTexture(imageNamed: "StarOutlined")
 
     // MARK: Members
 
@@ -72,7 +73,10 @@ class Tile: SKSpriteNode {
         if type != TileType.Hole {
 
             if tileType == TileType.Star {
-                super.init(texture: Textures.starTexture, color: Constants.Color3, size: Tile.tileSize)
+                super.init(texture: Textures.starTexture, color: Constants.yellowColor, size: Tile.tileSize)
+                let outline: SKSpriteNode = SKSpriteNode(texture: Tile.starOutlineTexture, size: Tile.tileSize)
+                outline.zPosition = 0
+                addChild(outline)
             } else {
                 super.init(texture: Textures.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
                 userInteractionEnabled = true

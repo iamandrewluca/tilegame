@@ -58,6 +58,8 @@ class GameScene: SKScene, TileDragDelegate {
     var menuPauseIcon: SKSpriteNode!
     var menuNextIcon: SKSpriteNode!
 
+    var touchesBeganOn: String!
+
     var winStarsShadows: [SKSpriteNode] = []
 
     // MARK: Animations intervals
@@ -148,8 +150,11 @@ class GameScene: SKScene, TileDragDelegate {
 
         if !canTouch { return }
 
-//        let location = touches.first!.locationInNode(self)
-//        let node = nodeAtPoint(location)
+        let location = touches.first!.locationInNode(self)
+        let node = nodeAtPoint(location)
+
+        touchesBeganOn = ""
+        touchesBeganOn = node.name
 
 //        debugPrint("began on \(node.name)")
     }
@@ -168,6 +173,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         let location = touches.first!.locationInNode(self)
         let node = nodeAtPoint(location)
+
+        if node.name != touchesBeganOn { return }
 
 //        debugPrint("ended on \(node.name)")
 
@@ -779,7 +786,7 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Methods - Buttons actions
 
     func showAd() {
-
+        debugPrint("Show ad")
     }
 
     func share() {
@@ -876,6 +883,8 @@ class GameScene: SKScene, TileDragDelegate {
         menuRightButton.removeAllChildren()
         menuRightButton.addChild(menuRestartIcon)
 
+        menuTopButtonLabel.removeFromParent()
+
     }
     func prepareButtonsForLose() {
 
@@ -890,9 +899,21 @@ class GameScene: SKScene, TileDragDelegate {
         menuMiddleButton.removeAllChildren()
         menuMiddleButton.addChild(menuRestartIcon)
 
+        let menuBackgroundWidth: CGFloat = GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x
+        let buttonMargin: CGFloat = Tile.tileSize.width / 3
+        let buttonWidth: CGFloat = (menuBackgroundWidth - buttonMargin * 4) / 3
+
+        menuRestartIcon.anchorPoint.x = 0.5
+        menuRestartIcon.position.x = buttonWidth / 2
+
         menuShareIcon.removeFromParent()
         menuRightButton.removeAllChildren()
         menuRightButton.addChild(menuShareIcon)
+
+        menuTopButton.color = Constants.textColor
+        menuTopButton.name = ButtonType.Ad.rawValue
+        menuTopButtonLabel.text = "Video Ad"
+        menuTopButtonLabel.name = ButtonType.Ad.rawValue
 
     }
     func prepareButtonsForPause() {
@@ -906,11 +927,24 @@ class GameScene: SKScene, TileDragDelegate {
 
         menuPauseIcon.removeFromParent()
         menuMiddleButton.removeAllChildren()
-        menuMiddleButton.addChild(menuNextIcon)
+        menuMiddleButton.addChild(menuPauseIcon)
+
+        let menuBackgroundWidth: CGFloat = GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x
+        let buttonMargin: CGFloat = Tile.tileSize.width / 3
+        let buttonWidth: CGFloat = (menuBackgroundWidth - buttonMargin * 4) / 3
 
         menuRestartIcon.removeFromParent()
         menuRightButton.removeAllChildren()
         menuRightButton.addChild(menuRestartIcon)
+
+        menuRestartIcon.anchorPoint.x = 1
+        menuRestartIcon.position.x = buttonWidth
+
+        menuTopButton.name = ButtonType.Empty.rawValue
+        menuTopButton.color = UIColor.clearColor()
+
+        menuTopButtonLabel.name = ButtonType.Empty.rawValue
+        menuTopButtonLabel.text = "PAUSE"
 
     }
 
@@ -1182,9 +1216,21 @@ class GameScene: SKScene, TileDragDelegate {
         menuBackground.position = GameScene.boardPositions[5][0]
         menuBackground.zPosition = 5
 
+        // menu 1/3 line
+
+        let menuLineWidth: CGFloat = menuBackgroundWidth - Tile.tileLength * 2/3
+        let menuLineSize = CGSize(width: menuLineWidth, height: 2)
+        let menuLine: SKSpriteNode = SKSpriteNode(color: Constants.orangeColor, size: menuLineSize)
+
+        menuLine.position.y = menuBackgroundHeight / 3
+        menuLine.position.x = Tile.tileLength * 1/3
+        menuLine.anchorPoint.x = 0
+        menuLine.zPosition = 1
+        menuBackground.addChild(menuLine)
+
         // add buttons
 
-        let buttonMargin: CGFloat = Tile.tileSize.width / 4
+        let buttonMargin: CGFloat = Tile.tileSize.width / 3
         let buttonHeight: CGFloat = (menuBackgroundHeight - buttonMargin * 4) / 3
         let buttonWidth: CGFloat = (menuBackgroundWidth - buttonMargin * 4) / 3
         let topButtonWidth: CGFloat = menuBackgroundWidth - buttonMargin * 2
@@ -1193,16 +1239,16 @@ class GameScene: SKScene, TileDragDelegate {
         let menuTopButtonsSize: CGSize = CGSize(width: topButtonWidth, height: buttonHeight)
 
         menuLeftButton = SKSpriteNode(texture: Textures.menuLeftButtonTexture,
-            color: Constants.backgroundColor, size: menuButtonsSize)
+            color: UIColor.clearColor(), size: menuButtonsSize)
 
         menuMiddleButton = SKSpriteNode(texture: Textures.menuMiddleButtonTexture,
-            color: Constants.backgroundColor, size: menuButtonsSize)
+            color: UIColor.clearColor(), size: menuButtonsSize)
 
         menuRightButton = SKSpriteNode(texture: Textures.menuRightButtonTexture,
-            color: Constants.backgroundColor, size: menuButtonsSize)
+            color: UIColor.clearColor(), size: menuButtonsSize)
 
         menuTopButton = SKSpriteNode(texture: Textures.menuTopButtonTexture,
-            color: Constants.backgroundColor, size: menuTopButtonsSize)
+            color: UIColor.clearColor(), size: menuTopButtonsSize)
 
         menuLeftButton.zPosition = 1
         menuMiddleButton.zPosition = 1
@@ -1217,7 +1263,6 @@ class GameScene: SKScene, TileDragDelegate {
         menuLeftButton.name = ButtonType.Lobby.rawValue
         menuMiddleButton.name = ButtonType.Continue.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
-        menuTopButton.name = ButtonType.Ad.rawValue
 
         menuLeftButton.anchorPoint = CGPointZero
         menuMiddleButton.anchorPoint = CGPointZero
@@ -1236,56 +1281,57 @@ class GameScene: SKScene, TileDragDelegate {
 
         // add menu buttons icons
 
-        let lobbyIcon: SKSpriteNode = SKSpriteNode(imageNamed: "Lobby")
+        let iconSize: CGSize = CGSize(width: buttonHeight * 4/5, height: buttonHeight * 4/5)
+
+        let lobbyIconTexture: SKTexture = SKTexture(imageNamed: "Lobby")
+        let lobbyIcon: SKSpriteNode = SKSpriteNode(texture: lobbyIconTexture, size: iconSize)
+
         menuLeftButton.addChild(lobbyIcon)
-        lobbyIcon.position = CGPoint(x: buttonWidth / 2, y: buttonHeight / 2)
         lobbyIcon.name = ButtonType.Lobby.rawValue
-        lobbyIcon.colorBlendFactor = 1.0
-        lobbyIcon.color = Constants.backgroundColor
         lobbyIcon.zPosition = 1
+        lobbyIcon.anchorPoint = CGPoint.zero
 
-        menuPauseIcon = SKSpriteNode(imageNamed: "Pause")
+        let pauseIconTexture: SKTexture = SKTexture(imageNamed: "Play")
+        menuPauseIcon = SKSpriteNode(texture: pauseIconTexture, size: iconSize)
         menuMiddleButton.addChild(menuPauseIcon)
-        menuPauseIcon.position = lobbyIcon.position
         menuPauseIcon.name = ButtonType.Pause.rawValue
-        menuPauseIcon.colorBlendFactor = 1.0
-        menuPauseIcon.color = Constants.backgroundColor
         menuPauseIcon.zPosition = 1
+        menuPauseIcon.anchorPoint = CGPoint(x: 0.5, y: 0)
+        menuPauseIcon.position.x = buttonWidth / 2
 
-        menuRestartIcon = SKSpriteNode(imageNamed: "Restart")
+        let restartIconTexture: SKTexture = SKTexture(imageNamed: "Restart")
+        menuRestartIcon = SKSpriteNode(texture: restartIconTexture, size: iconSize)
         menuRightButton.addChild(menuRestartIcon)
-        menuRestartIcon.position = lobbyIcon.position
         menuRestartIcon.name = ButtonType.Restart.rawValue
-        menuRestartIcon.colorBlendFactor = 1.0
-        menuRestartIcon.color = Constants.backgroundColor
         menuRestartIcon.zPosition = 1
+        menuRestartIcon.anchorPoint = CGPoint(x: 1, y: 0)
+        menuRestartIcon.position.x = buttonWidth
 
-        menuShareIcon = SKSpriteNode(imageNamed: "Share")
-        menuShareIcon.position = lobbyIcon.position
+        let shareTexture: SKTexture = SKTexture(imageNamed: "Share")
+        menuShareIcon = SKSpriteNode(texture: shareTexture, size: iconSize)
         menuShareIcon.name = ButtonType.Share.rawValue
-        menuShareIcon.colorBlendFactor = 1.0
-        menuShareIcon.color = Constants.backgroundColor
         menuShareIcon.zPosition = 1
+        menuShareIcon.anchorPoint = CGPoint(x: 1, y: 0)
+        menuShareIcon.position.x = buttonWidth
 
-        menuNextIcon = SKSpriteNode(imageNamed: "Play")
-        menuNextIcon.position = lobbyIcon.position
+        let nextIconTexture: SKTexture = SKTexture(imageNamed: "Play")
+        menuNextIcon = SKSpriteNode(texture: nextIconTexture, size: iconSize)
         menuNextIcon.name = ButtonType.Next.rawValue
-        menuNextIcon.colorBlendFactor = 1.0
-        menuNextIcon.color = Constants.backgroundColor
         menuNextIcon.zPosition = 1
+        menuNextIcon.anchorPoint = CGPoint(x: 0.5, y: 0)
+        menuNextIcon.position.x = buttonWidth / 2
 
         // add top label
 
         menuTopButtonLabel = SKLabelNode()
         menuTopButtonLabel.fontName = Constants.primaryFont
-        menuTopButtonLabel.fontColor = Constants.textColor
+        menuTopButtonLabel.fontColor = Constants.cyanColor
         menuTopButtonLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
         menuTopButtonLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
         menuTopButtonLabel.position.x = menuTopButton.size.width / 2
         menuTopButtonLabel.position.y = menuTopButton.size.height / 2
-        menuTopButtonLabel.name = ButtonType.Ad.rawValue
         menuTopButtonLabel.zPosition = 1
-        menuTopButtonLabel.text = "SAME TEXT HERE AND THERE"
+        menuTopButtonLabel.text = "PAUSE"
 
         let menuTopButtonLabelHeightRatio: CGFloat = menuTopButton.frame.height / 2 / menuTopButtonLabel.frame.height
         let menuTopButtonLabelWidthRatio: CGFloat = menuTopButton.frame.width / menuTopButtonLabel.frame.width
@@ -1303,7 +1349,7 @@ class GameScene: SKScene, TileDragDelegate {
         menuMiddleLabel.position.x = menuBackgroundSize.width / 2
         menuMiddleLabel.position.y = menuBackgroundSize.height / 2
         menuMiddleLabel.zPosition = 1
-        menuMiddleLabel.text = "SAME TEXT HERE AND THERE"
+        menuMiddleLabel.text = "Lorem ipsum dolor sit amet"
 
         let menuMiddleLabelHeightRatio: CGFloat = menuTopButtonsSize.height / 2 / menuMiddleLabel.frame.height
         let menuMiddleLabelWidthRatio: CGFloat = menuTopButtonsSize.width / menuMiddleLabel.frame.width
@@ -1405,31 +1451,30 @@ class GameScene: SKScene, TileDragDelegate {
 
     func createWinStarsShadows() {
 
-        let firstStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
-        let secondStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
-        let thirdStarShadow = SKSpriteNode(texture: Textures.starTexture, color: Constants.backgroundColor, size: Tile.tileSize)
-
-        firstStarShadow.setScale(1.5)
-        secondStarShadow.setScale(2)
-        thirdStarShadow.setScale(1.5)
+        let firstStarShadow = SKSpriteNode(texture: Tile.starOutlineTexture, color: Constants.yellowColor, size: Tile.tileSize)
+        let secondStarShadow = SKSpriteNode(texture: Tile.starOutlineTexture, color: Constants.yellowColor, size: Tile.tileSize)
+        let thirdStarShadow = SKSpriteNode(texture: Tile.starOutlineTexture, color: Constants.yellowColor, size: Tile.tileSize)
 
         firstStarShadow.colorBlendFactor = 1.0
         secondStarShadow.colorBlendFactor = 1.0
         thirdStarShadow.colorBlendFactor = 1.0
 
-        firstStarShadow.alpha = 0.1
-        secondStarShadow.alpha = 0.1
-        thirdStarShadow.alpha = 0.1
+        firstStarShadow.zPosition = 6
+        secondStarShadow.zPosition = 6
+        thirdStarShadow.zPosition = 6
 
-        firstStarShadow.zPosition = 5
-        secondStarShadow.zPosition = 5
-        thirdStarShadow.zPosition = 5
+        var topButtonCenter: CGPoint = menuTopButton.position
+        topButtonCenter.x += menuTopButton.size.width / 2
+        topButtonCenter.y += menuTopButton.size.height / 2
 
-        firstStarShadow.position = GameScene.boardPositions[0][1]
-        secondStarShadow.position = GameScene.boardPositions[0][2]
-        secondStarShadow.position.x += (GameScene.boardPositions[0][3].x - GameScene.boardPositions[0][2].x) / 2
-        secondStarShadow.position.y += Tile.tileLength / 4
-        thirdStarShadow.position = GameScene.boardPositions[0][4]
+        let pos: CGPoint = menu.convertPoint(topButtonCenter, toNode: self)
+
+        firstStarShadow.position = pos
+        secondStarShadow.position = pos
+        thirdStarShadow.position = pos
+
+        firstStarShadow.position.x -= Tile.tileLength
+        thirdStarShadow.position.x += Tile.tileLength
 
         winStarsShadows.append(firstStarShadow)
         winStarsShadows.append(secondStarShadow)

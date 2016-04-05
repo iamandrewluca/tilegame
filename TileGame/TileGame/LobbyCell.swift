@@ -61,6 +61,7 @@ class LobbyCell: UICollectionViewCell {
         secondStar.image = LobbyCell.starImageOutlined
         thirdStar.image = LobbyCell.starImageOutlined
 
+        levelNumber.textColor = (Settings.lightThemeOn ? Constants.orangeColor : Constants.lightColor)
         levelNumber.text = "0"
     }
 }
