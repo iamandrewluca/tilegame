@@ -143,7 +143,7 @@ class Textures {
         let topButtonSize: CGSize = CGSize(width: menuBackgroundSize.width - buttonMargin * 2, height: buttonHeight)
 
         let topButtonPath: UIBezierPath = UIBezierPath(roundedRect: CGRect(origin: CGPoint.zero, size: topButtonSize * screenRatio),
-            cornerRadius: buttonCornerRadius * screenRatio)
+            cornerRadius: Tile.tileLength / 2 * screenRatio)
         
 
         let topButtonShape = SKShapeNode()

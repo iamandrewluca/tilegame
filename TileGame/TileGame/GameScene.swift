@@ -101,6 +101,9 @@ class GameScene: SKScene, TileDragDelegate {
     var currentTargets: [TileType:Int] = [:]
     var currentStars: [TileType:Bool] = [:]
 
+    var lostByFail: Bool = false
+    var lostByLevelType: Bool = false
+
     var gameIsStarted: Bool = false
     var gameIsPaused: Bool = false
     var canTouch: Bool = false
@@ -630,6 +633,7 @@ class GameScene: SKScene, TileDragDelegate {
         for (key, value) in currentTargets {
             if value != levelInfo.colorTargets[key] && value + 3 > levelInfo.colorTargets[key]  {
                 gameIsOver = true
+                lostByFail = true
 //                debugPrint("game over?")
                 break
             }
@@ -638,6 +642,7 @@ class GameScene: SKScene, TileDragDelegate {
         if levelInfo.type == LevelType.LimitedMoves {
             if moves >= levelInfo.typeCounter {
                 gameIsOver = true
+                lostByLevelType = true
             }
         }
 
@@ -780,13 +785,46 @@ class GameScene: SKScene, TileDragDelegate {
         if levelInfo.type == LevelType.LimitedTime {
 //            debugPrint("end callback limited time")
             gameOver()
+            lostByLevelType = true
         }
     }
 
     // MARK: Methods - Buttons actions
 
     func showAd() {
-        debugPrint("Show ad")
+
+        debugPrint("Ad showed")
+
+        switch levelInfo.type {
+
+        case .FreeTime:
+            self.undoMoves(1)
+            break
+
+        case .LimitedMoves:
+
+            if lostByFail {
+                self.undoMoves(1)
+            }
+
+            if lostByLevelType {
+                self.addMoves(5)
+            }
+
+            break
+
+        case .LimitedTime:
+
+            if lostByFail {
+                self.undoMoves(1)
+            }
+
+            if lostByLevelType {
+                self.addTime(10)
+            }
+
+            break
+        }
     }
 
     func share() {
@@ -801,6 +839,36 @@ class GameScene: SKScene, TileDragDelegate {
             self.overlay = nil
             self.counter = nil
         }
+    }
+
+    // MARK: Lose Actions
+
+    func undoMoves(nMoves: Int) {
+        debugPrint("undo", nMoves, "moves")
+    }
+
+    func addMoves(nMoves: Int) {
+        debugPrint("add", nMoves, "moves")
+
+        moves -= nMoves
+
+        resetValues()
+        prepareButtonsForPause()
+
+    }
+
+    func addTime(nSeconds: Int) {
+        debugPrint("add", nSeconds, "seconds")
+
+        counter.counter -= NSTimeInterval(nSeconds)
+
+        resetValues()
+        prepareButtonsForPause()
+    }
+
+    func resetValues() {
+        lostByLevelType = false
+        lostByFail = false
     }
 
     // MARK: Menu related methods
@@ -952,8 +1020,6 @@ class GameScene: SKScene, TileDragDelegate {
 
     func changeLevelWith(level: LevelInfo) {
 
-        self.canTouch = false
-
         resetTargetsTo(levelInfo)
 
         for i in 0 ..< 6 {
@@ -984,6 +1050,9 @@ class GameScene: SKScene, TileDragDelegate {
     }
 
     func resetTargetsTo(levelInfo: LevelInfo) {
+
+        lostByFail = false
+        lostByLevelType = false
 
         // Removing current state
 
@@ -1249,6 +1318,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         menuTopButton = SKSpriteNode(texture: Textures.menuTopButtonTexture,
             color: UIColor.clearColor(), size: menuTopButtonsSize)
+
 
         menuLeftButton.zPosition = 1
         menuMiddleButton.zPosition = 1
