@@ -362,13 +362,12 @@ class GameScene: SKScene, TileDragDelegate {
 
             currentTargets[tileType]! += tilesToDestroy.count
 
-            if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! {
-                colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
-            } else if currentTargets[tileType]! != levelInfo.colorTargets[tileType]!
-                    && currentTargets[tileType]! + 3 > levelInfo.colorTargets[tileType]! {
-                colorLabels[tileType]!.text = "FAIL"
-            } else {
+            if currentTargets[tileType]! == levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "DONE"
+            } else if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! - 3 {
+                colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
+            } else {
+                colorLabels[tileType]!.text = "FAIL"
             }
 
             AudioPlayer.destroy()
