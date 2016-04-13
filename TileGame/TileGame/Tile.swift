@@ -75,7 +75,7 @@ class Tile: SKSpriteNode {
             if tileType == TileType.Star {
                 super.init(texture: Textures.starTexture, color: Constants.yellowColor, size: Tile.tileSize)
                 let outline: SKSpriteNode = SKSpriteNode(texture: Tile.starOutlineTexture, size: Tile.tileSize)
-                outline.zPosition = 0
+                outline.zPosition = 1
                 addChild(outline)
             } else {
                 super.init(texture: Textures.tileTexture, color: tileType.tileColor, size: Tile.tileSize)

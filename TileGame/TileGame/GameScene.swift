@@ -62,6 +62,10 @@ class GameScene: SKScene, TileDragDelegate {
 
     var winStarsShadows: [SKSpriteNode] = []
 
+    var winMessages: [String] = ["Champion!"]
+    var lostMessages: [String] = ["Maybe next time"]
+    var pauseMessages: [String] = ["Moving on!"]
+
     // MARK: Animations intervals
 
     let tilesAppearInterval: NSTimeInterval = 0.4
@@ -825,6 +829,9 @@ class GameScene: SKScene, TileDragDelegate {
 
             break
         }
+
+        resetValues()
+        prepareButtonsForPause()
     }
 
     func share() {
@@ -851,19 +858,12 @@ class GameScene: SKScene, TileDragDelegate {
         debugPrint("add", nMoves, "moves")
 
         moves -= nMoves
-
-        resetValues()
-        prepareButtonsForPause()
-
     }
 
     func addTime(nSeconds: Int) {
         debugPrint("add", nSeconds, "seconds")
 
         counter.counter -= NSTimeInterval(nSeconds)
-
-        resetValues()
-        prepareButtonsForPause()
     }
 
     func resetValues() {
@@ -934,7 +934,21 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Methods - Buttons game states changing
 
+    func getWinMessage() -> String {
+        return winMessages[0]
+    }
+
+    func getLostMessage() -> String {
+        return lostMessages[0]
+    }
+
+    func getPauseMessage() -> String {
+        return pauseMessages[0]
+    }
+
     func prepareButtonsForWin() {
+
+        menuMiddleLabel.text = self.getWinMessage()
 
         menuMiddleButton.name = ButtonType.Next.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
@@ -955,6 +969,8 @@ class GameScene: SKScene, TileDragDelegate {
 
     }
     func prepareButtonsForLose() {
+
+        menuMiddleLabel.text = self.getLostMessage()
 
         menuMiddleButton.name = ButtonType.Restart.rawValue
         menuRightButton.name = ButtonType.Share.rawValue
@@ -986,6 +1002,8 @@ class GameScene: SKScene, TileDragDelegate {
     }
     func prepareButtonsForPause() {
 
+        menuMiddleLabel.text = getPauseMessage()
+
         menuMiddleButton.name = ButtonType.Continue.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
 
@@ -1013,6 +1031,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         menuTopButtonLabel.name = ButtonType.Empty.rawValue
         menuTopButtonLabel.text = "PAUSE"
+        menuTopButton.removeAllChildren()
+        menuTopButton.addChild(menuTopButtonLabel)
 
     }
 
@@ -1179,6 +1199,8 @@ class GameScene: SKScene, TileDragDelegate {
             
             headerBackground.addChild(label)
         }
+
+        prepareButtonsForPause()
     }
 
     func addBoardTiles() {
@@ -1543,8 +1565,8 @@ class GameScene: SKScene, TileDragDelegate {
         secondStarShadow.position = pos
         thirdStarShadow.position = pos
 
-        firstStarShadow.position.x -= Tile.tileLength
-        thirdStarShadow.position.x += Tile.tileLength
+        firstStarShadow.position.x -= Tile.tileLength * 1.25
+        thirdStarShadow.position.x += Tile.tileLength * 1.25
 
         winStarsShadows.append(firstStarShadow)
         winStarsShadows.append(secondStarShadow)
