@@ -9,8 +9,7 @@
 import SpriteKit
 import Foundation
 
-class GameScene: SKScene, TileDragDelegate {
-
+class GameScene: SKScene, TileDragDelegate, Originator, Caretaker {
 
     // MARK: Members - Parent Controller
 
@@ -1604,5 +1603,29 @@ class GameScene: SKScene, TileDragDelegate {
         } else {
             return "\(minutes):\(seconds)"
         }
+    }
+
+    // MARK: Originator
+
+    func set(state: String) {
+        //
+    }
+
+    func saveToMemento() {
+        //
+    }
+
+    func restoreFromMemento(memento: Memento) {
+        //
+    }
+
+    // MARK: Caretaker
+
+    func addMemento(memento: Memento) {
+        //
+    }
+
+    func getMemento(index: Int) -> Memento {
+        //
     }
 }

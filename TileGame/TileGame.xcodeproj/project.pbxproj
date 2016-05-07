@@ -63,6 +63,9 @@
 		75F09C001AE08064003C061B /* Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F09BFF1AE08064003C061B /* Helpers.swift */; };
 		75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754E910F1B05519A0030C303 /* LobbyLayout.swift */; };
 		75FFAE2B1ADFCA42009C087F /* levelsinfo.json in Resources */ = {isa = PBXBuildFile; fileRef = 75FFAE2A1ADFCA42009C087F /* levelsinfo.json */; };
+		75FFD8131CDE34D300F506C8 /* Memento.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FFD8121CDE34D300F506C8 /* Memento.swift */; };
+		75FFD8161CDE35D400F506C8 /* Originator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FFD8151CDE35D400F506C8 /* Originator.swift */; };
+		75FFD8181CDE35E600F506C8 /* Caretaker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75FFD8171CDE35E600F506C8 /* Caretaker.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -136,6 +139,9 @@
 		75D793421B25ECFD00DB19B4 /* LevelsInfo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LevelsInfo.swift; sourceTree = "<group>"; };
 		75F09BFF1AE08064003C061B /* Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Helpers.swift; sourceTree = "<group>"; };
 		75FFAE2A1ADFCA42009C087F /* levelsinfo.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = levelsinfo.json; sourceTree = "<group>"; };
+		75FFD8121CDE34D300F506C8 /* Memento.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Memento.swift; sourceTree = "<group>"; };
+		75FFD8151CDE35D400F506C8 /* Originator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Originator.swift; sourceTree = "<group>"; };
+		75FFD8171CDE35E600F506C8 /* Caretaker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Caretaker.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -281,6 +287,7 @@
 		154E6D091AD016B100929955 /* Game */ = {
 			isa = PBXGroup;
 			children = (
+				75FFD8141CDE359C00F506C8 /* Undo */,
 				15A905991AC9D05400B37BEB /* Tile.swift */,
 				750320B71B7117820035E58B /* GameScene.swift */,
 				151B5A891AC9BA92002BD68C /* GameViewController.swift */,
@@ -324,6 +331,16 @@
 				7570FAB61C97603300DAA4E3 /* Comfortaa-Regular.ttf */,
 			);
 			name = Fonts;
+			sourceTree = "<group>";
+		};
+		75FFD8141CDE359C00F506C8 /* Undo */ = {
+			isa = PBXGroup;
+			children = (
+				75FFD8121CDE34D300F506C8 /* Memento.swift */,
+				75FFD8151CDE35D400F506C8 /* Originator.swift */,
+				75FFD8171CDE35E600F506C8 /* Caretaker.swift */,
+			);
+			name = Undo;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -466,14 +483,17 @@
 				15A9059A1AC9D05400B37BEB /* Tile.swift in Sources */,
 				75ACDB3E1BB2CF630013F1C4 /* Textures.swift in Sources */,
 				75F09C001AE08064003C061B /* Helpers.swift in Sources */,
+				75FFD8181CDE35E600F506C8 /* Caretaker.swift in Sources */,
 				7559F0CB1C01FB280045A07C /* AudioPlayer.swift in Sources */,
 				75F371941B2978BE007325A0 /* LobbyLayout.swift in Sources */,
+				75FFD8161CDE35D400F506C8 /* Originator.swift in Sources */,
 				750268F31B6B7F6400946480 /* LevelInfo.swift in Sources */,
 				15A905981AC9C22E00B37BEB /* LobbyCell.swift in Sources */,
 				151B5A841AC9BA92002BD68C /* AppDelegate.swift in Sources */,
 				753AC05F1BC2BE5E0053F607 /* MyThread.swift in Sources */,
 				75BC3D861B59149B00D99D73 /* Counter.swift in Sources */,
 				15C8367C1ACFC20000784FEC /* Settings.swift in Sources */,
+				75FFD8131CDE34D300F506C8 /* Memento.swift in Sources */,
 				750320B81B7117820035E58B /* GameScene.swift in Sources */,
 				75B52BF21B066ED200DCDB91 /* LobbyHeader.swift in Sources */,
 				15A905901AC9C06C00B37BEB /* MenuViewController.swift in Sources */,
