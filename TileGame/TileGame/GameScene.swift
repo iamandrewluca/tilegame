@@ -9,7 +9,7 @@
 import SpriteKit
 import Foundation
 
-class GameScene: SKScene, TileDragDelegate, Originator, Caretaker {
+class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Members - Parent Controller
 
@@ -295,6 +295,9 @@ class GameScene: SKScene, TileDragDelegate, Originator, Caretaker {
                 self.tiles[endPlace.row][endPlace.column] = self.currentSwipedTile
                 self.tiles[startPlace.row][startPlace.column] = nil
                 self.currentSwipedTile!.place = endPlace
+
+                // save current state of the game
+                self.addMemento(self.saveToMemento())
 
                 self.tileWasMoved(tile) { [unowned self] in
                     self.checkAndChangeGameState()
@@ -850,6 +853,9 @@ class GameScene: SKScene, TileDragDelegate, Originator, Caretaker {
 
     func undoMoves(nMoves: Int) {
         debugPrint("undo", nMoves, "moves")
+
+        // for now undo only 1 at a time
+        self.restoreFromMemento(self.getLastMemento())
     }
 
     func addMoves(nMoves: Int) {
@@ -1605,27 +1611,72 @@ class GameScene: SKScene, TileDragDelegate, Originator, Caretaker {
         }
     }
 
+
+
+    // MARK: Memento
+
+    class Memento {
+
+        init(colorTargets: [Int], starTargets: [Bool], mainTiles: [[TileType]], childTiles: [[TileType]]) {
+            
+        }
+
+    }
+
+
+
     // MARK: Originator
 
-    func set(state: String) {
-        //
+    /**
+     Get current state of the game and save it to a Memento
+
+     - returns: A game state wraper
+     */
+    func saveToMemento() -> Memento {
+        debugPrint("game state saved to memento")
+        return Memento()
     }
 
-    func saveToMemento() {
-        //
-    }
 
+
+    /**
+     Restore from a Memento the stat of the game
+
+     - parameter memento: Game State wraper
+     */
     func restoreFromMemento(memento: Memento) {
-        //
+        debugPrint("game state restored from memento")
+        // unwrap the memento
     }
+
+
 
     // MARK: Caretaker
 
+    // Saved mementos into a fixed size stack
+    var savedStates: FixedSizeStack<Memento> = FixedSizeStack(size: 3)
+
+
+
+    /**
+     Add a Memento to saved states
+
+     - parameter memento: memento to add
+     */
     func addMemento(memento: Memento) {
-        //
+        debugPrint("memento was added")
+        savedStates.push(memento)
     }
 
-    func getMemento(index: Int) -> Memento {
-        //
+
+
+    /**
+     Return last state of the game into a Memento
+
+     - returns: Wraper for the game state
+     */
+    func getLastMemento() -> Memento {
+        debugPrint("memento was poped")
+        return savedStates.pop()!
     }
 }
