@@ -12,7 +12,7 @@ class FixedSizeStack<Element> {
 
     let maxSize: Int
 
-    private(set) var items: [Element?] = [Element?]()
+    var items: [Element?] = [Element?]()
 
     init(size: Int) {
         maxSize = size

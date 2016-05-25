@@ -101,7 +101,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     var counter: Counter!
     var moves: Int = 0
-    var currentTargets: [TileType:Int] = [:]
+    var currentColors: [TileType:Int] = [:]
     var currentStars: [TileType:Bool] = [:]
 
     var lostByFail: Bool = false
@@ -362,12 +362,12 @@ class GameScene: SKScene, TileDragDelegate {
 
 //            debugPrint("\(tilesToDestroy.count) is >= 3")
 
-            currentTargets[tileType]! += tilesToDestroy.count
+            currentColors[tileType]! += tilesToDestroy.count
 
-            if currentTargets[tileType]! == levelInfo.colorTargets[tileType]! {
+            if currentColors[tileType]! == levelInfo.colorTargets[tileType]! {
                 colorLabels[tileType]!.text = "DONE"
-            } else if currentTargets[tileType]! < levelInfo.colorTargets[tileType]! - 3 {
-                colorLabels[tileType]!.text = "\(currentTargets[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
+            } else if currentColors[tileType]! < levelInfo.colorTargets[tileType]! - 3 {
+                colorLabels[tileType]!.text = "\(currentColors[tileType]!)/\(levelInfo.colorTargets[tileType]!)"
             } else {
                 colorLabels[tileType]!.text = "FAIL"
             }
@@ -620,7 +620,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         // first check for game won
 
-        for (key, value) in currentTargets {
+        for (key, value) in currentColors {
             if value != levelInfo.colorTargets[key] {
                 gameIsWon = false
                 break
@@ -635,7 +635,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         // then check for game over
 
-        for (key, value) in currentTargets {
+        for (key, value) in currentColors {
             if value != levelInfo.colorTargets[key] && value + 3 > levelInfo.colorTargets[key]  {
                 gameIsOver = true
                 lostByFail = true
@@ -854,7 +854,12 @@ class GameScene: SKScene, TileDragDelegate {
     func undoMoves(nMoves: Int) {
         debugPrint("undo", nMoves, "moves")
 
-        // for now undo only 1 at a time
+        // this should not happen
+        assert(savedStates.items.count != 0, "No saved states")
+
+        moves -= nMoves
+
+        // for now undo only 1 undo at a time
         self.restoreFromMemento(self.getLastMemento())
     }
 
@@ -870,6 +875,7 @@ class GameScene: SKScene, TileDragDelegate {
         counter.counter -= NSTimeInterval(nSeconds)
     }
 
+    // what does resetValues mean? )) you should burn in hell ))
     func resetValues() {
         lostByLevelType = false
         lostByFail = false
@@ -1075,6 +1081,8 @@ class GameScene: SKScene, TileDragDelegate {
 
     func resetTargetsTo(levelInfo: LevelInfo) {
 
+        savedStates.items.removeAll()
+
         lostByFail = false
         lostByLevelType = false
 
@@ -1094,7 +1102,7 @@ class GameScene: SKScene, TileDragDelegate {
         topSmallTiles.removeAll(keepCapacity: false)
         colorLabels.removeAll(keepCapacity: false)
         headerPositions.removeAll(keepCapacity: false)
-        currentTargets.removeAll(keepCapacity: false)
+        currentColors.removeAll(keepCapacity: false)
         currentStars.removeAll(keepCapacity: false)
 
         // Add new state
@@ -1168,7 +1176,7 @@ class GameScene: SKScene, TileDragDelegate {
             topSmallTiles[value] = tile
             headerBackground.addChild(tile)
 
-            currentTargets[value] = 0
+            currentColors[value] = 0
 
             if levelInfo.starTargets[value] != false {
                 let star = SKSpriteNode(texture: Textures.starTexture,
@@ -1617,10 +1625,24 @@ class GameScene: SKScene, TileDragDelegate {
 
     class Memento {
 
-        init(colorTargets: [Int], starTargets: [Bool], mainTiles: [[TileType]], childTiles: [[TileType]]) {
-            
+        let colorTargets: [TileType:Int]
+        let starTargets: [TileType:Bool]
+        let mainTiles: [[TileType]]
+        let childTiles: [[TileType]]
+
+        init(colorTargets: [TileType:Int], starTargets: [TileType:Bool], mainTiles: [[TileType]], childTiles: [[TileType]]) {
+            self.colorTargets = colorTargets
+            self.starTargets = starTargets
+            self.mainTiles = mainTiles
+            self.childTiles = childTiles
         }
 
+        init() {
+            self.colorTargets = [:]
+            self.starTargets = [:]
+            self.mainTiles = [[]]
+            self.childTiles = [[]]
+        }
     }
 
 
@@ -1634,19 +1656,49 @@ class GameScene: SKScene, TileDragDelegate {
      */
     func saveToMemento() -> Memento {
         debugPrint("game state saved to memento")
-        return Memento()
+
+        var mainTiles: [[TileType]] = Array(count: 6, repeatedValue: [])
+        var childTiles: [[TileType]] = Array(count: 6, repeatedValue: [])
+
+        for i in 0 ..< 6 {
+            for j in 0 ..< 6 {
+                if let tile = tiles[i][j] {
+                    mainTiles[i].append(tile.type)
+
+                    if let child = tile.childTile {
+                        childTiles[i].append(child.type)
+                    } else {
+                        childTiles[i].append(TileType.Empty)
+                    }
+                } else {
+                    mainTiles[i].append(TileType.Empty)
+                }
+            }
+        }
+
+        let memento: Memento = Memento(colorTargets: currentColors,
+                       starTargets: currentStars,
+                       mainTiles: mainTiles,
+                       childTiles: childTiles)
+
+        return memento
     }
 
 
 
     /**
-     Restore from a Memento the stat of the game
+     Restore from a Memento the state of the game
 
      - parameter memento: Game State wraper
      */
     func restoreFromMemento(memento: Memento) {
         debugPrint("game state restored from memento")
-        // unwrap the memento
+        // TODO: unwrap the memento to game state
+
+        self.currentColors = memento.colorTargets
+        self.currentStars = memento.starTargets
+
+
     }
 
 
@@ -1654,7 +1706,8 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Caretaker
 
     // Saved mementos into a fixed size stack
-    var savedStates: FixedSizeStack<Memento> = FixedSizeStack(size: 3)
+    // TODO: Reset on game restart
+    var savedStates: FixedSizeStack<Memento> = FixedSizeStack(size: 1)
 
 
 
