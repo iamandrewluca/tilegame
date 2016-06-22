@@ -1706,7 +1706,6 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Caretaker
 
     // Saved mementos into a fixed size stack
-    // TODO: Reset on game restart
     var savedStates: FixedSizeStack<Memento> = FixedSizeStack(size: 1)
 
 
