@@ -13,13 +13,13 @@ class AudioPlayer {
 
     // MARK: Members
 
-    private static let backgroundMusic: AVAudioPlayer = { () -> AVAudioPlayer in
-        let musicPath: NSString = NSBundle.mainBundle().pathForResource("backgroundMusic", ofType: "mp3")!
+    fileprivate static let backgroundMusic: AVAudioPlayer = { () -> AVAudioPlayer in
+        let musicPath: NSString = Bundle.main.path(forResource: "backgroundMusic", ofType: "mp3")! as NSString
 
         var audioPlayer: AVAudioPlayer?
 
         do {
-            try audioPlayer = AVAudioPlayer(contentsOfURL: NSURL(fileURLWithPath: musicPath as String))
+            try audioPlayer = AVAudioPlayer(contentsOf: URL(fileURLWithPath: musicPath as String))
         } catch {
             fatalError("Could not create AVAudioPlayer")
         }
@@ -27,46 +27,46 @@ class AudioPlayer {
         return audioPlayer!
     }()
 
-    private static let tapSound: SystemSoundID = { () -> SystemSoundID in
+    fileprivate static let tapSound: SystemSoundID = { () -> SystemSoundID in
 
-        let tapSoundPath: String = NSBundle.mainBundle().pathForResource("tap", ofType: "mp3")!
-        let tapURL: NSURL = NSURL(fileURLWithPath: tapSoundPath)
+        let tapSoundPath: String = Bundle.main.path(forResource: "tap", ofType: "mp3")!
+        let tapURL: URL = URL(fileURLWithPath: tapSoundPath)
         var tapID: SystemSoundID = 0
 
-        AudioServicesCreateSystemSoundID(tapURL, &tapID)
+        AudioServicesCreateSystemSoundID(tapURL as CFURL, &tapID)
 
         return tapID
     }()
 
-    private static let swipeSound: SystemSoundID = { () -> SystemSoundID in
+    fileprivate static let swipeSound: SystemSoundID = { () -> SystemSoundID in
 
-        let swipeSoundPath: String = NSBundle.mainBundle().pathForResource("swipe", ofType: "mp3")!
-        let swipeURL: NSURL = NSURL(fileURLWithPath: swipeSoundPath)
+        let swipeSoundPath: String = Bundle.main.path(forResource: "swipe", ofType: "mp3")!
+        let swipeURL: URL = URL(fileURLWithPath: swipeSoundPath)
         var swipeID: SystemSoundID = 0
 
-        AudioServicesCreateSystemSoundID(swipeURL, &swipeID)
+        AudioServicesCreateSystemSoundID(swipeURL as CFURL, &swipeID)
 
         return swipeID
     }()
 
-    private static let destroySound: SystemSoundID = { () -> SystemSoundID in
+    fileprivate static let destroySound: SystemSoundID = { () -> SystemSoundID in
 
-        let destroySoundPath: String = NSBundle.mainBundle().pathForResource("destroy", ofType: "mp3")!
-        let destroyURL: NSURL = NSURL(fileURLWithPath: destroySoundPath)
+        let destroySoundPath: String = Bundle.main.path(forResource: "destroy", ofType: "mp3")!
+        let destroyURL: URL = URL(fileURLWithPath: destroySoundPath)
         var destroyID: SystemSoundID = 0
 
-        AudioServicesCreateSystemSoundID(destroyURL, &destroyID)
+        AudioServicesCreateSystemSoundID(destroyURL as CFURL, &destroyID)
 
         return destroyID
     }()
 
-    private static let flySound: SystemSoundID = { () -> SystemSoundID in
+    fileprivate static let flySound: SystemSoundID = { () -> SystemSoundID in
 
-        let flySoundPath: String = NSBundle.mainBundle().pathForResource("fly", ofType: "mp3")!
-        let flyURL: NSURL = NSURL(fileURLWithPath: flySoundPath)
+        let flySoundPath: String = Bundle.main.path(forResource: "fly", ofType: "mp3")!
+        let flyURL: URL = URL(fileURLWithPath: flySoundPath)
         var flyID: SystemSoundID = 0
 
-        AudioServicesCreateSystemSoundID(flyURL, &flyID)
+        AudioServicesCreateSystemSoundID(flyURL as CFURL, &flyID)
 
         return flyID
     }()
@@ -82,7 +82,7 @@ class AudioPlayer {
     // MARK: Methods
 
     static func isMusicOn() -> Bool {
-        return AudioPlayer.backgroundMusic.playing
+        return AudioPlayer.backgroundMusic.isPlaying
     }
 
     static func play() {

@@ -12,30 +12,30 @@ class Counter {
 
     // MARK: Members
 
-    private var timerThread: MyThread!
+    fileprivate var timerThread: MyThread!
 
     // timer for counter
-    private var timer: NSTimer = NSTimer()
+    fileprivate var timer: Timer = Timer()
 
     // you can't change current elapsed time
-    var counter: NSTimeInterval = 0
+    var counter: TimeInterval = 0
 
     // interval after timer is invalidated
-    var endInterval: NSTimeInterval = 0
+    var endInterval: TimeInterval = 0
 
     // interval between timer loops
-    var loopInterval: NSTimeInterval = 0
+    var loopInterval: TimeInterval = 0
 
     // Internal loop for granular time
-    var internalLoopInterval: NSTimeInterval = 0.1
+    var internalLoopInterval: TimeInterval = 0.1
     // method called when counterEnd is reached
     var endCallback: (() -> Void)?
-    var loopCallback: (NSTimeInterval -> Void)?
+    var loopCallback: ((TimeInterval) -> Void)?
 
     // MARK: Counter
 
     // if end < 0 infinite counter
-    init(loopInterval: NSTimeInterval, endInterval: NSTimeInterval, loopCallback: (NSTimeInterval -> Void)?, endCallback: (() -> Void)?) {
+    init(loopInterval: TimeInterval, endInterval: TimeInterval, loopCallback: ((TimeInterval) -> Void)?, endCallback: (() -> Void)?) {
         self.loopInterval = loopInterval
         self.endInterval = endInterval
         self.endCallback = endCallback
@@ -49,26 +49,26 @@ class Counter {
 
     // MARK: Methods
 
-    @objc private func run() {
-        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
+    @objc fileprivate func run() {
+        timer = Timer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
 
-        let timerRunLoop = NSRunLoop.currentRunLoop()
-        timerRunLoop.addTimer(timer, forMode: NSRunLoopCommonModes)
+        let timerRunLoop = RunLoop.current
+        timerRunLoop.add(timer, forMode: RunLoopMode.commonModes)
         timerRunLoop.run()
     }
 
-    @objc private func intervalLoop() {
+    @objc fileprivate func intervalLoop() {
 
         let shouldCallLoopCallback: Bool = (counter + internalLoopInterval >= floor(counter) + loopInterval)
 
         counter += internalLoopInterval
 
-        if let call = loopCallback where shouldCallLoopCallback {
+        if let call = loopCallback, shouldCallLoopCallback {
 //            debugPrint("loop")
             call(counter)
         }
 
-        if let call = endCallback where endInterval > 0 && counter >= endInterval {
+        if let call = endCallback, endInterval > 0 && counter >= endInterval {
 //            debugPrint("end")
             pause()
             call()
@@ -78,8 +78,8 @@ class Counter {
     func start() {
 //        timerThread = MyThread(target: self, selector: "run", object: nil)
 //        timerThread.start()
-        timer = NSTimer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
-        NSRunLoop.currentRunLoop().addTimer(timer, forMode: NSDefaultRunLoopMode)
+        timer = Timer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
+        RunLoop.current.add(timer, forMode: RunLoopMode.defaultRunLoopMode)
     }
 
     /**
@@ -88,7 +88,7 @@ class Counter {
     thread where timer was initialized to terminate
     */
     func pause() {
-        if timer.valid {
+        if timer.isValid {
             timer.invalidate()
         }
     }

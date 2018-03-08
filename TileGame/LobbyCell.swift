@@ -15,11 +15,11 @@ class LobbyCell: UICollectionViewCell {
     static let identifier = "LobbyCell"
 
     static let starImage: UIImage = { () -> UIImage in
-        return (UIImage(named: "Star")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
+        return (UIImage(named: "Star")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
     }()
 
     static let starImageOutlined: UIImage = { () -> UIImage in
-        return (UIImage(named: "StarOutlined")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
+        return (UIImage(named: "StarOutlined")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
     }()
 
     // MARK: IBOutlets
@@ -41,7 +41,7 @@ class LobbyCell: UICollectionViewCell {
         }
 
         layer.borderWidth = 2
-        layer.borderColor = cellColor.CGColor
+        layer.borderColor = cellColor.cgColor
         layer.cornerRadius = bounds.width / 5
 
         firstStar.tintColor = Constants.yellowColor

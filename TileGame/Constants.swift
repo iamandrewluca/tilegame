@@ -13,9 +13,9 @@ class Constants {
 
     // MARK: Device
 
-    static let screenSize: CGSize = UIScreen.mainScreen().bounds.size
-    static let screenRatio: CGFloat = UIScreen.mainScreen().scale + 2
-    static let isIphone: Bool = (UIDevice.currentDevice().userInterfaceIdiom == UIUserInterfaceIdiom.Phone) ? true : false
+    static let screenSize: CGSize = UIScreen.main.bounds.size
+    static let screenRatio: CGFloat = UIScreen.main.scale + 2
+    static let isIphone: Bool = (UIDevice.current.userInterfaceIdiom == UIUserInterfaceIdiom.phone) ? true : false
 
     // MARK: Fonts
 
@@ -36,7 +36,7 @@ class Constants {
     // this will be set from user preferences
     static var tilesTheme: Int { return 0 }
 
-    private static let tilesColors: [[UIColor]] = [[
+    fileprivate static let tilesColors: [[UIColor]] = [[
             Constants.redColor,
             Constants.orangeColor,
             Constants.yellowColor,

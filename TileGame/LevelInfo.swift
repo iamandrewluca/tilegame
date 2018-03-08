@@ -21,30 +21,30 @@ class LevelInfo {
 
     let levelNumber: Int
 
-    var type: LevelType = LevelType.FreeTime
+    var type: LevelType = LevelType.freeTime
     var typeCounter: Int = 0
 
     var colorTargets: [TileType:Int] = [
-        TileType.Color1:0,
-        TileType.Color2:0,
-        TileType.Color3:0,
-        TileType.Color4:0,
-        TileType.Color5:0
+        TileType.color1:0,
+        TileType.color2:0,
+        TileType.color3:0,
+        TileType.color4:0,
+        TileType.color5:0
     ]
 
     var starTargets: [TileType:Bool] = [
-        TileType.Color1:false,
-        TileType.Color2:false,
-        TileType.Color3:false,
-        TileType.Color4:false,
-        TileType.Color5:false
+        TileType.color1:false,
+        TileType.color2:false,
+        TileType.color3:false,
+        TileType.color4:false,
+        TileType.color5:false
     ]
 
-    var mainTiles: [[TileType]] = Array(count: 6,
-        repeatedValue: Array(count: 6,
-            repeatedValue: TileType.Empty))
+    var mainTiles: [[TileType]] = Array(repeating: Array(repeating: TileType.empty,
+            count: 6),
+        count: 6)
 
-    var childTiles: [[TileType]] = Array(count: 6,
-        repeatedValue: Array(count: 6,
-            repeatedValue: TileType.Empty))
+    var childTiles: [[TileType]] = Array(repeating: Array(repeating: TileType.empty,
+            count: 6),
+        count: 6)
 }

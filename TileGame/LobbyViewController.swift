@@ -23,12 +23,12 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: IB Actions
 
-    @IBAction func goBack(sender: AnyObject) {
+    @IBAction func goBack(_ sender: AnyObject) {
         AudioPlayer.tap()
-        navigationController!.popViewControllerAnimated(true)
+        navigationController!.popViewController(animated: true)
     }
 
-    @IBAction func openLeaderboard(sender: AnyObject) {
+    @IBAction func openLeaderboard(_ sender: AnyObject) {
         AudioPlayer.tap()
         debugPrint("leaderboard")
     }
@@ -47,27 +47,27 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: Methods
 
-    private func setupLockedSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
+    fileprivate func setupLockedSectionHeaderAtIndexPath(_ view: LobbyHeader, indexPath: IndexPath) {
 
-        let starsToPass  = levelsInfo.starsToPassSection - levelsInfo.starsInSection(indexPath.section - 1)
+        let starsToPass  = levelsInfo?.starsToPassSection - levelsInfo?.starsInSection(indexPath.section - 1)
 
         view.sectionLabel.text = "Section \(indexPath.section + 1)"
         view.starsLabel.text = "\(starsToPass) stars to unlock"
     }
 
-    private func setupSectionHeaderAtIndexPath(view: LobbyHeader, indexPath: NSIndexPath) {
+    fileprivate func setupSectionHeaderAtIndexPath(_ view: LobbyHeader, indexPath: IndexPath) {
 
-        let totalStars = levelsInfo.starsInSection(indexPath.section)
+        let totalStars = levelsInfo?.starsInSection(indexPath.section)
 
         view.sectionLabel.text = "Section \(indexPath.section + 1)"
         view.starsLabel.text = "\(totalStars) stars"
     }
 
-    private func setupCellWithIndexPath(cell: LobbyCell, indexPath: NSIndexPath) {
-        let cellLevel = String(1 + indexPath.section * levelsInfo.levelsPerSection + indexPath.item)
+    fileprivate func setupCellWithIndexPath(_ cell: LobbyCell, indexPath: IndexPath) {
+        let cellLevel = String(1 + indexPath.section * (levelsInfo?.levelsPerSection)! + indexPath.item)
         cell.levelNumber.text = cellLevel
 
-        let levelStars = levelsInfo.starsAtIndexPath(indexPath)
+        let levelStars = levelsInfo?.starsAtIndexPath(indexPath)
 
         if levelStars > 0 {
             cell.firstStar.image = LobbyCell.starImage
@@ -83,36 +83,36 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
 
-    private func setupLockedCellWithIndexPath(cell: LobbyLockedCell, indexPath: NSIndexPath) {
+    fileprivate func setupLockedCellWithIndexPath(_ cell: LobbyLockedCell, indexPath: IndexPath) {
 
     }
 
-    private func registerNibsForCollectionView() {
-        collectionView!.registerNib(UINib(nibName: LobbyHeader.identifier, bundle: nil),
+    fileprivate func registerNibsForCollectionView() {
+        collectionView!.register(UINib(nibName: LobbyHeader.identifier, bundle: nil),
             forSupplementaryViewOfKind: LobbyHeader.identifier, withReuseIdentifier: LobbyHeader.identifier)
 
-        collectionView!.registerNib(UINib(nibName: LobbyCell.identifier, bundle: nil),
+        collectionView!.register(UINib(nibName: LobbyCell.identifier, bundle: nil),
             forCellWithReuseIdentifier: LobbyCell.identifier)
 
-        collectionView!.registerNib(UINib(nibName: LobbyLockedCell.identifier, bundle: nil),
+        collectionView!.register(UINib(nibName: LobbyLockedCell.identifier, bundle: nil),
             forCellWithReuseIdentifier: LobbyLockedCell.identifier)
     }
 
-    private func setupViews() {
+    fileprivate func setupViews() {
 
         navigationHeaderHeight.constant = Tile.tileLength
 
         let backMask = CAShapeLayer()
         backMask.path = UIBezierPath(
             roundedRect: CGRect(x: 0, y: 0, width: Tile.tileLength, height: Tile.tileLength),
-            byRoundingCorners: UIRectCorner.TopRight,
-            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).CGPath
+            byRoundingCorners: UIRectCorner.topRight,
+            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).cgPath
 
         let leaderboardMask = CAShapeLayer()
         leaderboardMask.path = UIBezierPath(
             roundedRect: CGRect(x: 0, y: 0, width: Tile.tileLength, height: Tile.tileLength),
-            byRoundingCorners: UIRectCorner.TopLeft,
-            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).CGPath
+            byRoundingCorners: UIRectCorner.topLeft,
+            cornerRadii: CGSize(width: Tile.tileLength / 2, height: Tile.tileLength / 2)).cgPath
 
         leaderboardButtonContainer.layer.mask = leaderboardMask
         backButtonContainer.layer.mask = backMask
@@ -133,7 +133,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         debugPrint("lobby deinit")
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 
@@ -144,10 +144,10 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         setupViews()
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        middleLabel.text = "\(levelsInfo.totalStars()) stars"
+        middleLabel.text = "\(levelsInfo?.totalStars()) stars"
 
         if sectionsToReload.count != 0 {
 //            debugPrint("reload sections")
@@ -186,34 +186,34 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     // MARK: UICollectionViewDataSource
 
-    func collectionView(collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return levelsInfo.levelsPerSection
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return levelsInfo!.levelsPerSection
     }
 
-    func numberOfSectionsInCollectionView(collectionView: UICollectionView) -> Int {
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
 
-        if levelsInfo.unlockedSections == levelsInfo.totalSections {
-            return levelsInfo.totalSections
+        if levelsInfo?.unlockedSections == levelsInfo?.totalSections {
+            return levelsInfo!.totalSections
         }
 
-        return levelsInfo.unlockedSections + 1
+        return levelsInfo!.unlockedSections + 1
     }
 
     // MARK: UICollectionViewDelegate
 
-    func collectionView(collectionView: UICollectionView,
-        cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
 
         var cell: UICollectionViewCell!
 
-        if indexPath.section < levelsInfo.unlockedSections {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-                LobbyCell.identifier, forIndexPath: indexPath) as! LobbyCell
+        if indexPath.section < (levelsInfo?.unlockedSections)! {
+            cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: LobbyCell.identifier, for: indexPath) as! LobbyCell
 
             setupCellWithIndexPath(cell as! LobbyCell, indexPath: indexPath)
         } else {
-            cell = collectionView.dequeueReusableCellWithReuseIdentifier(
-                LobbyLockedCell.identifier, forIndexPath: indexPath) as! LobbyLockedCell
+            cell = collectionView.dequeueReusableCell(
+                withReuseIdentifier: LobbyLockedCell.identifier, for: indexPath) as! LobbyLockedCell
 
             setupLockedCellWithIndexPath(cell as! LobbyLockedCell, indexPath: indexPath)
         }
@@ -221,18 +221,18 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         return cell
     }
 
-    func collectionView(collectionView: UICollectionView,
-        viewForSupplementaryElementOfKind kind: String, atIndexPath indexPath: NSIndexPath) -> UICollectionReusableView {
+    func collectionView(_ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
 
         var supplementaryView: UICollectionReusableView!
 
         if kind == LobbyHeader.identifier {
 
-            supplementaryView = collectionView.dequeueReusableSupplementaryViewOfKind(kind,
+            supplementaryView = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                 withReuseIdentifier: LobbyHeader.identifier,
-                forIndexPath: indexPath) as! LobbyHeader
+                for: indexPath) as! LobbyHeader
 
-            if indexPath.section < levelsInfo.unlockedSections {
+            if indexPath.section < (levelsInfo?.unlockedSections)! {
                 setupSectionHeaderAtIndexPath(supplementaryView as! LobbyHeader, indexPath: indexPath)
             } else {
                 setupLockedSectionHeaderAtIndexPath(supplementaryView as! LobbyHeader, indexPath: indexPath)
@@ -242,19 +242,19 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         return supplementaryView
     }
 
-    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
 
-        if indexPath.section < levelsInfo.unlockedSections {
+        if indexPath.section < (levelsInfo?.unlockedSections)! {
 
-            let gameVC = storyboard!.instantiateViewControllerWithIdentifier("gameVC") as! GameViewController
+            let gameVC = storyboard!.instantiateViewController(withIdentifier: "gameVC") as! GameViewController
             gameVC.lobbyVC = self
-            gameVC.levelInfo = levelsInfo.loadLevel(indexPath.section, number: indexPath.item)
+            gameVC.levelInfo = levelsInfo!.loadLevel(indexPath.section, number: indexPath.item)
 
             saveLastIndexPath(indexPath)
 
             AudioPlayer.tap()
 
-            navigationController!.presentViewController(gameVC, animated: true, completion: nil)
+            navigationController!.present(gameVC, animated: true, completion: nil)
         }
     }
 
@@ -263,9 +263,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
      - parameter indexPath: index path to save in user defaults
      */
-    func saveLastIndexPath(indexPath: NSIndexPath) {
-        NSUserDefaults.standardUserDefaults().setInteger(indexPath.item, forKey: LAST_INDEX_PATH_ITEM_KEY)
-        NSUserDefaults.standardUserDefaults().setInteger(indexPath.section, forKey: LAST_INDEX_PATH_SECTION_KEY)
+    func saveLastIndexPath(_ indexPath: IndexPath) {
+        UserDefaults.standard.set(indexPath.item, forKey: LAST_INDEX_PATH_ITEM_KEY)
+        UserDefaults.standard.set(indexPath.section, forKey: LAST_INDEX_PATH_SECTION_KEY)
     }
 
     /**
@@ -273,13 +273,13 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
      - returns: NSIndexPath?
      */
-    func loadLastIndexPath() -> NSIndexPath? {
+    func loadLastIndexPath() -> IndexPath? {
 
-        var lastIndexPath: NSIndexPath? = NSIndexPath?.None
+        var lastIndexPath: IndexPath? = IndexPath?.none
 
-        if let lastIndexPathItem = NSUserDefaults.standardUserDefaults().valueForKey(LAST_INDEX_PATH_ITEM_KEY) as! Int!,
-            lastIndexPathSection = NSUserDefaults.standardUserDefaults().valueForKey(LAST_INDEX_PATH_SECTION_KEY) as! Int!{
-                lastIndexPath = NSIndexPath(forItem: lastIndexPathItem, inSection: lastIndexPathSection)
+        if let lastIndexPathItem = UserDefaults.standard.value(forKey: LAST_INDEX_PATH_ITEM_KEY) as! Int!,
+            let lastIndexPathSection = UserDefaults.standard.value(forKey: LAST_INDEX_PATH_SECTION_KEY) as! Int!{
+                lastIndexPath = IndexPath(item: lastIndexPathItem, section: lastIndexPathSection)
         }
 
         return lastIndexPath
@@ -287,9 +287,9 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     func scrollToLastIndexPath() {
         if let lastIndexPath = loadLastIndexPath() {
-            collectionView.scrollToItemAtIndexPath(
-                lastIndexPath,
-                atScrollPosition: UICollectionViewScrollPosition.CenteredVertically, animated: false)
+            collectionView.scrollToItem(
+                at: lastIndexPath,
+                at: UICollectionViewScrollPosition.centeredVertically, animated: false)
         }
     }
 

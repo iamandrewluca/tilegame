@@ -8,6 +8,30 @@
 
 import SpriteKit
 import Foundation
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l < r
+  case (nil, _?):
+    return true
+  default:
+    return false
+  }
+}
+
+// FIXME: comparison operators with optionals were removed from the Swift Standard Libary.
+// Consider refactoring the code to use the non-optional operators.
+fileprivate func > <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
+  switch (lhs, rhs) {
+  case let (l?, r?):
+    return l > r
+  default:
+    return rhs < lhs
+  }
+}
+
 
 class GameScene: SKScene, TileDragDelegate {
 
@@ -26,7 +50,7 @@ class GameScene: SKScene, TileDragDelegate {
     var headerPositions: [TileType:CGPoint] = [:]
 
     var topSmallTiles: [TileType:SKSpriteNode] = [:]
-    var topSmallStars: [TileType:SKSpriteNode!] = [:]
+    var topSmallStars: [TileType:SKSpriteNode?] = [:]
     var colorLabels: [TileType:SKLabelNode] = [:]
 
     var headerBackground: SKSpriteNode!
@@ -68,10 +92,10 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Animations intervals
 
-    let tilesAppearInterval: NSTimeInterval = 0.4
-    let tilesDissappearInterval: NSTimeInterval = 0.2
-    let menuToogleInterval: NSTimeInterval = 0.1
-    let tileMovingInterval: NSTimeInterval = 0.1
+    let tilesAppearInterval: TimeInterval = 0.4
+    let tilesDissappearInterval: TimeInterval = 0.2
+    let menuToogleInterval: TimeInterval = 0.1
+    let tileMovingInterval: TimeInterval = 0.1
     let overlayAlpha: CGFloat = 0.8
 
     // MARK: Members - Board
@@ -79,26 +103,26 @@ class GameScene: SKScene, TileDragDelegate {
     static let boardSize: Int = 6
     static let boardPositions: [[CGPoint]] = GameScene.createBoardPositions()
 
-    var tiles: [[Tile?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: Tile?.None))
-    var backgroundTiles: [[SKSpriteNode?]] = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: SKSpriteNode?.None))
+    var tiles: [[Tile?]] = Array(repeating: Array(repeating: Tile?.none, count: 6), count: 6)
+    var backgroundTiles: [[SKSpriteNode?]] = Array(repeating: Array(repeating: SKSpriteNode?.none, count: 6), count: 6)
 
     // MARK: Members - Game State
 
     var limits: [Direction:(row: Int, column: Int)] = [
-        Direction.Up: (row: 0, column: 0),
-        Direction.Right: (row: 0, column: 0),
-        Direction.Down: (row: 0, column: 0),
-        Direction.Left: (row: 0, column: 0)
+        Direction.up: (row: 0, column: 0),
+        Direction.right: (row: 0, column: 0),
+        Direction.down: (row: 0, column: 0),
+        Direction.left: (row: 0, column: 0)
     ]
 
-    var startTouchPoint: CGPoint = CGPointZero
-    var lastTouchPoint: CGPoint = CGPointZero
-    var startTilePoint: CGPoint = CGPointZero
-    var endTilePoint: CGPoint = CGPointZero
+    var startTouchPoint: CGPoint = CGPoint.zero
+    var lastTouchPoint: CGPoint = CGPoint.zero
+    var startTilePoint: CGPoint = CGPoint.zero
+    var endTilePoint: CGPoint = CGPoint.zero
 
-    var currentDirection: Direction = Direction.None
-    var fromDirection: Direction = Direction.None
-    var toDirection: Direction = Direction.None
+    var currentDirection: Direction = Direction.none
+    var fromDirection: Direction = Direction.none
+    var toDirection: Direction = Direction.none
 
     var counter: Counter!
     var moves: Int = 0
@@ -117,12 +141,12 @@ class GameScene: SKScene, TileDragDelegate {
     // MARK: Override - SKScene
 
     deinit {
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        NotificationCenter.default.removeObserver(self)
         debugPrint("GameScene deinit")
     }
 
-    override func didMoveToView(view: SKView) {
-        super.didMoveToView(view)
+    override func didMove(to view: SKView) {
+        super.didMove(to: view)
         /* Setup your scene here */
 
         backgroundColor = Constants.backgroundColor
@@ -137,8 +161,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         addBoardBackgroundAndHoles()
 
-        NSNotificationCenter.defaultCenter()
-            .addObserver(self, selector: #selector(GameScene.didEnterBackground), name: UIApplicationWillResignActiveNotification, object: nil)
+        NotificationCenter.default
+            .addObserver(self, selector: #selector(GameScene.didEnterBackground), name: NSNotification.Name.UIApplicationWillResignActive, object: nil)
 
         // tiles are added in viewDidAppear
     }
@@ -153,19 +177,19 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Override - UIResponder
 
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
 
         if !canTouch { return }
 
-        let location = touches.first!.locationInNode(self)
-        let node = nodeAtPoint(location)
+        let location = touches.first!.location(in: self)
+        let node = atPoint(location)
 
         touchesBeganOn = ""
         touchesBeganOn = node.name
 
 //        debugPrint("began on \(node.name)")
     }
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 
         if !canTouch { return }
 
@@ -174,12 +198,12 @@ class GameScene: SKScene, TileDragDelegate {
 
 //        debugPrint("move on \(node.name)")
     }
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 
         if !canTouch { return }
 
-        let location = touches.first!.locationInNode(self)
-        let node = nodeAtPoint(location)
+        let location = touches.first!.location(in: self)
+        let node = atPoint(location)
 
         if node.name != touchesBeganOn { return }
 
@@ -217,14 +241,14 @@ class GameScene: SKScene, TileDragDelegate {
             showAd()
         }
     }
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        touchesEnded(touches!, withEvent: event)
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        touchesEnded(touches, with: event)
         debugPrint("canceled")
     }
 
     // MARK: Methods - Tile Drag Protocol
 
-    func tileDragBegan(tile: Tile, position: CGPoint) {
+    func tileDragBegan(_ tile: Tile, position: CGPoint) {
 
         if !canTouch { return }
 
@@ -237,11 +261,11 @@ class GameScene: SKScene, TileDragDelegate {
         startTouchPoint = position
         lastTouchPoint = startTouchPoint
 
-        fromDirection = Direction.None
-        toDirection = Direction.None
-        currentDirection = Direction.None
+        fromDirection = Direction.none
+        toDirection = Direction.none
+        currentDirection = Direction.none
     }
-    func tileDragMoved(tile: Tile, position: CGPoint) {
+    func tileDragMoved(_ tile: Tile, position: CGPoint) {
 
         if !canTouch { return }
 
@@ -249,7 +273,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         let currentTouchPoint = position
 
-        if toDirection == Direction.None {
+        if toDirection == Direction.none {
 
             setDirs(startTouchPoint, end: currentTouchPoint)
 
@@ -276,19 +300,19 @@ class GameScene: SKScene, TileDragDelegate {
 
         lastTouchPoint = currentTouchPoint
     }
-    func tileDragEnded(tile: Tile, position: CGPoint) {
+    func tileDragEnded(_ tile: Tile, position: CGPoint) {
 
         if !canTouch { return }
 
         if currentSwipedTile != tile { return }
-        if toDirection == Direction.None { return }
+        if toDirection == Direction.none { return }
 
         canTouch = false
 
         AudioPlayer.swipe()
 
         if currentDirection == toDirection {
-            tile.runAction(SKAction.moveTo(endTilePoint, duration: tileMovingInterval)) { [unowned self] in
+            tile.run(SKAction.move(to: endTilePoint, duration: tileMovingInterval), completion: { [unowned self] in
 
                 let startPlace = self.currentSwipedTile!.place
                 let endPlace = self.limits[self.toDirection]!
@@ -304,28 +328,28 @@ class GameScene: SKScene, TileDragDelegate {
                 }
 
                 self.currentSwipedTile = nil
-                self.fromDirection = Direction.None
-                self.toDirection = Direction.None
-                self.currentDirection = Direction.None
-            }
+                self.fromDirection = Direction.none
+                self.toDirection = Direction.none
+                self.currentDirection = Direction.none
+            }) 
         } else {
-            tile.runAction(SKAction.moveTo(startTilePoint, duration: tileMovingInterval)) { [unowned self] in
+            tile.run(SKAction.move(to: startTilePoint, duration: tileMovingInterval), completion: { [unowned self] in
                 self.canTouch = true
                 self.currentSwipedTile = nil
-                self.fromDirection = Direction.None
-                self.toDirection = Direction.None
-                self.currentDirection = Direction.None
-            }
+                self.fromDirection = Direction.none
+                self.toDirection = Direction.none
+                self.currentDirection = Direction.none
+            }) 
         }
     }
-    func tileDragCancelled(tile: Tile, position: CGPoint) {
+    func tileDragCancelled(_ tile: Tile, position: CGPoint) {
         debugPrint("tile drag canceled")
         tileDragEnded(tile, position: position)
     }
 
     // MARK: Methods - Tile Methods
 
-    func tileWasMoved(tile: Tile, completion: () -> Void) {
+    func tileWasMoved(_ tile: Tile, completion: @escaping () -> Void) {
 
         moves += 1
 
@@ -334,7 +358,7 @@ class GameScene: SKScene, TileDragDelegate {
             completion()
         }
 
-        if levelInfo.type == LevelType.LimitedMoves {
+        if levelInfo.type == LevelType.limitedMoves {
             let leftMoves = levelInfo.typeCounter - moves
             headerTopLabel.text = "\(leftMoves)"
         }
@@ -347,11 +371,11 @@ class GameScene: SKScene, TileDragDelegate {
     - parameter tilesToCheck: tiles to check for neighbours
     - parameter completion:   callback called when all chains are destroyed
     */
-    func checkTilesAndDestroy(inout tilesToCheck: [Tile], completion: () -> Void) {
+    func checkTilesAndDestroy(_ tilesToCheck: inout [Tile], completion: @escaping () -> Void) {
 
         if tilesToCheck.count == 0 { return }
 
-        let firstTileToCheck: Tile = tilesToCheck.removeAtIndex(0)
+        let firstTileToCheck: Tile = tilesToCheck.remove(at: 0)
         let tileType: TileType = firstTileToCheck.type
 
         let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
@@ -382,14 +406,14 @@ class GameScene: SKScene, TileDragDelegate {
                     childTile.position = tile.position
                     childTile.zPosition = 2
 
-                    if childTile.type != TileType.Star {
+                    if childTile.type != TileType.star {
 
                         childTile.removeFromParent()
                         self.addChild(childTile)
 
                         tiles[tile.place.row][tile.place.column] = childTile
-                        childTile.userInteractionEnabled = true
-                        childTile.runAction(SKAction.sequence([SKAction.scaleTo(1.2, duration: 0.15), SKAction.scaleTo(1, duration: 0.2)]))
+                        childTile.isUserInteractionEnabled = true
+                        childTile.run(SKAction.sequence([SKAction.scale(to: 1.2, duration: 0.15), SKAction.scale(to: 1, duration: 0.2)]))
 
                         tilesToCheck.append(childTile)
                     } else {
@@ -397,27 +421,27 @@ class GameScene: SKScene, TileDragDelegate {
                     }
                 }
 
-                tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
+                tile.run(SKAction.scale(to: 0, duration: tilesDissappearInterval), completion: {
                     tile.removeFromParent()
-                }
+                }) 
             }
         }
 
         if tilesToCheck.count != 0 {
 //            debugPrint("cycle check tyles to destroy")
-            self.runAction(SKAction.waitForDuration(tilesDissappearInterval - 0.1)) { [unowned self] in
+            self.run(SKAction.wait(forDuration: tilesDissappearInterval - 0.1), completion: { [unowned self] in
                 self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
-            }
+            }) 
         } else {
             completion()
         }
     }
 
-    func addStar(tile: Tile, forColor: TileType) {
+    func addStar(_ tile: Tile, forColor: TileType) {
 
         currentStars[forColor] = true
 
-        let headerPosition = scene!.convertPoint(tile.position, toNode: topSmallTiles[forColor]!)
+        let headerPosition = scene!.convert(tile.position, to: topSmallTiles[forColor]!)
         tile.position = headerPosition
 
         tile.removeFromParent()
@@ -425,24 +449,24 @@ class GameScene: SKScene, TileDragDelegate {
         topSmallTiles[forColor]!.addChild(tile)
         topSmallStars[forColor] = tile
 
-        let finalPosition = CGPointZero
+        let finalPosition = CGPoint.zero
 
-        let moveAction = SKAction.moveTo(finalPosition, duration: 0.4)
-        let scaleAction = SKAction.sequence([SKAction.scaleTo(1, duration: 0.2), SKAction.scaleTo(2/6, duration: 0.2)])
-        let rotateAction = SKAction.rotateByAngle(degree2radian(-15), duration: 0.4)
+        let moveAction = SKAction.move(to: finalPosition, duration: 0.4)
+        let scaleAction = SKAction.sequence([SKAction.scale(to: 1, duration: 0.2), SKAction.scale(to: 2/6, duration: 0.2)])
+        let rotateAction = SKAction.rotate(byAngle: degree2radian(-15), duration: 0.4)
 
         let tileMoveAction = SKAction.group([moveAction, scaleAction, rotateAction])
 
-        moveAction.timingMode = SKActionTimingMode.EaseInEaseOut
+        moveAction.timingMode = SKActionTimingMode.easeInEaseOut
 
-        tile.runAction(tileMoveAction)
+        tile.run(tileMoveAction)
     }
 
-    func getNeighbours(startTile: Tile) -> Array<Tile> {
+    func getNeighbours(_ startTile: Tile) -> Array<Tile> {
 
         var neighbours = Array<Tile>()
         var lastTiles = Array<Tile>()
-        var visited = Array(count: 6, repeatedValue: Array(count: 6, repeatedValue: false))
+        var visited = Array(repeating: Array(repeating: false, count: 6), count: 6)
 
         lastTiles.append(startTile)
 
@@ -481,15 +505,15 @@ class GameScene: SKScene, TileDragDelegate {
                 }
             }
 
-            lastTiles.removeAll(keepCapacity: true)
+            lastTiles.removeAll(keepingCapacity: true)
             lastTiles += nextTiles
-            nextTiles.removeAll(keepCapacity: true)
+            nextTiles.removeAll(keepingCapacity: true)
         }
 
         return neighbours
     }
 
-    func calculateLimits(tile: Tile) {
+    func calculateLimits(_ tile: Tile) {
 
         // set all limits to current position
         for (key, _) in limits {
@@ -499,111 +523,111 @@ class GameScene: SKScene, TileDragDelegate {
         // right check
         for i in tile.place.column + 1 ..< GameScene.boardSize {
             if tiles[tile.place.row][i] != nil { break }
-            limits[Direction.Right] = (tile.place.row, i)
+            limits[Direction.right] = (tile.place.row, i)
         }
 
         // up check
 
-        for i in (0 ..< tile.place.row).reverse() {
+        for i in (0 ..< tile.place.row).reversed() {
             if tiles[i][tile.place.column] != nil { break }
-            limits[Direction.Up] = (i, tile.place.column)
+            limits[Direction.up] = (i, tile.place.column)
         }
 
         // left check
-        for i in (0 ..< tile.place.column).reverse() {
+        for i in (0 ..< tile.place.column).reversed() {
             if tiles[tile.place.row][i] != nil { break }
-            limits[Direction.Left] = (tile.place.row, i)
+            limits[Direction.left] = (tile.place.row, i)
         }
 
         // down check
         for i in tile.place.row + 1 ..< GameScene.boardSize {
             if tiles[i][tile.place.column] != nil { break }
-            limits[Direction.Down] = (i, tile.place.column)
+            limits[Direction.down] = (i, tile.place.column)
         }
     }
 
-    func getAxisFromDir(dir: Direction) -> Axis {
+    func getAxisFromDir(_ dir: Direction) -> Axis {
 
-        if dir == Direction.Left || dir == Direction.Right {
-            return Axis.Horizontal
+        if dir == Direction.left || dir == Direction.right {
+            return Axis.horizontal
         }
 
-        if dir == Direction.Up || dir == Direction.Down {
-            return Axis.Vertical
+        if dir == Direction.up || dir == Direction.down {
+            return Axis.vertical
         }
 
-        return Axis.None
+        return Axis.none
     }
 
-    func getDirFromPointsWithErrorForceAxis(start: CGPoint, end: CGPoint, error: CGFloat, axis: Axis) -> Direction {
+    func getDirFromPointsWithErrorForceAxis(_ start: CGPoint, end: CGPoint, error: CGFloat, axis: Axis) -> Direction {
 
         let delta = end - start
 
         if max(fabs(delta.x), fabs(delta.y)) > error {
 
-            if axis == Axis.Horizontal {
+            if axis == Axis.horizontal {
                 if delta.x > 0.0 {
-                    return Direction.Right
+                    return Direction.right
                 } else {
-                    return Direction.Left
+                    return Direction.left
                 }
-            } else if axis == Axis.Vertical {
+            } else if axis == Axis.vertical {
                 if delta.y > 0.0 {
-                    return Direction.Up
+                    return Direction.up
                 } else {
-                    return Direction.Down
+                    return Direction.down
                 }
             } else {
                 if fabs(delta.x) > fabs(delta.y) {
                     if delta.x > 0.0 {
-                        return Direction.Right
+                        return Direction.right
                     } else {
-                        return Direction.Left
+                        return Direction.left
                     }
                 } else {
                     if delta.y > 0.0 {
-                        return Direction.Up
+                        return Direction.up
                     } else {
-                        return Direction.Down
+                        return Direction.down
                     }
                 }
             }
         }
 
-        return Direction.None
+        return Direction.none
     }
 
-    func getDirFromPointsWithError(start: CGPoint, end: CGPoint, error: CGFloat) -> Direction {
-        return getDirFromPointsWithErrorForceAxis(start, end: end, error: error, axis: Axis.None)
+    func getDirFromPointsWithError(_ start: CGPoint, end: CGPoint, error: CGFloat) -> Direction {
+        return getDirFromPointsWithErrorForceAxis(start, end: end, error: error, axis: Axis.none)
     }
 
-    func getDirFromPointsForceAxis(start: CGPoint, end: CGPoint, axis: Axis) -> Direction {
+    func getDirFromPointsForceAxis(_ start: CGPoint, end: CGPoint, axis: Axis) -> Direction {
         return getDirFromPointsWithErrorForceAxis(start, end: end, error: 0.0, axis: axis)
     }
 
-    func getDirFromPoints(start: CGPoint, end: CGPoint) -> Direction {
-        return getDirFromPointsWithErrorForceAxis(start, end: end, error: 0.0, axis: Axis.None)
+    func getDirFromPoints(_ start: CGPoint, end: CGPoint) -> Direction {
+        return getDirFromPointsWithErrorForceAxis(start, end: end, error: 0.0, axis: Axis.none)
     }
 
-    func setDirs(start: CGPoint, end: CGPoint) {
+    func setDirs(_ start: CGPoint, end: CGPoint) {
 
         toDirection = getDirFromPoints(start, end: end)
 
         switch toDirection {
-        case Direction.Left:
-            fromDirection = Direction.Right
-        case Direction.Right:
-            fromDirection = Direction.Left
-        case Direction.Up:
-            fromDirection = Direction.Down
-        case Direction.Down:
-            fromDirection = Direction.Up
+        case Direction.left:
+            fromDirection = Direction.right
+        case Direction.right:
+            fromDirection = Direction.left
+        case Direction.up:
+            fromDirection = Direction.down
+        case Direction.down:
+            fromDirection = Direction.up
         default:
-            fromDirection = Direction.None
+            fromDirection = Direction.none
         }
     }
     
-    func getPlacePosition(place: (row: Int, column: Int)) -> CGPoint {
+    func getPlacePosition(_ place: (row: Int, column: Int)) -> CGPoint {
         return GameScene.boardPositions[place.row][place.column]
     }
 
@@ -642,7 +666,7 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        if levelInfo.type == LevelType.LimitedMoves {
+        if levelInfo.type == LevelType.limitedMoves {
             if moves >= levelInfo.typeCounter {
                 gameIsOver = true
                 lostByLevelType = true
@@ -694,19 +718,19 @@ class GameScene: SKScene, TileDragDelegate {
         var count: Int = 0
         for (key, value) in currentStars where value != false {
 
-            let headerPosition = topSmallTiles[key]!.convertPoint(topSmallStars[key]!.position, toNode: scene!)
+            let headerPosition = topSmallTiles[key]!.convert((topSmallStars[key]!?.position)!, to: scene!)
 
-            topSmallStars[key]!.removeFromParent()
+            topSmallStars[key]!?.removeFromParent()
 
-            topSmallStars[key]!.zPosition = 6
-            topSmallStars[key]!.position = headerPosition
+            topSmallStars[key]!?.zPosition = 6
+            topSmallStars[key]!?.position = headerPosition
 
-            addChild(topSmallStars[key]!)
+            addChild(topSmallStars[key]!!)
 
-            topSmallStars[key]!.runAction(SKAction.group([
-                SKAction.moveTo(winStarsShadows[count].position, duration: 0.5),
-                SKAction.scaleTo(winStarsShadows[count].xScale, duration: 0.5),
-                SKAction.rotateToAngle(0, duration: 0.5)
+            topSmallStars[key]!?.run(SKAction.group([
+                SKAction.move(to: winStarsShadows[count].position, duration: 0.5),
+                SKAction.scale(to: winStarsShadows[count].xScale, duration: 0.5),
+                SKAction.rotate(toAngle: 0, duration: 0.5)
             ]))
 
             count += 1
@@ -743,7 +767,7 @@ class GameScene: SKScene, TileDragDelegate {
                 number = 0
             }
 
-            gameVC.lobbyVC.saveLastIndexPath(NSIndexPath(forItem: number, inSection: section))
+            gameVC.lobbyVC.saveLastIndexPath(IndexPath(item: number, section: section))
 
             levelInfo = levelsInfo.loadLevel(section, number: number)
 //            debugPrint(levelInfo.type)
@@ -776,8 +800,8 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Methods - Counter closures
 
-    func counterLoop(value: NSTimeInterval) {
-        if levelInfo.type == LevelType.LimitedTime {
+    func counterLoop(_ value: TimeInterval) {
+        if levelInfo.type == LevelType.limitedTime {
             headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter - Int(value))
         }
 
@@ -785,7 +809,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     func counterEnd() {
 //        debugPrint("end callback")
-        if levelInfo.type == LevelType.LimitedTime {
+        if levelInfo.type == LevelType.limitedTime {
 //            debugPrint("end callback limited time")
             gameOver()
             lostByLevelType = true
@@ -800,11 +824,11 @@ class GameScene: SKScene, TileDragDelegate {
 
         switch levelInfo.type {
 
-        case .FreeTime:
+        case .freeTime:
             self.undoMoves(1)
             break
 
-        case .LimitedMoves:
+        case .limitedMoves:
 
             if lostByFail {
                 self.undoMoves(1)
@@ -816,7 +840,7 @@ class GameScene: SKScene, TileDragDelegate {
 
             break
 
-        case .LimitedTime:
+        case .limitedTime:
 
             if lostByFail {
                 self.undoMoves(1)
@@ -840,7 +864,7 @@ class GameScene: SKScene, TileDragDelegate {
     func goToLobby() {
         toogleMenuOff(false)
         counter.stop()
-        gameVC!.dismissViewControllerAnimated(true) { [unowned self] in
+        gameVC!.dismiss(animated: true) { [unowned self] in
             self.menu = nil
             self.overlay = nil
             self.counter = nil
@@ -849,20 +873,20 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Lose Actions
 
-    func undoMoves(nMoves: Int) {
+    func undoMoves(_ nMoves: Int) {
         debugPrint("undo", nMoves, "moves")
     }
 
-    func addMoves(nMoves: Int) {
+    func addMoves(_ nMoves: Int) {
         debugPrint("add", nMoves, "moves")
 
         moves -= nMoves
     }
 
-    func addTime(nSeconds: Int) {
+    func addTime(_ nSeconds: Int) {
         debugPrint("add", nSeconds, "seconds")
 
-        counter.counter -= NSTimeInterval(nSeconds)
+        counter.counter -= TimeInterval(nSeconds)
     }
 
     func resetValues() {
@@ -872,7 +896,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Menu related methods
 
-    func toogleMenu(animated: Bool) {
+    func toogleMenu(_ animated: Bool) {
         if gameIsPaused {
             toogleMenuOff(animated)
         } else {
@@ -880,7 +904,7 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func toogleMenuOn(animated: Bool) {
+    func toogleMenuOn(_ animated: Bool) {
 
         if overlay.parent == nil && menu.parent == nil  && !gameIsPaused{
 
@@ -891,8 +915,8 @@ class GameScene: SKScene, TileDragDelegate {
             addChild(menu)
 
             if animated {
-                overlay.runAction(SKAction.fadeAlphaTo(overlayAlpha, duration: menuToogleInterval))
-                menu.runAction(SKAction.fadeInWithDuration(menuToogleInterval))
+                overlay.run(SKAction.fadeAlpha(to: overlayAlpha, duration: menuToogleInterval))
+                menu.run(SKAction.fadeIn(withDuration: menuToogleInterval))
             } else {
                 overlay.alpha = overlayAlpha
                 menu.alpha = 1
@@ -900,20 +924,20 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func toogleMenuOff(animated: Bool) {
+    func toogleMenuOff(_ animated: Bool) {
         if overlay.parent != nil && menu.parent != nil && gameIsPaused {
 
             gameIsPaused = false
 
             if animated {
-                menu.runAction(SKAction.fadeOutWithDuration(menuToogleInterval)) { [unowned self] in
+                menu.run(SKAction.fadeOut(withDuration: menuToogleInterval), completion: { [unowned self] in
                     self.menu.removeFromParent()
                     if self.gameIsStarted { self.resumeGame() }
-                }
+                }) 
 
-                overlay.runAction(SKAction.fadeOutWithDuration(menuToogleInterval)) { [unowned self] in
+                overlay.run(SKAction.fadeOut(withDuration: menuToogleInterval), completion: { [unowned self] in
                     self.overlay.removeFromParent()
-                }
+                }) 
             } else {
                 if gameIsStarted { resumeGame() }
                 menu.removeFromParent()
@@ -1026,7 +1050,7 @@ class GameScene: SKScene, TileDragDelegate {
         menuRestartIcon.position.x = buttonWidth
 
         menuTopButton.name = ButtonType.Empty.rawValue
-        menuTopButton.color = UIColor.clearColor()
+        menuTopButton.color = UIColor.clear
 
         menuTopButtonLabel.name = ButtonType.Empty.rawValue
         menuTopButtonLabel.text = "PAUSE"
@@ -1037,38 +1061,38 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Methods - Create Methods
 
-    func changeLevelWith(level: LevelInfo) {
+    func changeLevelWith(_ level: LevelInfo) {
 
         resetTargetsTo(levelInfo)
 
         for i in 0 ..< 6 {
             for j in 0 ..< 6 {
 
-                if let tile = tiles[i][j] where tile.type != TileType.Hole {
+                if let tile = tiles[i][j], tile.type != TileType.hole {
                     tiles[i][j] = nil
-                    tile.runAction(SKAction.scaleTo(0, duration: tilesDissappearInterval)) {
+                    tile.run(SKAction.scale(to: 0, duration: tilesDissappearInterval), completion: {
                         tile.removeFromParent()
-                    }
+                    }) 
                 }
 
                 if let backTile = backgroundTiles[i][j] {
                     backgroundTiles[i][j] = nil
 
-                    backTile.runAction(SKAction.moveTo(CGPoint.zero, duration: tilesAppearInterval)) {
+                    backTile.run(SKAction.move(to: CGPoint.zero, duration: tilesAppearInterval), completion: {
                         backTile.removeFromParent()
-                    }
+                    }) 
                 }
             }
         }
 
         addBoardBackgroundAndHoles()
 
-        self.runAction(SKAction.waitForDuration(tilesDissappearInterval + 0.2)) { [unowned self] in
+        self.run(SKAction.wait(forDuration: tilesDissappearInterval + 0.2), completion: { [unowned self] in
             self.addBoardTiles()
-        }
+        }) 
     }
 
-    func resetTargetsTo(levelInfo: LevelInfo) {
+    func resetTargetsTo(_ levelInfo: LevelInfo) {
 
         lostByFail = false
         lostByLevelType = false
@@ -1076,38 +1100,38 @@ class GameScene: SKScene, TileDragDelegate {
         // Removing current state
 
         for (_, value) in topSmallStars {
-            value.removeFromParent()
+            value?.removeFromParent()
         }
 
-        topSmallStars.removeAll(keepCapacity: false)
+        topSmallStars.removeAll(keepingCapacity: false)
 
         for (key, _) in headerPositions {
             topSmallTiles[key]!.removeFromParent()
             colorLabels[key]!.removeFromParent()
         }
 
-        topSmallTiles.removeAll(keepCapacity: false)
-        colorLabels.removeAll(keepCapacity: false)
-        headerPositions.removeAll(keepCapacity: false)
-        currentTargets.removeAll(keepCapacity: false)
-        currentStars.removeAll(keepCapacity: false)
+        topSmallTiles.removeAll(keepingCapacity: false)
+        colorLabels.removeAll(keepingCapacity: false)
+        headerPositions.removeAll(keepingCapacity: false)
+        currentTargets.removeAll(keepingCapacity: false)
+        currentStars.removeAll(keepingCapacity: false)
 
         // Add new state
 
         moves = 0
         gameIsStarted = false
 
-        if levelInfo.type == LevelType.LimitedMoves {
+        if levelInfo.type == LevelType.limitedMoves {
             headerBottomLabel.text = "moves"
             headerTopLabel.text = "\(levelInfo.typeCounter)"
         }
 
-        if levelInfo.type == LevelType.LimitedTime {
+        if levelInfo.type == LevelType.limitedTime {
             headerBottomLabel.text = "time"
             headerTopLabel.text = timeFromSeconds(levelInfo.typeCounter)
         }
 
-        if levelInfo.type == LevelType.FreeTime {
+        if levelInfo.type == LevelType.freeTime {
             headerBottomLabel.text = "level"
             headerTopLabel.text = "\(levelInfo.levelNumber)"
         }
@@ -1115,11 +1139,11 @@ class GameScene: SKScene, TileDragDelegate {
         if let counter = self.counter {
             counter.stop()
 
-            if levelInfo.type != LevelType.LimitedMoves {
-                counter.endInterval = NSTimeInterval(levelInfo.typeCounter)
+            if levelInfo.type != LevelType.limitedMoves {
+                counter.endInterval = TimeInterval(levelInfo.typeCounter)
             }
         } else {
-            counter = Counter(loopInterval: 1.0, endInterval: NSTimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
+            counter = Counter(loopInterval: 1.0, endInterval: TimeInterval(levelInfo.typeCounter), loopCallback: self.counterLoop, endCallback: self.counterEnd)
 
             debugPrint("new counter")
         }
@@ -1135,18 +1159,18 @@ class GameScene: SKScene, TileDragDelegate {
         let startX = diffWidth / 2 + smallTileWidth / 2
 
         let orderedKeys: [TileType] = [
-            TileType.Color1,
-            TileType.Color2,
-            TileType.Color3,
-            TileType.Color4,
-            TileType.Color5,
+            TileType.color1,
+            TileType.color2,
+            TileType.color3,
+            TileType.color4,
+            TileType.color5,
         ]
 
-        for (index, value) in orderedKeys.enumerate() where levelInfo.colorTargets[value] != 0 {
+        for (index, value) in orderedKeys.enumerated() where levelInfo.colorTargets[value] != 0 {
 
             // Create header tiles positions in order
             let x = startX + CGFloat(index) * (space + smallTileWidth)
-            headerPositions[value] = CGPointMake(x, yMiddle)
+            headerPositions[value] = CGPoint(x: x, y: yMiddle)
 
             // add top tiles
 
@@ -1184,8 +1208,8 @@ class GameScene: SKScene, TileDragDelegate {
             label.fontColor = Constants.backgroundColor
             label.fontName = Constants.primaryFont
             label.text = "00/00"
-            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-            label.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+            label.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+            label.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
 
             let labelSizeRatio: CGFloat = Tile.tileLength / 8 * 1.5 / label.frame.height
             label.fontSize *= labelSizeRatio
@@ -1208,24 +1232,24 @@ class GameScene: SKScene, TileDragDelegate {
 
         for i in 0 ... 5 {
             for j in 0 ... 5 {
-                if levelInfo.mainTiles[i][j] != TileType.Hole &&
-                    levelInfo.mainTiles[i][j] != TileType.Empty {
+                if levelInfo.mainTiles[i][j] != TileType.hole &&
+                    levelInfo.mainTiles[i][j] != TileType.empty {
                         addTile(i, column: j)
                 }
             }
         }
 
-        self.runAction(SKAction.waitForDuration(tilesAppearInterval + 0.1)) { [unowned self] in
+        self.run(SKAction.wait(forDuration: tilesAppearInterval + 0.1), completion: { [unowned self] in
             self.canTouch = true
-        }
+        }) 
     }
 
-    func addTile(row: Int, column: Int) {
+    func addTile(_ row: Int, column: Int) {
         let mainTile: Tile = Tile(row: row, column: column, tileType: levelInfo.mainTiles[row][column], delegate: self)
         mainTile.zPosition = 2
         mainTile.position = GameScene.boardPositions[row][column]
 
-        if levelInfo.childTiles[row][column] != TileType.Empty {
+        if levelInfo.childTiles[row][column] != TileType.empty {
             let childTile: Tile = Tile(row: row, column: column, tileType: levelInfo.childTiles[row][column], delegate: self)
             childTile.zPosition = 1
             mainTile.childTile = childTile
@@ -1237,13 +1261,13 @@ class GameScene: SKScene, TileDragDelegate {
 
         addChild(mainTile)
 
-        mainTile.runAction(SKAction.scaleTo(1, duration: tilesAppearInterval))
+        mainTile.run(SKAction.scale(to: 1, duration: tilesAppearInterval))
     }
 
     func addBoardBackgroundAndHoles() {
         for i in 0 ... 5 {
             for j in 0 ... 5 {
-                if levelInfo.mainTiles[i][j] == TileType.Hole {
+                if levelInfo.mainTiles[i][j] == TileType.hole {
                     addBoardHole(i, column: j)
                 } else {
                     addBoardBackgroundTile(i, column: j)
@@ -1252,15 +1276,15 @@ class GameScene: SKScene, TileDragDelegate {
         }
     }
 
-    func addBoardHole(row: Int, column: Int) {
-        let holeTile = Tile(row: row, column: column, tileType: TileType.Hole, delegate: self)
+    func addBoardHole(_ row: Int, column: Int) {
+        let holeTile = Tile(row: row, column: column, tileType: TileType.hole, delegate: self)
         holeTile.position = GameScene.boardPositions[row][column]
-        holeTile.hidden = true
+        holeTile.isHidden = true
         tiles[row][column] = holeTile
         addChild(holeTile)
     }
 
-    func addBoardBackgroundTile(row: Int, column: Int) {
+    func addBoardBackgroundTile(_ row: Int, column: Int) {
         let backTile = SKSpriteNode(texture: Textures.tileBackgroundTexture, color: Constants.textColor, size: Tile.tileSize)
         backTile.colorBlendFactor = 1
         backTile.zPosition = 1
@@ -1278,13 +1302,13 @@ class GameScene: SKScene, TileDragDelegate {
         backTile.position = corners[random() % 4]
 
         addChild(backTile)
-        backTile.runAction(SKAction.moveTo(GameScene.boardPositions[row][column], duration: tilesAppearInterval))
+        backTile.run(SKAction.move(to: GameScene.boardPositions[row][column], duration: tilesAppearInterval))
         
     }
 
     func createOverlay() {
         overlay = SKSpriteNode(color: Constants.textColor, size: size);
-        overlay.anchorPoint = CGPointZero
+        overlay.anchorPoint = CGPoint.zero
         overlay.zPosition = 4
         overlay.name = ButtonType.Overlay.rawValue
         overlay.alpha = 0
@@ -1296,13 +1320,13 @@ class GameScene: SKScene, TileDragDelegate {
 
         let menuBackgroundWidth: CGFloat = GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x
         let menuBackgroundHeight: CGFloat = GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y
-        let menuBackgroundSize: CGSize = CGSizeMake(menuBackgroundWidth, menuBackgroundHeight)
+        let menuBackgroundSize: CGSize = CGSize(width: menuBackgroundWidth, height: menuBackgroundHeight)
 
         let menuBackground: SKSpriteNode = SKSpriteNode(texture: Textures.menuBackgroundTexture,
             color: Constants.backgroundColor, size: menuBackgroundSize)
 
         menuBackground.colorBlendFactor = 1.0
-        menuBackground.anchorPoint = CGPointZero
+        menuBackground.anchorPoint = CGPoint.zero
         menuBackground.position = GameScene.boardPositions[5][0]
         menuBackground.zPosition = 5
 
@@ -1329,16 +1353,16 @@ class GameScene: SKScene, TileDragDelegate {
         let menuTopButtonsSize: CGSize = CGSize(width: topButtonWidth, height: buttonHeight)
 
         menuLeftButton = SKSpriteNode(texture: Textures.menuLeftButtonTexture,
-            color: UIColor.clearColor(), size: menuButtonsSize)
+            color: UIColor.clear, size: menuButtonsSize)
 
         menuMiddleButton = SKSpriteNode(texture: Textures.menuMiddleButtonTexture,
-            color: UIColor.clearColor(), size: menuButtonsSize)
+            color: UIColor.clear, size: menuButtonsSize)
 
         menuRightButton = SKSpriteNode(texture: Textures.menuRightButtonTexture,
-            color: UIColor.clearColor(), size: menuButtonsSize)
+            color: UIColor.clear, size: menuButtonsSize)
 
         menuTopButton = SKSpriteNode(texture: Textures.menuTopButtonTexture,
-            color: UIColor.clearColor(), size: menuTopButtonsSize)
+            color: UIColor.clear, size: menuTopButtonsSize)
 
 
         menuLeftButton.zPosition = 1
@@ -1355,10 +1379,10 @@ class GameScene: SKScene, TileDragDelegate {
         menuMiddleButton.name = ButtonType.Continue.rawValue
         menuRightButton.name = ButtonType.Restart.rawValue
 
-        menuLeftButton.anchorPoint = CGPointZero
-        menuMiddleButton.anchorPoint = CGPointZero
-        menuRightButton.anchorPoint = CGPointZero
-        menuTopButton.anchorPoint = CGPointZero
+        menuLeftButton.anchorPoint = CGPoint.zero
+        menuMiddleButton.anchorPoint = CGPoint.zero
+        menuRightButton.anchorPoint = CGPoint.zero
+        menuTopButton.anchorPoint = CGPoint.zero
 
         menuLeftButton.position.y += buttonMargin
         menuMiddleButton.position.y += buttonMargin
@@ -1417,8 +1441,8 @@ class GameScene: SKScene, TileDragDelegate {
         menuTopButtonLabel = SKLabelNode()
         menuTopButtonLabel.fontName = Constants.primaryFont
         menuTopButtonLabel.fontColor = Constants.cyanColor
-        menuTopButtonLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        menuTopButtonLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        menuTopButtonLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        menuTopButtonLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         menuTopButtonLabel.position.x = menuTopButton.size.width / 2
         menuTopButtonLabel.position.y = menuTopButton.size.height / 2
         menuTopButtonLabel.zPosition = 1
@@ -1435,8 +1459,8 @@ class GameScene: SKScene, TileDragDelegate {
         menuMiddleLabel = SKLabelNode()
         menuMiddleLabel.fontName = Constants.primaryFont
         menuMiddleLabel.fontColor = Constants.textColor
-        menuMiddleLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Center
-        menuMiddleLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        menuMiddleLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.center
+        menuMiddleLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         menuMiddleLabel.position.x = menuBackgroundSize.width / 2
         menuMiddleLabel.position.y = menuBackgroundSize.height / 2
         menuMiddleLabel.zPosition = 1
@@ -1466,16 +1490,16 @@ class GameScene: SKScene, TileDragDelegate {
         headerBottomLabel = SKLabelNode()
         headerBottomLabel.fontColor = Constants.backgroundColor
         headerBottomLabel.fontName = Constants.primaryFont
-        headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Top
-        headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        headerBottomLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.top
+        headerBottomLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         headerBottomLabel.zPosition = 1
         headerBottomLabel.setTextWithinSize("AAAAA", size: tileTwoThirds, vertically: false)
 
         headerTopLabel = SKLabelNode()
         headerTopLabel.fontColor = Constants.backgroundColor
         headerTopLabel.fontName = Constants.primaryFont
-        headerTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.Baseline
-        headerTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.Center
+        headerTopLabel.verticalAlignmentMode = SKLabelVerticalAlignmentMode.baseline
+        headerTopLabel.horizontalAlignmentMode = SKLabelHorizontalAlignmentMode.center
         headerTopLabel.zPosition = 1
         headerTopLabel.text = "9999"
 
@@ -1502,7 +1526,7 @@ class GameScene: SKScene, TileDragDelegate {
                                         size: CGSize(width: Constants.screenSize.width, height: Tile.tileLength))
 
         headerBackground.colorBlendFactor = 1.0
-        headerBackground.anchorPoint = CGPointZero
+        headerBackground.anchorPoint = CGPoint.zero
         headerBackground.position = CGPoint(x: 0, y: Constants.screenSize.height - Tile.tileLength)
         headerBackground.zPosition = 5
 
@@ -1521,7 +1545,7 @@ class GameScene: SKScene, TileDragDelegate {
 
         pauseButton.colorBlendFactor = 1.0
         pauseButton.zPosition = 1
-        pauseButton.position = CGPointMake(Constants.screenSize.width - Tile.tileLength / 2, Tile.tileLength / 2)
+        pauseButton.position = CGPoint(x: Constants.screenSize.width - Tile.tileLength / 2, y: Tile.tileLength / 2)
         pauseButton.name = ButtonType.Pause.rawValue
 
         // add pause image to button
@@ -1558,7 +1582,7 @@ class GameScene: SKScene, TileDragDelegate {
         topButtonCenter.x += menuTopButton.size.width / 2
         topButtonCenter.y += menuTopButton.size.height / 2
 
-        let pos: CGPoint = menu.convertPoint(topButtonCenter, toNode: self)
+        let pos: CGPoint = menu.convert(topButtonCenter, to: self)
 
         firstStarShadow.position = pos
         secondStarShadow.position = pos
@@ -1578,9 +1602,9 @@ class GameScene: SKScene, TileDragDelegate {
         let boardVerticalMargin = (Constants.screenSize.height - Constants.screenSize.width) / 2 +
             boardHorizontalMargin + Tile.tileLength / 2
 
-        var board = Array(count: boardSize,
-            repeatedValue: Array(count: boardSize,
-                repeatedValue: CGPoint.zero))
+        var board = Array(repeating: Array(repeating: CGPoint.zero,
+                count: boardSize),
+            count: boardSize)
 
         for i in 0 ..< boardSize {
             for j in 0 ..< boardSize {
@@ -1595,7 +1619,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: Misc methods
 
-    func timeFromSeconds(totalSeconds: Int) -> String {
+    func timeFromSeconds(_ totalSeconds: Int) -> String {
         let minutes = totalSeconds / 60
         let seconds = totalSeconds % 60
 

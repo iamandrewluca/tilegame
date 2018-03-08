@@ -13,7 +13,7 @@ class LobbyLockedCell: UICollectionViewCell {
     // MARK: Members
 
     static let padLockImage: UIImage = { () -> UIImage in
-        return (UIImage(named: "Padlock")?.imageWithRenderingMode(UIImageRenderingMode.AlwaysTemplate))!
+        return (UIImage(named: "Padlock")?.withRenderingMode(UIImageRenderingMode.alwaysTemplate))!
     }()
 
     static let identifier: String = "LobbyLockedCell"
@@ -31,7 +31,7 @@ class LobbyLockedCell: UICollectionViewCell {
         }
 
         layer.borderWidth = 2
-        layer.borderColor = cellColor.CGColor
+        layer.borderColor = cellColor.cgColor
         layer.cornerRadius = bounds.width / 5
 
         lockpadImageView.image = LobbyLockedCell.padLockImage

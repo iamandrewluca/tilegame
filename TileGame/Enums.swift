@@ -10,15 +10,15 @@ import Foundation
 import SpriteKit
 
 enum LevelType: Int {
-    case FreeTime, LimitedTime, LimitedMoves
+    case freeTime, limitedTime, limitedMoves
 }
 
 enum Direction: Int {
-    case None = -1, Right, Up, Left, Down
+    case none = -1, right, up, left, down
 }
 
 enum Axis: Int {
-    case None = -1, Horizontal, Vertical
+    case none = -1, horizontal, vertical
 }
 
 enum ButtonType: String {
@@ -34,22 +34,22 @@ enum ButtonType: String {
 }
 
 enum TileType: Int {
-    case Hole = -1, Empty, Color1, Color2, Color3, Color4, Color5, Star
+    case hole = -1, empty, color1, color2, color3, color4, color5, star
 
     var tileColor: SKColor {
         switch self {
-        case .Color1:
+        case .color1:
             return Constants.Color1
-        case .Color2:
+        case .color2:
             return Constants.Color2
-        case .Color3:
+        case .color3:
             return Constants.Color3
-        case .Color4:
+        case .color4:
             return Constants.Color4
-        case .Color5:
+        case .color5:
             return Constants.Color5
         default:
-            return SKColor.clearColor()
+            return SKColor.clear
         }
     }
 }

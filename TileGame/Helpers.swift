@@ -12,15 +12,15 @@ import SpriteKit
 // MARK: Operator overloading
 
 func -(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-    return CGPointMake(lhs.x - rhs.x, lhs.y - rhs.y)
+    return CGPoint(x: lhs.x - rhs.x, y: lhs.y - rhs.y)
 }
 
 func +(lhs: CGPoint, rhs: CGPoint) -> CGPoint {
-    return CGPointMake(lhs.x + rhs.x, lhs.y + rhs.y)
+    return CGPoint(x: lhs.x + rhs.x, y: lhs.y + rhs.y)
 }
 
 func /(lhs: CGPoint, rhs: CGFloat) -> CGPoint {
-    return CGPointMake(lhs.x / rhs, lhs.y / rhs)
+    return CGPoint(x: lhs.x / rhs, y: lhs.y / rhs)
 }
 
 func ==(lhs: CGPoint, rhs: CGPoint) -> Bool {
@@ -45,7 +45,7 @@ func ==(lhs: (row: Int, column: Int), rhs: (row: Int, column: Int)) -> Bool {
 
 // MARK: Other useful functions
 
-func clamp(firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGFloat {
+func clamp(_ firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGFloat {
 
     var minValue: CGFloat
     var maxValue: CGFloat
@@ -61,12 +61,12 @@ func clamp(firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> CGF
     return max(minValue, min(value, maxValue))
 }
 
-func degree2radian(a:CGFloat) -> CGFloat {
+func degree2radian(_ a:CGFloat) -> CGFloat {
     let b = CGFloat(M_PI) * a/180
     return b
 }
 
-private func polygonPointArray(sides: Int, x: CGFloat, y: CGFloat, radius: CGFloat, adjustment: CGFloat = 0) -> [CGPoint] {
+private func polygonPointArray(_ sides: Int, x: CGFloat, y: CGFloat, radius: CGFloat, adjustment: CGFloat = 0) -> [CGPoint] {
     let angle = degree2radian(360/CGFloat(sides))
     let cx = x // x origin
     let cy = y // y origin
@@ -82,9 +82,9 @@ private func polygonPointArray(sides: Int, x: CGFloat, y: CGFloat, radius: CGFlo
     return points
 }
 
-func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPathRef {
+func getStarPath(_ x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness: CGFloat) -> CGPath {
     let adjustment = 360/sides/2
-    let path = CGPathCreateMutable()
+    let path = CGMutablePath()
     let points = polygonPointArray(sides, x: x, y: y, radius: radius)
     let cpg = points[0]
     let points2 = polygonPointArray(sides,x: x,y: y,radius: radius*pointyness,adjustment:CGFloat(adjustment))
@@ -95,23 +95,23 @@ func getStarPath(x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyness
         CGPathAddLineToPoint(path, nil, p.x, p.y)
         i += 1
     }
-    CGPathCloseSubpath(path)
+    path.closeSubpath()
 
-    var rotaionTransform = CGAffineTransformMakeRotation(degree2radian(-54))
-    return CGPathCreateCopyByTransformingPath(path, &rotaionTransform)!
+    var rotaionTransform = CGAffineTransform(rotationAngle: degree2radian(-54))
+    return path.copy(using: &rotaionTransform)!
 }
 
 // MARK: Extensions
 
 extension CGFloat {
-    mutating func roundDecimals(numberOfDecimals: Int) {
+    mutating func roundDecimals(_ numberOfDecimals: Int) {
         let multiplier = pow(10.0, CGFloat(numberOfDecimals))
         self = round(self * multiplier) / multiplier
     }
 }
 
 extension SKLabelNode {
-    func setTextWithinSize(text: String, size: CGFloat, vertically: Bool) {
+    func setTextWithinSize(_ text: String, size: CGFloat, vertically: Bool) {
         self.text = text
 
         if vertically {

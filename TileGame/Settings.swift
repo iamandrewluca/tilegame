@@ -12,26 +12,26 @@ class Settings {
 
     // MARK: NSUserDefaults Settings Keys
 
-    private static let SETTINGS_SOUND_KEY: String = "SETTINGS_SOUND_KEY"
-    private static let SETTINGS_MUSIC_KEY: String = "SETTINGS_MUSIC_KEY"
-    private static let SETTINGS_LIGHT_THEME_KEY: String = "SETTINGS_LIGHT_THEME_KEY"
-    private static let SETTINGS_ADS_KEY: String = "SETTINGS_ADS_KEY"
+    fileprivate static let SETTINGS_SOUND_KEY: String = "SETTINGS_SOUND_KEY"
+    fileprivate static let SETTINGS_MUSIC_KEY: String = "SETTINGS_MUSIC_KEY"
+    fileprivate static let SETTINGS_LIGHT_THEME_KEY: String = "SETTINGS_LIGHT_THEME_KEY"
+    fileprivate static let SETTINGS_ADS_KEY: String = "SETTINGS_ADS_KEY"
 
     // MARK: Members
 
-    private(set) static var soundOn: Bool = { () -> Bool in
+    fileprivate(set) static var soundOn: Bool = { () -> Bool in
         return Settings.getBoolSettings(Settings.SETTINGS_SOUND_KEY)
     }()
 
-    private(set) static var musicOn: Bool = { () -> Bool in
+    fileprivate(set) static var musicOn: Bool = { () -> Bool in
         return Settings.getBoolSettings(Settings.SETTINGS_MUSIC_KEY)
     }()
 
-    private(set) static var lightThemeOn: Bool = { () -> Bool in
+    fileprivate(set) static var lightThemeOn: Bool = { () -> Bool in
         return Settings.getBoolSettings(Settings.SETTINGS_LIGHT_THEME_KEY)
     }()
 
-    private(set) static var adsOn: Bool = { () -> Bool in
+    fileprivate(set) static var adsOn: Bool = { () -> Bool in
         return Settings.getBoolSettings(Settings.SETTINGS_ADS_KEY)
     }()
 
@@ -49,25 +49,25 @@ class Settings {
         Settings.setLightTheme(!Settings.lightThemeOn)
     }
 
-    private static func getBoolSettings(key: String) -> Bool {
+    fileprivate static func getBoolSettings(_ key: String) -> Bool {
 
-        if let value = NSUserDefaults.standardUserDefaults().valueForKey(key) as! Bool? {
+        if let value = UserDefaults.standard.value(forKey: key) as! Bool? {
             return value
         }
 
         return true
     }
 
-    private static func setBoolSettings(key: String, value: Bool) {
-        NSUserDefaults.standardUserDefaults().setBool(value, forKey: key)
+    fileprivate static func setBoolSettings(_ key: String, value: Bool) {
+        UserDefaults.standard.set(value, forKey: key)
     }
 
-    private static func setSound(value: Bool) {
+    fileprivate static func setSound(_ value: Bool) {
         Settings.soundOn = value
         Settings.setBoolSettings(Settings.SETTINGS_SOUND_KEY, value: value)
     }
 
-    private static func setMusic(value: Bool) {
+    fileprivate static func setMusic(_ value: Bool) {
 
         Settings.musicOn = value
 
@@ -82,12 +82,12 @@ class Settings {
         Settings.setBoolSettings(Settings.SETTINGS_MUSIC_KEY, value: value)
     }
 
-    private static func setLightTheme(value: Bool) {
+    fileprivate static func setLightTheme(_ value: Bool) {
         Settings.lightThemeOn = value
         Settings.setBoolSettings(Settings.SETTINGS_LIGHT_THEME_KEY, value: value)
     }
 
-    static func setAds(value: Bool) {
+    static func setAds(_ value: Bool) {
         Settings.adsOn = value
         Settings.setBoolSettings(Settings.SETTINGS_ADS_KEY, value: value)
     }

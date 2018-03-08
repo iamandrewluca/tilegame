@@ -52,13 +52,13 @@ class MenuViewController: UIViewController {
 
     // MARK: IBActions
 
-    @IBAction func soundButtonPressed(sender: AnyObject) {
+    @IBAction func soundButtonPressed(_ sender: AnyObject) {
         Settings.toogleSound()
         self.toogleSoundButtonLook(Settings.soundOn)
         AudioPlayer.tap()
         debugPrint("sound")
     }
-    @IBAction func themeButtonPressed(sender: AnyObject) {
+    @IBAction func themeButtonPressed(_ sender: AnyObject) {
         Settings.toogleTheme()
 
         self.toogleTheme(Settings.lightThemeOn)
@@ -66,37 +66,37 @@ class MenuViewController: UIViewController {
         AudioPlayer.tap()
         debugPrint("theme")
     }
-    @IBAction func musicButtonPressed(sender: AnyObject) {
+    @IBAction func musicButtonPressed(_ sender: AnyObject) {
         Settings.toogleMusic()
         self.toogleMusicButtonLook(Settings.musicOn)
         AudioPlayer.tap()
         debugPrint("music")
     }
-    @IBAction func adsButtonPressed(sender: AnyObject) {
+    @IBAction func adsButtonPressed(_ sender: AnyObject) {
         AudioPlayer.tap()
         debugPrint("ads")
     }
-    @IBAction func shareButtonPressed(sender: AnyObject) {
+    @IBAction func shareButtonPressed(_ sender: AnyObject) {
         AudioPlayer.tap()
 
         var sharingItems = [AnyObject]()
 
         // Text
-        sharingItems.append("Check out this awesome game!")
+        sharingItems.append("Check out this awesome game!" as AnyObject)
         // URL
-        sharingItems.append(NSURL(fileURLWithPath: "http://google.com"))
+        sharingItems.append(URL(fileURLWithPath: "http://google.com") as AnyObject)
         // Image
         sharingItems.append(UIImage(named: "Star")!)
 
         let shareVC = UIActivityViewController(activityItems: [], applicationActivities: nil)
-        presentViewController(shareVC, animated: true, completion: nil)
+        present(shareVC, animated: true, completion: nil)
     }
-    @IBAction func rateButtonPressed(sender: AnyObject) {
+    @IBAction func rateButtonPressed(_ sender: AnyObject) {
         AudioPlayer.tap()
 
-        let appURL: NSURL = NSURL(fileURLWithPath: "http://www.google.com")
+        let appURL: URL = URL(fileURLWithPath: "http://www.google.com")
 
-        debugPrint(UIApplication.sharedApplication().openURL(appURL))
+        debugPrint(UIApplication.shared.openURL(appURL))
     }
 
     // MARK: UIViewController
@@ -105,7 +105,7 @@ class MenuViewController: UIViewController {
         debugPrint("menu deinit")
     }
 
-    override func viewWillAppear(animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
         if !started {
@@ -113,7 +113,7 @@ class MenuViewController: UIViewController {
         }
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
         if !started {
@@ -123,7 +123,7 @@ class MenuViewController: UIViewController {
         }
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 
@@ -146,8 +146,8 @@ class MenuViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        super.prepareForSegue(segue, sender: sender)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        super.prepare(for: segue, sender: sender)
 
         if segue.identifier == MenuViewController.toLobbySegueIdentifier {
             debugPrint("prepare")
@@ -157,9 +157,9 @@ class MenuViewController: UIViewController {
 
     // MARK: Methods
 
-    private func animateMenu() {
+    fileprivate func animateMenu() {
 
-        UIView.animateWithDuration(0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.CurveEaseIn, animations: { [unowned self] in
+        UIView.animate(withDuration: 0.8, delay: 0.5, usingSpringWithDamping: 0.4, initialSpringVelocity: 0.5, options: UIViewAnimationOptions.curveEaseIn, animations: { [unowned self] in
 
             self.logoTopConstraint.constant = self.view.frame.height / 8
             self.buttonsHorizontalConstraint.constant = 0
@@ -168,7 +168,7 @@ class MenuViewController: UIViewController {
         }, completion: nil);
     }
 
-    private func prepareMenu() {
+    fileprivate func prepareMenu() {
         let fifthPart = self.view.bounds.height / 5
 
         buttonsVerticalConstraint.constant = -fifthPart
@@ -177,7 +177,7 @@ class MenuViewController: UIViewController {
         logoTopConstraint.constant = -logoImageView.frame.height
     }
 
-    private func prepareBottomTiles() {
+    fileprivate func prepareBottomTiles() {
         bottomConstraint.constant -= bottomContainer.bounds.height / 3 * 2
 
         tile1.layer.cornerRadius = tile1.bounds.height / 3
@@ -222,7 +222,7 @@ class MenuViewController: UIViewController {
         rtile2.layer.borderWidth = borderWidth
         rtile3.layer.borderWidth = borderWidth
 
-        self.themeButton.titleLabel?.textAlignment = NSTextAlignment.Center
+        self.themeButton.titleLabel?.textAlignment = NSTextAlignment.center
     }
 
     func setupColors() {
@@ -235,47 +235,47 @@ class MenuViewController: UIViewController {
         self.toogleTheme(Settings.lightThemeOn)
     }
 
-    func toogleMusicButtonLook(musicOn: Bool) {
+    func toogleMusicButtonLook(_ musicOn: Bool) {
         if Settings.musicOn {
             self.musicButton.backgroundColor = Constants.blueColor
-            self.musicButton.layer.borderColor = Constants.blueColor.CGColor
-            self.musicButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
+            self.musicButton.layer.borderColor = Constants.blueColor.cgColor
+            self.musicButton.setTitleColor(Constants.lightColor, for: UIControlState())
             self.musicButtonLabel.backgroundColor = self.musicButton.backgroundColor
-            self.musicButtonLabel.layer.borderColor = Constants.lightColor.CGColor
+            self.musicButtonLabel.layer.borderColor = Constants.lightColor.cgColor
             self.musicButtonLabel.textColor = Constants.lightColor
             self.musicButtonLabel.text = "on"
         } else {
             self.musicButton.backgroundColor = Constants.backgroundColor
-            self.musicButton.layer.borderColor = Constants.blueColor.CGColor
-            self.musicButton.setTitleColor(Constants.blueColor, forState: UIControlState.Normal)
+            self.musicButton.layer.borderColor = Constants.blueColor.cgColor
+            self.musicButton.setTitleColor(Constants.blueColor, for: UIControlState())
             self.musicButtonLabel.backgroundColor = self.musicButton.backgroundColor
-            self.musicButtonLabel.layer.borderColor = Constants.blueColor.CGColor
+            self.musicButtonLabel.layer.borderColor = Constants.blueColor.cgColor
             self.musicButtonLabel.textColor = Constants.blueColor
             self.musicButtonLabel.text = "off"
         }
     }
 
-    func toogleSoundButtonLook(soundOn: Bool) {
+    func toogleSoundButtonLook(_ soundOn: Bool) {
         if soundOn {
             self.soundButton.backgroundColor = Constants.cyanColor
-            self.soundButton.layer.borderColor = Constants.cyanColor.CGColor
-            self.soundButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
+            self.soundButton.layer.borderColor = Constants.cyanColor.cgColor
+            self.soundButton.setTitleColor(Constants.lightColor, for: UIControlState())
             self.soundButtonLabel.backgroundColor = self.soundButton.backgroundColor
-            self.soundButtonLabel.layer.borderColor = Constants.lightColor.CGColor
+            self.soundButtonLabel.layer.borderColor = Constants.lightColor.cgColor
             self.soundButtonLabel.textColor = Constants.lightColor
             self.soundButtonLabel.text = "on"
         } else {
             self.soundButton.backgroundColor = Constants.backgroundColor
-            self.soundButton.layer.borderColor = Constants.cyanColor.CGColor
-            self.soundButton.setTitleColor(Constants.cyanColor, forState: UIControlState.Normal)
+            self.soundButton.layer.borderColor = Constants.cyanColor.cgColor
+            self.soundButton.setTitleColor(Constants.cyanColor, for: UIControlState())
             self.soundButtonLabel.backgroundColor = self.soundButton.backgroundColor
-            self.soundButtonLabel.layer.borderColor = Constants.cyanColor.CGColor
+            self.soundButtonLabel.layer.borderColor = Constants.cyanColor.cgColor
             self.soundButtonLabel.textColor = Constants.cyanColor
             self.soundButtonLabel.text = "off"
         }
     }
 
-    func toogleTheme(lightThemeOn: Bool) {
+    func toogleTheme(_ lightThemeOn: Bool) {
 
         self.view.backgroundColor = Constants.backgroundColor
 
@@ -291,26 +291,26 @@ class MenuViewController: UIViewController {
             self.rtile2.backgroundColor = Constants.redColor
             self.rtile3.backgroundColor = Constants.blueColor
 
-            self.playButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
-            self.themeButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
-            self.adsButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
-            self.shareButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
-            self.rateButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
+            self.playButton.setTitleColor(Constants.lightColor, for: UIControlState())
+            self.themeButton.setTitleColor(Constants.lightColor, for: UIControlState())
+            self.adsButton.setTitleColor(Constants.lightColor, for: UIControlState())
+            self.shareButton.setTitleColor(Constants.lightColor, for: UIControlState())
+            self.rateButton.setTitleColor(Constants.lightColor, for: UIControlState())
 
-            self.playButton.layer.borderColor = Constants.redColor.CGColor
-            self.themeButton.layer.borderColor = Constants.darkColor.CGColor
-            self.adsButton.layer.borderColor = Constants.cyanColor.CGColor
-            self.shareButton.layer.borderColor = Constants.yellowColor.CGColor
-            self.rateButton.layer.borderColor = Constants.orangeColor.CGColor
+            self.playButton.layer.borderColor = Constants.redColor.cgColor
+            self.themeButton.layer.borderColor = Constants.darkColor.cgColor
+            self.adsButton.layer.borderColor = Constants.cyanColor.cgColor
+            self.shareButton.layer.borderColor = Constants.yellowColor.cgColor
+            self.rateButton.layer.borderColor = Constants.orangeColor.cgColor
 
-            self.rtile1.layer.borderColor = Constants.orangeColor.CGColor
-            self.rtile2.layer.borderColor = Constants.redColor.CGColor
-            self.rtile3.layer.borderColor = Constants.blueColor.CGColor
+            self.rtile1.layer.borderColor = Constants.orangeColor.cgColor
+            self.rtile2.layer.borderColor = Constants.redColor.cgColor
+            self.rtile3.layer.borderColor = Constants.blueColor.cgColor
 
             self.toogleSoundButtonLook(Settings.soundOn)
             self.toogleMusicButtonLook(Settings.musicOn)
 
-            self.themeButton.setTitle("Dark Version", forState: UIControlState.Normal)
+            self.themeButton.setTitle("Dark Version", for: UIControlState())
 
             self.logoImageView.image = UIImage(named: "Logo")
 
@@ -326,26 +326,26 @@ class MenuViewController: UIViewController {
             self.rtile2.backgroundColor = Constants.backgroundColor
             self.rtile3.backgroundColor = Constants.backgroundColor
 
-            self.playButton.setTitleColor(Constants.redColor, forState: UIControlState.Normal)
-            self.themeButton.setTitleColor(Constants.lightColor, forState: UIControlState.Normal)
-            self.adsButton.setTitleColor(Constants.cyanColor, forState: UIControlState.Normal)
-            self.shareButton.setTitleColor(Constants.yellowColor, forState: UIControlState.Normal)
-            self.rateButton.setTitleColor(Constants.orangeColor, forState: UIControlState.Normal)
+            self.playButton.setTitleColor(Constants.redColor, for: UIControlState())
+            self.themeButton.setTitleColor(Constants.lightColor, for: UIControlState())
+            self.adsButton.setTitleColor(Constants.cyanColor, for: UIControlState())
+            self.shareButton.setTitleColor(Constants.yellowColor, for: UIControlState())
+            self.rateButton.setTitleColor(Constants.orangeColor, for: UIControlState())
 
-            self.playButton.layer.borderColor = Constants.redColor.CGColor
-            self.themeButton.layer.borderColor = Constants.lightColor.CGColor
-            self.adsButton.layer.borderColor = Constants.cyanColor.CGColor
-            self.shareButton.layer.borderColor = Constants.yellowColor.CGColor
-            self.rateButton.layer.borderColor = Constants.orangeColor.CGColor
+            self.playButton.layer.borderColor = Constants.redColor.cgColor
+            self.themeButton.layer.borderColor = Constants.lightColor.cgColor
+            self.adsButton.layer.borderColor = Constants.cyanColor.cgColor
+            self.shareButton.layer.borderColor = Constants.yellowColor.cgColor
+            self.rateButton.layer.borderColor = Constants.orangeColor.cgColor
 
-            self.rtile1.layer.borderColor = Constants.orangeColor.CGColor
-            self.rtile2.layer.borderColor = Constants.redColor.CGColor
-            self.rtile3.layer.borderColor = Constants.blueColor.CGColor
+            self.rtile1.layer.borderColor = Constants.orangeColor.cgColor
+            self.rtile2.layer.borderColor = Constants.redColor.cgColor
+            self.rtile3.layer.borderColor = Constants.blueColor.cgColor
 
             self.toogleSoundButtonLook(Settings.soundOn)
             self.toogleMusicButtonLook(Settings.musicOn)
 
-            self.themeButton.setTitle("Light Version", forState: UIControlState.Normal)
+            self.themeButton.setTitle("Light Version", for: UIControlState())
 
             self.logoImageView.image = UIImage(named: "LogoOutlined")
 

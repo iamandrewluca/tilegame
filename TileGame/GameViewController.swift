@@ -21,7 +21,7 @@ class GameViewController: UIViewController {
     // MARK: UIViewController
 
     deinit {
-        UIApplication.sharedApplication().idleTimerDisabled = false;
+        UIApplication.shared.isIdleTimerDisabled = false;
         debugPrint("gvc deinit")
     }
 
@@ -36,14 +36,14 @@ class GameViewController: UIViewController {
         gameScene = GameScene(size: skView.frame.size)
         gameScene.levelInfo = levelInfo
         gameScene.gameVC = self
-        gameScene.scaleMode = SKSceneScaleMode.AspectFill
+        gameScene.scaleMode = SKSceneScaleMode.aspectFill
 
-        UIApplication.sharedApplication().idleTimerDisabled = true;
+        UIApplication.shared.isIdleTimerDisabled = true;
 
         skView.presentScene(gameScene)
     }
 
-    override func viewDidAppear(animated: Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         gameScene.viewDidAppear()
     }
@@ -54,7 +54,7 @@ class GameViewController: UIViewController {
         debugPrint("memory warning")
     }
 
-    override func prefersStatusBarHidden() -> Bool {
+    override var prefersStatusBarHidden : Bool {
         return true
     }
 }

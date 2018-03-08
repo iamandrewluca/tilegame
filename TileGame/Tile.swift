@@ -10,10 +10,10 @@ import SpriteKit
 import UIKit
 
 protocol TileDragDelegate: class {
-    func tileDragBegan(tile: Tile, position: CGPoint)
-    func tileDragMoved(tile: Tile, position: CGPoint)
-    func tileDragCancelled(tile: Tile, position: CGPoint)
-    func tileDragEnded(tile: Tile, position: CGPoint)
+    func tileDragBegan(_ tile: Tile, position: CGPoint)
+    func tileDragMoved(_ tile: Tile, position: CGPoint)
+    func tileDragCancelled(_ tile: Tile, position: CGPoint)
+    func tileDragEnded(_ tile: Tile, position: CGPoint)
 }
 
 class Tile: SKSpriteNode {
@@ -43,9 +43,9 @@ class Tile: SKSpriteNode {
     var childTile: Tile? {
         didSet {
             if let tile = childTile {
-                tile.position = CGPointZero
+                tile.position = CGPoint.zero
                 tile.setScale(0.5)
-                tile.userInteractionEnabled = false
+                tile.isUserInteractionEnabled = false
                 tile.removeFromParent()
                 self.removeAllChildren()
                 self.addChild(tile)
@@ -70,21 +70,21 @@ class Tile: SKSpriteNode {
         tileDragDelegate = delegate
         myScene = delegate as! GameScene
         
-        if type != TileType.Hole {
+        if type != TileType.hole {
 
-            if tileType == TileType.Star {
+            if tileType == TileType.star {
                 super.init(texture: Textures.starTexture, color: Constants.yellowColor, size: Tile.tileSize)
                 let outline: SKSpriteNode = SKSpriteNode(texture: Tile.starOutlineTexture, size: Tile.tileSize)
                 outline.zPosition = 1
                 addChild(outline)
             } else {
                 super.init(texture: Textures.tileTexture, color: tileType.tileColor, size: Tile.tileSize)
-                userInteractionEnabled = true
+                isUserInteractionEnabled = true
             }
 
             colorBlendFactor = 1.0
         } else {
-            super.init(texture: nil, color: SKColor.clearColor(), size: Tile.tileSize)
+            super.init(texture: nil, color: SKColor.clear, size: Tile.tileSize)
         }
         
         position = GameScene.boardPositions[place.row][place.column]
@@ -93,19 +93,19 @@ class Tile: SKSpriteNode {
 
     // MARK: Touches
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragBegan(self, position: touches.first!.locationInNode(myScene!))
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tileDragDelegate!.tileDragBegan(self, position: touches.first!.location(in: myScene!))
     }
     
-    override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragMoved(self, position: touches.first!.locationInNode(myScene!))
+    override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tileDragDelegate!.tileDragMoved(self, position: touches.first!.location(in: myScene!))
     }
     
-    override func touchesCancelled(touches: Set<UITouch>?, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragCancelled(self, position: touches!.first!.locationInNode(myScene!))
+    override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tileDragDelegate!.tileDragCancelled(self, position: touches.first!.location(in: myScene!))
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
-        tileDragDelegate!.tileDragEnded(self, position: touches.first!.locationInNode(myScene!))
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+        tileDragDelegate!.tileDragEnded(self, position: touches.first!.location(in: myScene!))
     }
 }

@@ -8,7 +8,7 @@
 
 import UIKit
 
-class MyThread: NSThread {
+class MyThread: Thread {
     deinit {
         debugPrint("my thread de init")
     }

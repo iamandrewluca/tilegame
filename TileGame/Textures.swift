@@ -13,7 +13,7 @@ class Textures {
 
     // MARK: Methods
 
-    private static var texturesAreCreated: Bool = false
+    fileprivate static var texturesAreCreated: Bool = false
 
     static var tileTexture: SKTexture!
     static var tileBackgroundTexture: SKTexture!
@@ -38,35 +38,35 @@ class Textures {
 
         debugPrint("generating textures")
 
-        let view: SKView = SKView(frame: UIScreen.mainScreen().bounds)
+        let view: SKView = SKView(frame: UIScreen.main.bounds)
 
         let screenRatio = Constants.screenRatio
 
         // tile texture
         let roundRectPath = UIBezierPath(
-            roundedRect: CGRectMake(0, 0, Tile.tileLength * screenRatio , Tile.tileLength * screenRatio),
-            cornerRadius: Tile.tileCornerRadius * screenRatio).CGPath
+            roundedRect: CGRect(x: 0, y: 0, width: Tile.tileLength * screenRatio , height: Tile.tileLength * screenRatio),
+            cornerRadius: Tile.tileCornerRadius * screenRatio).cgPath
 
         let tileShape = SKShapeNode()
-        tileShape.fillColor = UIColor.whiteColor()
+        tileShape.fillColor = UIColor.white
         tileShape.lineWidth = 0
         tileShape.path = roundRectPath
-        tileTexture = view.textureFromNode(tileShape)
+        tileTexture = view.texture(from: tileShape)
 
         // tile back texture
 
-        tileShape.fillColor = UIColor.clearColor()
-        tileShape.strokeColor = UIColor.whiteColor()
+        tileShape.fillColor = UIColor.clear
+        tileShape.strokeColor = UIColor.white
         tileShape.lineWidth = 1 * Constants.screenRatio
-        tileBackgroundTexture = view.textureFromNode(tileShape)
+        tileBackgroundTexture = view.texture(from: tileShape)
 
         // tile top texture
 
-        let roundPath = UIBezierPath(ovalInRect: CGRect(origin: CGPointZero, size: Tile.tileSize * screenRatio / 2)).CGPath
+        let roundPath = UIBezierPath(ovalIn: CGRect(origin: CGPoint.zero, size: Tile.tileSize * screenRatio / 2)).cgPath
         let tileTopShape = SKShapeNode();
-        tileTopShape.fillColor = UIColor.whiteColor()
+        tileTopShape.fillColor = UIColor.white
         tileTopShape.path = roundPath
-        tileTopTexture = view.textureFromNode(tileTopShape)
+        tileTopTexture = view.texture(from: tileTopShape)
 
         // star texture
 //        let starPath = getStarPath(0, y: 0, radius: Tile.tileLength / 2 * screenRatio, sides: 5, pointyness: 2)
@@ -79,20 +79,20 @@ class Textures {
 
         // menu background texture
 
-        let menuBackgroundSize = CGSizeMake(
-            GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x,
-            GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y)
+        let menuBackgroundSize = CGSize(
+            width: GameScene.boardPositions[5][5].x - GameScene.boardPositions[5][0].x,
+            height: GameScene.boardPositions[1][0].y - GameScene.boardPositions[5][0].y)
 
         let menuCornerRadius = Tile.tileLength / 4
 
         let menuBackgroundPath: UIBezierPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: menuBackgroundSize * screenRatio),
+            roundedRect: CGRect(origin: CGPoint.zero, size: menuBackgroundSize * screenRatio),
             cornerRadius: menuCornerRadius * screenRatio)
 
         let menuBackgroundShape = SKShapeNode()
-        menuBackgroundShape.fillColor = SKColor.whiteColor()
-        menuBackgroundShape.path = menuBackgroundPath.CGPath
-        menuBackgroundTexture = view.textureFromNode(menuBackgroundShape)
+        menuBackgroundShape.fillColor = SKColor.white
+        menuBackgroundShape.path = menuBackgroundPath.cgPath
+        menuBackgroundTexture = view.texture(from: menuBackgroundShape)
 
         // buttons textures
 
@@ -105,38 +105,38 @@ class Textures {
         // left button texture
 
         let leftButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: [UIRectCorner.TopLeft, UIRectCorner.BottomRight],
+            roundedRect: CGRect(origin: CGPoint.zero, size: buttonSize * screenRatio),
+            byRoundingCorners: [UIRectCorner.topLeft, UIRectCorner.bottomRight],
             cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
 
         let leftButtonShape = SKShapeNode()
-        leftButtonShape.fillColor = UIColor.whiteColor()
-        leftButtonShape.path = leftButtonPath.CGPath
-        menuLeftButtonTexture = view.textureFromNode(leftButtonShape)
+        leftButtonShape.fillColor = UIColor.white
+        leftButtonShape.path = leftButtonPath.cgPath
+        menuLeftButtonTexture = view.texture(from: leftButtonShape)
 
         // middle button texture
 
         let middleButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: UIRectCorner.AllCorners,
+            roundedRect: CGRect(origin: CGPoint.zero, size: buttonSize * screenRatio),
+            byRoundingCorners: UIRectCorner.allCorners,
             cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
 
         let middleButtonShape = SKShapeNode()
-        middleButtonShape.fillColor = UIColor.whiteColor()
-        middleButtonShape.path = middleButtonPath.CGPath
-        menuMiddleButtonTexture = view.textureFromNode(middleButtonShape)
+        middleButtonShape.fillColor = UIColor.white
+        middleButtonShape.path = middleButtonPath.cgPath
+        menuMiddleButtonTexture = view.texture(from: middleButtonShape)
 
         // right button texture
 
         let rightButtonPath = UIBezierPath(
-            roundedRect: CGRect(origin: CGPointZero, size: buttonSize * screenRatio),
-            byRoundingCorners: [UIRectCorner.BottomLeft, UIRectCorner.TopRight],
+            roundedRect: CGRect(origin: CGPoint.zero, size: buttonSize * screenRatio),
+            byRoundingCorners: [UIRectCorner.bottomLeft, UIRectCorner.topRight],
             cornerRadii: CGSize(width: buttonCornerRadius * screenRatio, height: buttonCornerRadius * screenRatio))
 
         let rightButtonShape = SKShapeNode()
-        rightButtonShape.fillColor = UIColor.whiteColor()
-        rightButtonShape.path = rightButtonPath.CGPath
-        menuRightButtonTexture = view.textureFromNode(rightButtonShape)
+        rightButtonShape.fillColor = UIColor.white
+        rightButtonShape.path = rightButtonPath.cgPath
+        menuRightButtonTexture = view.texture(from: rightButtonShape)
 
         // top button texture
 
@@ -147,9 +147,9 @@ class Textures {
         
 
         let topButtonShape = SKShapeNode()
-        topButtonShape.fillColor = UIColor.whiteColor()
-        topButtonShape.path = topButtonPath.CGPath
-        menuTopButtonTexture = view.textureFromNode(topButtonShape)
+        topButtonShape.fillColor = UIColor.white
+        topButtonShape.path = topButtonPath.cgPath
+        menuTopButtonTexture = view.texture(from: topButtonShape)
         
         Textures.texturesAreCreated = true
     }
