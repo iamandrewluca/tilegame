@@ -353,8 +353,8 @@ class GameScene: SKScene, TileDragDelegate {
 
         moves += 1
 
-        var tilesToCheck: [Tile] = [tile]
-        checkTilesAndDestroy(&tilesToCheck) {
+        let tilesToCheck: [Tile] = [tile]
+        checkTilesAndDestroy(tilesToCheck: tilesToCheck) {
             completion()
         }
 
@@ -371,11 +371,13 @@ class GameScene: SKScene, TileDragDelegate {
     - parameter tilesToCheck: tiles to check for neighbours
     - parameter completion:   callback called when all chains are destroyed
     */
-    func checkTilesAndDestroy(_ tilesToCheck: inout [Tile], completion: @escaping () -> Void) {
+    func checkTilesAndDestroy(tilesToCheck: [Tile], completion: @escaping () -> Void) {
+        
+        var checkingTiles = tilesToCheck
 
-        if tilesToCheck.count == 0 { return }
+        if checkingTiles.count == 0 { return }
 
-        let firstTileToCheck: Tile = tilesToCheck.remove(at: 0)
+        let firstTileToCheck: Tile = checkingTiles.remove(at: 0)
         let tileType: TileType = firstTileToCheck.type
 
         let tilesToDestroy: [Tile] = self.getNeighbours(firstTileToCheck)
@@ -415,7 +417,7 @@ class GameScene: SKScene, TileDragDelegate {
                         childTile.isUserInteractionEnabled = true
                         childTile.run(SKAction.sequence([SKAction.scale(to: 1.2, duration: 0.15), SKAction.scale(to: 1, duration: 0.2)]))
 
-                        tilesToCheck.append(childTile)
+                        checkingTiles.append(childTile)
                     } else {
                         addStar(childTile, forColor: tile.type)
                     }
@@ -427,10 +429,10 @@ class GameScene: SKScene, TileDragDelegate {
             }
         }
 
-        if tilesToCheck.count != 0 {
+        if checkingTiles.count != 0 {
 //            debugPrint("cycle check tyles to destroy")
             self.run(SKAction.wait(forDuration: tilesDissappearInterval - 0.1), completion: { [unowned self] in
-                self.checkTilesAndDestroy(&tilesToCheck, completion: completion)
+                self.checkTilesAndDestroy(tilesToCheck: checkingTiles, completion: completion)
             }) 
         } else {
             completion()
@@ -950,7 +952,7 @@ class GameScene: SKScene, TileDragDelegate {
 
     // MARK: App goes to background
 
-    func didEnterBackground() {
+    @objc func didEnterBackground() {
         pauseGame()
         toogleMenuOn(false)
     }
@@ -1299,7 +1301,7 @@ class GameScene: SKScene, TileDragDelegate {
             CGPoint(x: 300, y: 500),
         ]
 
-        backTile.position = corners[random() % 4]
+        backTile.position = corners[Int(arc4random_uniform(4))]
 
         addChild(backTile)
         backTile.run(SKAction.move(to: GameScene.boardPositions[row][column], duration: tilesAppearInterval))

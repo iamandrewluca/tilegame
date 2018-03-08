@@ -49,7 +49,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     fileprivate func setupLockedSectionHeaderAtIndexPath(_ view: LobbyHeader, indexPath: IndexPath) {
 
-        let starsToPass  = levelsInfo?.starsToPassSection - levelsInfo?.starsInSection(indexPath.section - 1)
+        let starsToPass  = (levelsInfo?.starsToPassSection)! - (levelsInfo?.starsInSection(indexPath.section - 1))!
 
         view.sectionLabel.text = "Section \(indexPath.section + 1)"
         view.starsLabel.text = "\(starsToPass) stars to unlock"
@@ -57,7 +57,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
 
     fileprivate func setupSectionHeaderAtIndexPath(_ view: LobbyHeader, indexPath: IndexPath) {
 
-        let totalStars = levelsInfo?.starsInSection(indexPath.section)
+        let totalStars = levelsInfo!.starsInSection(indexPath.section)
 
         view.sectionLabel.text = "Section \(indexPath.section + 1)"
         view.starsLabel.text = "\(totalStars) stars"
@@ -67,7 +67,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
         let cellLevel = String(1 + indexPath.section * (levelsInfo?.levelsPerSection)! + indexPath.item)
         cell.levelNumber.text = cellLevel
 
-        let levelStars = levelsInfo?.starsAtIndexPath(indexPath)
+        let levelStars = levelsInfo!.starsAtIndexPath(indexPath)
 
         if levelStars > 0 {
             cell.firstStar.image = LobbyCell.starImage
@@ -147,7 +147,7 @@ class LobbyViewController: UIViewController, UICollectionViewDataSource, UIColle
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        middleLabel.text = "\(levelsInfo?.totalStars()) stars"
+        middleLabel.text = "\(levelsInfo!.totalStars()) stars"
 
         if sectionsToReload.count != 0 {
 //            debugPrint("reload sections")

@@ -62,7 +62,7 @@ func clamp(_ firstValue: CGFloat, _ secondValue: CGFloat, _ value: CGFloat) -> C
 }
 
 func degree2radian(_ a:CGFloat) -> CGFloat {
-    let b = CGFloat(M_PI) * a/180
+    let b = CGFloat(Double.pi) * a/180
     return b
 }
 
@@ -89,10 +89,10 @@ func getStarPath(_ x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyne
     let cpg = points[0]
     let points2 = polygonPointArray(sides,x: x,y: y,radius: radius*pointyness,adjustment:CGFloat(adjustment))
     var i = 0
-    CGPathMoveToPoint(path, nil, cpg.x, cpg.y)
+    path.move(to: cpg)
     for p in points {
-        CGPathAddLineToPoint(path, nil, points2[i].x, points2[i].y)
-        CGPathAddLineToPoint(path, nil, p.x, p.y)
+        path.addLine(to: points2[i])
+        path.addLine(to: p)
         i += 1
     }
     path.closeSubpath()
@@ -106,7 +106,7 @@ func getStarPath(_ x: CGFloat, y: CGFloat, radius: CGFloat, sides: Int, pointyne
 extension CGFloat {
     mutating func roundDecimals(_ numberOfDecimals: Int) {
         let multiplier = pow(10.0, CGFloat(numberOfDecimals))
-        self = round(self * multiplier) / multiplier
+        self = Foundation.round(self * multiplier) / multiplier
     }
 }
 

@@ -49,7 +49,7 @@ class Counter {
 
     // MARK: Methods
 
-    @objc fileprivate func run() {
+    func run() {
         timer = Timer(timeInterval: internalLoopInterval, target: self, selector: #selector(Counter.intervalLoop), userInfo: nil, repeats: true)
 
         let timerRunLoop = RunLoop.current
@@ -57,7 +57,7 @@ class Counter {
         timerRunLoop.run()
     }
 
-    @objc fileprivate func intervalLoop() {
+    @objc func intervalLoop() {
 
         let shouldCallLoopCallback: Bool = (counter + internalLoopInterval >= floor(counter) + loopInterval)
 
